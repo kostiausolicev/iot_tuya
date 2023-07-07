@@ -2,8 +2,8 @@ let tg = window.Telegram.WebApp;
 
 let p = document.createElement("p");
 
-let data = tg.initData;
-p.innerText = data;
+let data = tg.initDataUnsafe;
+p.innerText = data.vector;
 let tableDiv = document.getElementById("table_div");
 tableDiv.appendChild(p);
 
