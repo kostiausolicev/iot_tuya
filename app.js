@@ -2,8 +2,9 @@ let tg = window.Telegram.WebApp;
 
 let p = document.createElement("p");
 
-let data = tg.initDataUnsafe;
-p.innerText = data.user;
+let data = tg.initData;
+const obj = JSON.parse(data);
+p.innerText = obj;
 let tableDiv = document.getElementById("table_div");
 tableDiv.appendChild(p);
 
