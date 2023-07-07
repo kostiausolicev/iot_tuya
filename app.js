@@ -2,7 +2,7 @@ let tg = window.Telegram.WebApp;
 
 let p = document.createElement("p");
 
-let data = tg.initDataUnsafe;
+let data = tg.initData;
 p.innerText = data;
 let tableDiv = document.getElementById("table_div");
 tableDiv.appendChild(p);
