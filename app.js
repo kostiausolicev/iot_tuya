@@ -3,8 +3,7 @@ let tg = window.Telegram.WebApp;
 let p = document.createElement("p");
 
 let data = tg.initData;
-const obj = JSON.parse(data);
-p.innerText = obj.type;
+p.innerText = data;
 let tableDiv = document.getElementById("table_div");
 tableDiv.appendChild(p);
 
