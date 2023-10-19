@@ -1,14 +1,13 @@
 package ru.headh.kosti.homeservice.repositoties
 
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Table
+import javax.persistence.*
 
 @Entity
 @Table(name="homes")
-data class Home(
+class Home(
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int = 0,
-    val name: String = "not name",
-    val address: String? = null
+    var name: String = "",
+    var address: String? = null
 )
