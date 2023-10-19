@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import ru.headh.kosti.homeservice.repositoties.Home
 
@@ -17,12 +18,12 @@ class HomeController {
 
     @PostMapping
     fun createHome(@RequestBody home: Home) : ResponseEntity<String> {
-        return ResponseEntity.ok("Home was created")
+        return ResponseEntity.ok("Home with name ${home.name} was created")
     }
 
     @GetMapping("/{homeId}")
     fun getHome(@PathVariable homeId: Int) : ResponseEntity<String> {
-        return ResponseEntity.ok("This is a home")
+        return ResponseEntity.ok("This is a home with id: $homeId")
     }
 
     @GetMapping
