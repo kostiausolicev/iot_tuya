@@ -10,13 +10,16 @@ class HomeEntity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int? = null,
     var name: String,
-    var address: String?
+    var address: String?,
+    @OneToMany
+    var rooms: ArrayList<RoomEntity>
 ) {
     fun toDto(): HomeDto {
         return HomeDto(
             id = id,
             name = name,
-            address = address
+            address = address,
+            rooms = rooms
         )
     }
 }
