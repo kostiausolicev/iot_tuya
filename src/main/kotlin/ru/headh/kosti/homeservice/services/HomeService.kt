@@ -1,37 +1,42 @@
 package ru.headh.kosti.homeservice.services
 
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException
 import org.springframework.stereotype.Service
-import ru.headh.kosti.homeservice.repositoties.Home
+import ru.headh.kosti.homeservice.dto.HomeDto
+import ru.headh.kosti.homeservice.dto.request.HomeRequest
+import ru.headh.kosti.homeservice.repositoties.entity.HomeEntity
 import ru.headh.kosti.homeservice.repositoties.dao.HomeDao
+import javax.persistence.EntityNotFoundException
 
 @Service
 class HomeService(
     val homeDao: HomeDao
 ) {
-    fun creatingHome(name: String, address: String?) : Home {
-        val home = homeDao.save(Home(name=name, address=address))
-        return home
+    fun creatingHome(homeRequest: HomeRequest) : HomeDto {
+        return homeDao.save(HomeEntity(
+            name = homeRequest.name,
+            address = homeRequest.address)
+        ).toDto()
     }
 
-    fun getHome(id: Int) : Home {
-        val home = homeDao.findById(id).orElseThrow()
-        return home
+    fun getHome(id: Int) : HomeDto {
+        val home = homeDao.findById(id).orElseThrow() {EntityNotFoundException("Дом с id $id не найден") }
+        return home.toDto()
     }
-    fun getHomeList(): List<Home> {
-        return homeDao.findAll()
-    }
+    fun getHomeList(): List<HomeDto> =
+        homeDao.findAll().let { sourceList ->
+            sourceList.map { it.toDto() }
+        }
 
-    fun deleteHome(id: Int) {
-        val home = homeDao.findById(id).orElseThrow()
-        homeDao.delete(home)
-    }
+    fun deleteHome(id: Int) =
+        homeDao.delete(homeDao.findById(id).orElseThrow())
 
-    fun updateHome(id: Int, name: String, address: String?) : Home {
-        val home = homeDao.findById(id).orElseThrow()
-        home.name = name
-        home.address = address
+    fun updateHome(id: Int, homeRequest: HomeRequest) : HomeDto {
+        val existsHome = homeDao.findById(id).orElseThrow() {EntityNotFoundException("Дом с id $id не найден") }
+        existsHome.name = homeRequest.name
+        existsHome.address = homeRequest.address
 
-        homeDao.updateHomeById(id, home.name, home.address)
-        return home
+        val updateHome = homeDao.save(existsHome)
+        return updateHome.toDto()
     }
 }
