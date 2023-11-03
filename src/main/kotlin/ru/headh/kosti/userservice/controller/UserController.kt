@@ -15,14 +15,11 @@ class UserController(
     val userService: UserService
 ) {
     @PostMapping("/register")
-    fun register(@RequestBody userRegisterRequest: UserRegisterRequest) = null
+    fun register(@RequestBody userRegisterRequest: UserRegisterRequest) = userService.register(userRegisterRequest)
 
     @PostMapping("/auth")
     fun auth(@RequestBody userAuthRequest: UserAuthRequest) = null
 
     @PostMapping("/signout")
     fun signout(@RequestBody accessToken: String) = null
-
-    @PostMapping("/refresh")
-    fun refresh(@RequestBody tokenRefreshRequest: TokenRefreshRequest) = null
 }

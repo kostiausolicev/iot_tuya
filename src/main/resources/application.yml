@@ -7,6 +7,6 @@ spring:
     change-log: classpath:/db/changelog-master.yaml
     enabled: true
 
-jwb:
+jwt:
   secret: hjhbjhbJHBJHFBDjhbjhb873Y4UI2BUYLSDLDBjgf
   ttl: 3600
