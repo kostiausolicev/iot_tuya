@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/HOME_SERVICE_DB
+    username: postgres
+    password: 1111
+  liquibase:
+    change-log: classpath:/db/changelog-master.yaml
+    enabled: true
+
+jwb:
+  secret: hjhbjhbJHBJHFBDjhbjhb873Y4UI2BUYLSDLDBjgf
+  ttl: 3600
