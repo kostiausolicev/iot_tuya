@@ -2,6 +2,7 @@ package ru.headh.kosti.userservice.service
 
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import ru.headh.kosti.userservice.dto.request.UserAuthRequest
 import ru.headh.kosti.userservice.dto.request.UserRegisterRequest
 import ru.headh.kosti.userservice.entity.UserEntity
 import ru.headh.kosti.userservice.repositories.UserRepository
@@ -24,5 +25,12 @@ class UserService(
                 ).let {user -> jwtService.generate(user) }
             }
 
-    fun matchPassword(rawPass: String, encodePass: String): Boolean = passwordEncoder.matches(rawPass, encodePass)
+    fun auth(userAuthRequest: UserAuthRequest) =
+        userRepository.findByUsername(userAuthRequest.username)
+            ?.let {
+                if (!matchPassword(userAuthRequest.password, it.password)) throw Exception("Пароли не совпадают")
+                jwtService.generate(it)
+            } ?: throw Exception("Пользователя с таким username не найдено")
+
+    private fun matchPassword(rawPass: String, encodePass: String): Boolean = passwordEncoder.matches(rawPass, encodePass)
 }

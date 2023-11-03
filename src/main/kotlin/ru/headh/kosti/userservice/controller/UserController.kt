@@ -18,7 +18,7 @@ class UserController(
     fun register(@RequestBody userRegisterRequest: UserRegisterRequest) = userService.register(userRegisterRequest)
 
     @PostMapping("/auth")
-    fun auth(@RequestBody userAuthRequest: UserAuthRequest) = null
+    fun auth(@RequestBody userAuthRequest: UserAuthRequest) = userService.auth(userAuthRequest)
 
     @PostMapping("/signout")
     fun signout(@RequestBody accessToken: String) = null
