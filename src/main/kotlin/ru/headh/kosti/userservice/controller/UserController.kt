@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import ru.headh.kosti.userservice.dto.request.AccessTokenRequest
 import ru.headh.kosti.userservice.dto.request.TokenRefreshRequest
 import ru.headh.kosti.userservice.dto.request.UserAuthRequest
 import ru.headh.kosti.userservice.dto.request.UserRegisterRequest
@@ -21,5 +22,5 @@ class UserController(
     fun auth(@RequestBody userAuthRequest: UserAuthRequest) = userService.auth(userAuthRequest)
 
     @PostMapping("/signout")
-    fun signout(@RequestBody accessToken: String) = null
+    fun signout(@RequestBody accessTokenRequest: AccessTokenRequest) = userService.signout(accessTokenRequest.accessToken)
 }

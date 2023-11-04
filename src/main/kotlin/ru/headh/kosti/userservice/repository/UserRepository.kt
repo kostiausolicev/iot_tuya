@@ -1,4 +1,4 @@
-package ru.headh.kosti.userservice.repositories
+package ru.headh.kosti.userservice.repository
 
 import org.springframework.data.jpa.repository.JpaRepository
 import ru.headh.kosti.userservice.entity.UserEntity

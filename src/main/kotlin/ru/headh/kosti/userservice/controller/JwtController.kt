@@ -1,9 +1,6 @@
 package ru.headh.kosti.userservice.controller
 
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import ru.headh.kosti.userservice.dto.request.TokenRefreshRequest
 import ru.headh.kosti.userservice.service.JwtService
 
