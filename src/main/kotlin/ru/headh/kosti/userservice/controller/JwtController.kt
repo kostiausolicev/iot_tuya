@@ -10,5 +10,5 @@ class JwtController(
     val jwtService: JwtService
 ) {
     @PostMapping("/refresh")
-    fun refresh(@RequestBody tokenRefreshRequest: TokenRefreshRequest) = null
+    fun refresh(@RequestBody tokenRefreshRequest: TokenRefreshRequest) = jwtService.refresh(tokenRefreshRequest)
 }

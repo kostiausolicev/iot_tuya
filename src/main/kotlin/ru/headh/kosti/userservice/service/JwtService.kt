@@ -20,9 +20,21 @@ class JwtService(
     val secret: String,
     val tokenRepository: TokenRepository
 ) {
-    fun refresh(tokenRefreshRequest: TokenRefreshRequest): SuccessAuthDto? = null
+    fun refresh(tokenRefreshRequest: TokenRefreshRequest): SuccessAuthDto? =
+        tokenRepository.findByRefreshToken(UUID.fromString(tokenRefreshRequest.refreshToken))
+            ?.let {
+                tokenRepository.delete(it)
+                val newToken = generate(it.user)
+                SuccessAuthDto(
+                    accessToken = newToken.accessToken,
+                    refreshToken = newToken.refreshToken,
+                    ttl = ttl
+                )
+            }
+            ?: throw Exception("Токен не найден или истек")
 
-    fun generate(userEntity: UserEntity): SuccessAuthDto = JWT.create()
+    fun generate(userEntity: UserEntity): SuccessAuthDto =
+        JWT.create()
         .withClaim("id", userEntity.id)
         .withClaim("username", userEntity.username)
         .withExpiresAt(Instant.now().plusSeconds(ttl))

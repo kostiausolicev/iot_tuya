@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import ru.headh.kosti.userservice.dto.request.AccessTokenRequest
-import ru.headh.kosti.userservice.dto.request.TokenRefreshRequest
 import ru.headh.kosti.userservice.dto.request.UserAuthRequest
 import ru.headh.kosti.userservice.dto.request.UserRegisterRequest
 import ru.headh.kosti.userservice.service.UserService
