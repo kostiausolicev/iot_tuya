@@ -8,7 +8,7 @@ import javax.persistence.*
 class TokenEntity(
     @Id
     @Column(name = "token", nullable = false)
-    val refreshToken: UUID,
+    val refreshToken: UUID = UUID.randomUUID(),
     @OneToOne
     @JoinColumn(name = "user_id")
     val user: UserEntity

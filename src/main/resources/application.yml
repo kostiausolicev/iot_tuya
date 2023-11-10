@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/HOME_SERVICE_DB
-    username: postgres
-    password: 1111
+    url: jdbc:postgresql://localhost:5432/users_headh_db
+    username: admin
+    password: admin
   liquibase:
     change-log: classpath:/db/changelog-master.yaml
     enabled: true
