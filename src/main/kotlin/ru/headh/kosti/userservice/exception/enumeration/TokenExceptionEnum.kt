@@ -7,8 +7,7 @@ enum class TokenExceptionEnum(
     val httpStatus: HttpStatus,
     val message: String
 ) {
-    REFRESH_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "Токен не найден"),
-    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "Ошибка авторизации");
+    REFRESH_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "Токен не найден");
 
     fun toTokenException(): TokenException =
         TokenException(

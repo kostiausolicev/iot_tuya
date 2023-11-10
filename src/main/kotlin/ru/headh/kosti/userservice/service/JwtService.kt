@@ -12,6 +12,7 @@ import ru.headh.kosti.userservice.exception.enumeration.TokenExceptionEnum
 import ru.headh.kosti.userservice.repository.TokenRepository
 import java.time.Instant
 import java.util.UUID
+import javax.transaction.Transactional
 
 @Service
 class JwtService(
@@ -23,19 +24,26 @@ class JwtService(
 ) {
     fun refresh(tokenRefreshRequest: TokenRefreshRequest): SuccessAuthDto? =
         tokenRepository.findByRefreshToken(UUID.fromString(tokenRefreshRequest.refreshToken))
-            ?.let {
-                tokenRepository.delete(it)
-                val newToken = generate(it.user)
-                SuccessAuthDto(
-                    accessToken = newToken.accessToken,
-                    refreshToken = newToken.refreshToken,
-                    ttl = ttl
-                )
+            ?.let {token ->
+                tokenRepository.delete(token)
+                generate(token.user).let { newToken ->
+                    SuccessAuthDto(
+                        accessToken = newToken.accessToken,
+                        refreshToken = newToken.refreshToken,
+                        ttl = ttl
+                    )
+                }
             }
             ?: throw TokenExceptionEnum.REFRESH_TOKEN_NOT_FOUND.toTokenException()
 
-    fun generate(userEntity: UserEntity): SuccessAuthDto =
-        JWT.create()
+    @Transactional
+    fun generate(userEntity: UserEntity): SuccessAuthDto {
+        tokenRepository.findByUser(userEntity)
+            ?.let { token ->
+                tokenRepository.delete(token)
+                tokenRepository.findByUser(userEntity)
+            }
+        return JWT.create()
             .withClaim("id", userEntity.id)
             .withExpiresAt(Instant.now().plusSeconds(ttl))
             .sign(Algorithm.HMAC256(secret))
@@ -48,6 +56,7 @@ class JwtService(
                     ttl = ttl
                 )
             }
+    }
 
     fun parse(token: String) =
         JWT.require(Algorithm.HMAC256(secret))

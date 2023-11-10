@@ -14,7 +14,7 @@ import ru.headh.kosti.userservice.repository.UserRepository
 @Service
 class UserService(
     val userRepository: UserRepository,
-    val jwtRepository: TokenRepository,
+    val tokenRepository: TokenRepository,
     val jwtService: JwtService,
     val passwordEncoder: PasswordEncoder
 ) {
@@ -30,10 +30,10 @@ class UserService(
 
     fun auth(userAuthRequest: UserAuthRequest) =
         userRepository.findByUsername(userAuthRequest.username)
-            ?.let {
-                if (!matchPassword(userAuthRequest.password, it.password))
+            ?.let { user ->
+                if (!matchPassword(userAuthRequest.password, user.password))
                     throw UserExceptionEnum.WRONG_LOGIN_OR_PASSWORD.toUserException()
-                jwtService.generate(it)
+                jwtService.generate(user)
             } ?: throw UserExceptionEnum.WRONG_LOGIN_OR_PASSWORD.toUserException()
 
     fun signout(token: String) =
@@ -41,12 +41,11 @@ class UserService(
             userRepository.findByIdOrNull(
                 it?.get("id")?.asInt()
             )
-                ?.let { u ->
-                    jwtRepository.findByUser(u)
-                        ?.also { token -> jwtRepository.delete(token) }
-                        ?: throw TokenExceptionEnum.REFRESH_TOKEN_NOT_FOUND.toTokenException()
-                } ?: throw UserExceptionEnum.USER_NOT_FOUND.toUserException()
-        }
+        } ?.let { u ->
+            tokenRepository.findByUser(u)
+                ?.let { token -> tokenRepository.delete(token) }
+                ?: throw TokenExceptionEnum.REFRESH_TOKEN_NOT_FOUND.toTokenException()
+        } ?: throw UserExceptionEnum.USER_NOT_FOUND.toUserException()
 
     private fun matchPassword(rawPass: String, encodePass: String): Boolean =
         passwordEncoder.matches(rawPass, encodePass)
