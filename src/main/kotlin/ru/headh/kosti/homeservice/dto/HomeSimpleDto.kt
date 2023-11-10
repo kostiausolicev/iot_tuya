@@ -1,4 +1,4 @@
-package ru.headh.kosti.homeservice.dto.simple
+package ru.headh.kosti.homeservice.dto
 
 data class HomeSimpleDto (
     val id: Int,

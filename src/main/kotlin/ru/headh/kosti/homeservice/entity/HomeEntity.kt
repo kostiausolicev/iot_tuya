@@ -1,8 +1,18 @@
 package ru.headh.kosti.homeservice.entity
 
-import ru.headh.kosti.homeservice.dto.dto.HomeDto
-import ru.headh.kosti.homeservice.dto.simple.HomeSimpleDto
-import javax.persistence.*
+import ru.headh.kosti.homeservice.dto.HomeDto
+import ru.headh.kosti.homeservice.dto.HomeSimpleDto
+import javax.persistence.Entity
+import javax.persistence.NamedEntityGraph
+import javax.persistence.NamedEntityGraphs
+import javax.persistence.Table
+import javax.persistence.NamedAttributeNode
+import javax.persistence.Id
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.OneToMany
+import javax.persistence.FetchType
+
 
 @Entity
 @Table(name="homes")
@@ -20,7 +30,7 @@ class HomeEntity(
     val name: String,
     val address: String?,
 
-    @OneToMany(mappedBy = "home", targetEntity = RoomEntity::class)
+    @OneToMany(mappedBy = "home", fetch = FetchType.EAGER, targetEntity = RoomEntity::class)
     var rooms: List<RoomEntity>? = null
 ) {
     fun toDto(): HomeDto =

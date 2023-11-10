@@ -2,42 +2,52 @@ package ru.headh.kosti.homeservice.service
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import ru.headh.kosti.homeservice.dto.dto.HomeDto
+import ru.headh.kosti.homeservice.dto.HomeDto
 import ru.headh.kosti.homeservice.dto.request.HomeRequest
-import ru.headh.kosti.homeservice.dto.simple.HomeSimpleDto
+import ru.headh.kosti.homeservice.dto.HomeSimpleDto
 import ru.headh.kosti.homeservice.entity.HomeEntity
-import ru.headh.kosti.homeservice.repositoty.HomeDao
-import javax.persistence.EntityNotFoundException
+import ru.headh.kosti.homeservice.error.ApiError
+import ru.headh.kosti.homeservice.repositoty.HomeRepository
 
 @Service
 class HomeService(
-    val homeDao: HomeDao
+    val homeRepository: HomeRepository
 ) {
     fun createHome(homeRequest: HomeRequest) : HomeDto =
-        homeDao.save(
-            HomeEntity(
-            name = homeRequest.name,
-            address = homeRequest.address,
-            rooms = listOf()
-        )
+        homeRepository.save(
+            homeRequest.toEntity()
         ).toDto()
 
     fun getHome(id: Int) : HomeDto =
-        homeDao.findById(id).orElseThrow { EntityNotFoundException("Дом с id $id не найден") }.toDto()
+        homeRepository.findByIdOrNull(id)?.toDto()
+            ?: throw ApiError.HOME_NOT_FOUND.toException()
 
     fun getHomeList(): List<HomeSimpleDto> =
-        homeDao.findAll().let { sourceList ->
+        homeRepository.findAll().let { sourceList ->
             sourceList.map { it.toSimpleDto() }
         }
 
     fun deleteHome(id: Int) =
-        homeDao.delete(homeDao.findById(id).orElseThrow())
+        homeRepository.findByIdOrNull(id)
+            ?.let {home ->
+                homeRepository.delete( home )
+            }
+            ?: throw ApiError.HOME_NOT_FOUND.toException()
 
-    fun updateHome(id: Int, homeRequest: HomeRequest) : HomeDto = homeDao.findByIdOrNull(id)?.let {
-        homeDao.save(HomeEntity (
-            id = it.id,
-            name = it.name,
-            address = it.address
-        )).toDto()
-    }?: throw EntityNotFoundException("Дом с id $id не найден")
+    fun updateHome(id: Int, homeRequest: HomeRequest) : HomeDto =
+        homeRepository.findByIdOrNull(id)
+            ?.let { home ->
+                homeRepository.save(HomeEntity (
+                    id = home.id,
+                    name = home.name,
+                    address = home.address
+                )).toDto()
+            }?: throw ApiError.HOME_NOT_FOUND.toException()
+
+    private fun HomeRequest.toEntity() =
+        HomeEntity(
+            name = this.name,
+            address = this.address,
+            rooms = listOf()
+        )
 }

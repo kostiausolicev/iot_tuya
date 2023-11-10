@@ -1,4 +1,4 @@
-package ru.headh.kosti.homeservice.dto.dto
+package ru.headh.kosti.homeservice.dto
 
 data class HomeDto(
     val id: Int,

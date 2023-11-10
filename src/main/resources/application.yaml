@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/HOME_SERVICE_DB
-    username: postgres
-    password: 1111
+    url: jdbc:postgresql://localhost:5432/home_service_db
+    username: admin
+    password: admin
     generate-dll: none
 
   jpa:

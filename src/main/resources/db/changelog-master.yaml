@@ -1,9 +1,4 @@
 databaseChangeLog:
-#  - changeSet:
-#      author: Konstantin
   - include:
       id: 1
-      file: db/changelog/create-homes-table.sql
-  - include:
-      id: 2
-      file: db/changelog/create-rooms-table.sql
+      file: db/changelog/create-table.sql

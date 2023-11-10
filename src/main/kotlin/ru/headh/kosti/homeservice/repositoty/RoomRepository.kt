@@ -5,4 +5,4 @@ import org.springframework.stereotype.Repository
 import ru.headh.kosti.homeservice.entity.RoomEntity
 
 @Repository
-interface RoomDao : JpaRepository<RoomEntity, Int>
+interface RoomRepository : JpaRepository<RoomEntity, Int>

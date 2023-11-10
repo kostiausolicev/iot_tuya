@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository
 import ru.headh.kosti.homeservice.entity.HomeEntity
 
 @Repository
-interface HomeDao : JpaRepository<HomeEntity, Int> {
+interface HomeRepository : JpaRepository<HomeEntity, Int> {
     @EntityGraph(value = "only_house_entity_graph")
     override fun findAll(): List<HomeEntity>
 }
