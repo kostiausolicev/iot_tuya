@@ -36,18 +36,14 @@ class HomeService(
 
     fun updateHome(id: Int, homeRequest: HomeRequest) : HomeDto =
         homeRepository.findByIdOrNull(id)
-            ?.let { home ->
-                homeRepository.save(HomeEntity (
-                    id = home.id,
-                    name = home.name,
-                    address = home.address
-                )).toDto()
+            ?.let {
+                homeRepository.save(homeRequest.toEntity(id)).toDto()
             }?: throw ApiError.HOME_NOT_FOUND.toException()
 
-    private fun HomeRequest.toEntity() =
+    private fun HomeRequest.toEntity(id: Int = -1) =
         HomeEntity(
+            id = id,
             name = this.name,
-            address = this.address,
-            rooms = listOf()
+            address = this.address
         )
 }
