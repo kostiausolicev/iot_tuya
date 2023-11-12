@@ -13,12 +13,10 @@ import ru.headh.kosti.homeservice.repositoty.HomeRepository
 class HomeService(
     val homeRepository: HomeRepository
 ) {
-    fun createHome(homeRequest: HomeRequest) : HomeDto =
-        homeRepository.save(
-            homeRequest.toEntity()
-        ).toDto()
+    fun createHome(homeRequest: HomeRequest): HomeDto =
+        homeRepository.save(homeRequest.toEntity()).toDto()
 
-    fun getHome(id: Int) : HomeDto =
+    fun getHome(id: Int): HomeDto =
         homeRepository.findByIdOrNull(id)?.toDto()
             ?: throw ApiError.HOME_NOT_FOUND.toException()
 
@@ -29,16 +27,16 @@ class HomeService(
 
     fun deleteHome(id: Int) =
         homeRepository.findByIdOrNull(id)
-            ?.let {home ->
-                homeRepository.delete( home )
+            ?.let { home ->
+                homeRepository.delete(home)
             }
             ?: throw ApiError.HOME_NOT_FOUND.toException()
 
-    fun updateHome(id: Int, homeRequest: HomeRequest) : HomeDto =
+    fun updateHome(id: Int, homeRequest: HomeRequest): HomeDto =
         homeRepository.findByIdOrNull(id)
             ?.let {
                 homeRepository.save(homeRequest.toEntity(id)).toDto()
-            }?: throw ApiError.HOME_NOT_FOUND.toException()
+            } ?: throw ApiError.HOME_NOT_FOUND.toException()
 
     private fun HomeRequest.toEntity(id: Int = -1) =
         HomeEntity(
