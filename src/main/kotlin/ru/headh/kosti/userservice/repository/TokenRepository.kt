@@ -10,6 +10,4 @@ import java.util.UUID
 interface TokenRepository : JpaRepository<TokenEntity, UUID> {
     fun findByRefreshToken(refreshToken: UUID): TokenEntity?
     fun findByUser(userEntity: UserEntity): TokenEntity?
-
-    fun deleteByUser(user: UserEntity)
 }
