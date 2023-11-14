@@ -3,6 +3,7 @@ package ru.headh.kosti.userservice.service
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import ru.headh.kosti.userservice.dto.SuccessAuthDto
 import ru.headh.kosti.userservice.dto.request.UserAuthRequest
 import ru.headh.kosti.userservice.dto.request.UserRegisterRequest
 import ru.headh.kosti.userservice.entity.UserEntity
@@ -14,38 +15,35 @@ import ru.headh.kosti.userservice.repository.UserRepository
 @Service
 class UserService(
     val userRepository: UserRepository,
-    val tokenRepository: TokenRepository,
     val jwtService: JwtService,
     val passwordEncoder: PasswordEncoder
 ) {
-    fun register(userRegisterRequest: UserRegisterRequest) =
-        userRepository.findByUsername(userRegisterRequest.username)
-            ?.also { throw UserExceptionEnum.USER_EXIST.toUserException() }
-            ?:let {
-                if (userRegisterRequest.password != userRegisterRequest.confirmPassword)
-                    throw UserExceptionEnum.WRONG_CONFIRM_PASSWORD.toUserException()
-                userRepository.save(userRegisterRequest.toEntity())
-                    .let {user -> jwtService.generate(user) }
-            }
+    fun register(userRegisterRequest: UserRegisterRequest): SuccessAuthDto {
+        val user = userRepository.findByUsername(userRegisterRequest.username)
+        if (user != null)
+            throw UserExceptionEnum.USER_EXIST.toUserException()
+        if (userRegisterRequest.password != userRegisterRequest.confirmPassword)
+            throw UserExceptionEnum.WRONG_CONFIRM_PASSWORD.toUserException()
+        val userEntity = userRegisterRequest.toEntity()
+        userRepository.save(userEntity)
+        return jwtService.generate(userEntity)
+    }
 
-    fun auth(userAuthRequest: UserAuthRequest) =
-        userRepository.findByUsername(userAuthRequest.username)
-            ?.let { user ->
-                if (!matchPassword(userAuthRequest.password, user.password))
-                    throw UserExceptionEnum.WRONG_LOGIN_OR_PASSWORD.toUserException()
-                jwtService.generate(user)
-            } ?: throw UserExceptionEnum.WRONG_LOGIN_OR_PASSWORD.toUserException()
+    fun auth(userAuthRequest: UserAuthRequest): SuccessAuthDto {
+        val user = userRepository.findByUsername(userAuthRequest.username)
+            ?: throw UserExceptionEnum.WRONG_LOGIN_OR_PASSWORD.toUserException()
+        if (!matchPassword(userAuthRequest.password, user.password))
+            throw UserExceptionEnum.WRONG_LOGIN_OR_PASSWORD.toUserException()
+        return jwtService.generate(user)
+    }
 
-    fun signout(token: String) =
-        jwtService.parse(token).let {
-            userRepository.findByIdOrNull(
-                it?.get("id")?.asInt()
-            )
-        } ?.let { u ->
-            tokenRepository.findByUser(u)
-                ?.let { token -> tokenRepository.delete(token) }
-                ?: throw TokenExceptionEnum.REFRESH_TOKEN_NOT_FOUND.toTokenException()
-        } ?: throw UserExceptionEnum.USER_NOT_FOUND.toUserException()
+    fun signout(token: String) {
+        val claims = jwtService.parse(token)
+        val userId = claims?.get("id")?.asInt()
+        val user = userRepository.findByIdOrNull(userId)
+            ?: throw UserExceptionEnum.USER_NOT_FOUND.toUserException()
+        jwtService.deleteByUser(user)
+    }
 
     private fun matchPassword(rawPass: String, encodePass: String): Boolean =
         passwordEncoder.matches(rawPass, encodePass)

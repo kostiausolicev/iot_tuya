@@ -22,19 +22,13 @@ class JwtService(
     val secret: String,
     val tokenRepository: TokenRepository
 ) {
-    fun refresh(tokenRefreshRequest: TokenRefreshRequest): SuccessAuthDto? =
-        tokenRepository.findByRefreshToken(UUID.fromString(tokenRefreshRequest.refreshToken))
-            ?.let {token ->
-                tokenRepository.delete(token)
-                generate(token.user).let { newToken ->
-                    SuccessAuthDto(
-                        accessToken = newToken.accessToken,
-                        refreshToken = newToken.refreshToken,
-                        ttl = ttl
-                    )
-                }
-            }
+    fun refresh(tokenRefreshRequest: TokenRefreshRequest): SuccessAuthDto {
+        val refreshToken: UUID = UUID.fromString(tokenRefreshRequest.refreshToken)
+        val token = tokenRepository.findByRefreshToken(refreshToken)
             ?: throw TokenExceptionEnum.REFRESH_TOKEN_NOT_FOUND.toTokenException()
+        tokenRepository.delete(token)
+        return generate(token.user)
+    }
 
     @Transactional
     fun generate(userEntity: UserEntity): SuccessAuthDto {
@@ -57,6 +51,9 @@ class JwtService(
                 )
             }
     }
+
+    fun deleteByUser(user: UserEntity) =
+        tokenRepository.deleteByUser(user)
 
     fun parse(token: String) =
         JWT.require(Algorithm.HMAC256(secret))
