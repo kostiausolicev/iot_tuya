@@ -7,9 +7,7 @@ import ru.headh.kosti.userservice.dto.SuccessAuthDto
 import ru.headh.kosti.userservice.dto.request.UserAuthRequest
 import ru.headh.kosti.userservice.dto.request.UserRegisterRequest
 import ru.headh.kosti.userservice.entity.UserEntity
-import ru.headh.kosti.userservice.exception.enumeration.TokenExceptionEnum
 import ru.headh.kosti.userservice.exception.enumeration.UserExceptionEnum
-import ru.headh.kosti.userservice.repository.TokenRepository
 import ru.headh.kosti.userservice.repository.UserRepository
 
 @Service
@@ -24,8 +22,7 @@ class UserService(
             throw UserExceptionEnum.USER_EXIST.toUserException()
         if (userRegisterRequest.password != userRegisterRequest.confirmPassword)
             throw UserExceptionEnum.WRONG_CONFIRM_PASSWORD.toUserException()
-        val userEntity = userRegisterRequest.toEntity()
-        userRepository.save(userEntity)
+        val userEntity = userRepository.save(userRegisterRequest.toEntity())
         return jwtService.generate(userEntity)
     }
 

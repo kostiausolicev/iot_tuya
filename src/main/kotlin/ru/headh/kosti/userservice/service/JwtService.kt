@@ -32,28 +32,22 @@ class JwtService(
 
     @Transactional
     fun generate(userEntity: UserEntity): SuccessAuthDto {
-        tokenRepository.findByUser(userEntity)
-            ?.let { token ->
-                tokenRepository.delete(token)
-                tokenRepository.findByUser(userEntity)
-            }
-        return JWT.create()
+        deleteByUser(userEntity)
+        val token = JWT.create()
             .withClaim("id", userEntity.id)
             .withExpiresAt(Instant.now().plusSeconds(ttl))
             .sign(Algorithm.HMAC256(secret))
-            .let { token ->
-                SuccessAuthDto(
-                    accessToken = token,
-                    refreshToken = tokenRepository.save(
-                        TokenEntity(user = userEntity)
-                    ).refreshToken.toString(),
-                    ttl = ttl
-                )
-            }
+        val refresh = tokenRepository.save(TokenEntity(user = userEntity))
+        return SuccessAuthDto(
+            accessToken = token,
+            refreshToken = refresh.refreshToken.toString(),
+            ttl = ttl
+        )
     }
 
     fun deleteByUser(user: UserEntity) =
-        tokenRepository.deleteByUser(user)
+        tokenRepository.findByUser(user)
+            ?.let { tokenRepository.delete(it) }
 
     fun parse(token: String) =
         JWT.require(Algorithm.HMAC256(secret))
