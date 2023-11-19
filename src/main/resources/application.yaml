@@ -8,9 +8,9 @@ connector:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/DEVICE_DB
-    username: postgres
-    password: 1111
+    url: jdbc:postgresql://localhost:5432/device-service-db
+    username: admin
+    password: admin
   # TODO Сделать миграции
   jpa:
     properties:
