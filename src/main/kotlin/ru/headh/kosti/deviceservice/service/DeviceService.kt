@@ -7,10 +7,10 @@ import ru.headh.kosti.deviceservice.dto.request.CreateDeviceRequest
 import ru.headh.kosti.deviceservice.dto.request.UpdateDeviceRequest
 import ru.headh.kosti.deviceservice.dto.tuya.DeviceDto
 import ru.headh.kosti.deviceservice.dto.tuya.SimpleDeviceDto
-import ru.headh.kosti.deviceservice.dto.tuya.TuyaCommand
 import ru.headh.kosti.deviceservice.dto.tuya.TuyaSendCommandRequest
 import ru.headh.kosti.deviceservice.entity.DeviceEntity
 import ru.headh.kosti.deviceservice.enum.DeviceCategory
+import ru.headh.kosti.deviceservice.exception.ApiExceptionEnum
 import ru.headh.kosti.deviceservice.repository.DeviceRepository
 
 @Service
@@ -24,19 +24,19 @@ class DeviceService(
             val capabilities = deviceConnector.getDeviceState(tuyaId)
             deviceConnector.getDeviceInfo(createDeviceRequest.tuyaId)
             val newDevice = deviceRepository.findByTuyaId(tuyaId)
-                ?.also { throw Exception() }
+                ?.also { throw ApiExceptionEnum.DEVICE_EXIST.toException() }
                 ?: createDeviceRequest.toEntity()
             val device = deviceRepository.save(newDevice)
             return device.toDto()
         } catch (_: Exception) {
-            throw Exception("Неправильный tuya id")
+            throw ApiExceptionEnum.WRONG_TUYA_ID.toException()
         }
     }
 
     fun sendAction(id: Int, commands: TuyaSendCommandRequest) {
         val tuyaId = deviceRepository.findByIdOrNull(id)
             ?.tuyaId
-            ?: throw Exception("Device not found")
+            ?: throw ApiExceptionEnum.DEVICE_NOT_FOUND.toException()
         deviceConnector.sendCommand(tuyaId, commands)
     }
 
@@ -44,12 +44,12 @@ class DeviceService(
     fun getDevice(id: Int): DeviceDto =
         deviceRepository.findByIdOrNull(id)
             ?.toDto()
-            ?: throw Exception("Device not found")
+            ?: throw ApiExceptionEnum.DEVICE_NOT_FOUND.toException()
 
     fun deleteDevice(id: Int) =
         deviceRepository.findByIdOrNull(id)
             ?.let { deviceRepository.delete(it) }
-            ?: throw Exception("Device not found")
+            ?: throw ApiExceptionEnum.DEVICE_NOT_FOUND.toException()
 
     fun getDeviceList(): List<SimpleDeviceDto> =
         deviceRepository.findAll().map {
@@ -59,7 +59,7 @@ class DeviceService(
     fun updateDevice(deviceId: Int, updateDeviceRequest: UpdateDeviceRequest): DeviceDto {
         val device = deviceRepository.findByIdOrNull(deviceId)
             ?.let { updateDeviceRequest.toEntity(it) }
-            ?: throw Exception("Девайс не найден")
+            ?: throw ApiExceptionEnum.DEVICE_NOT_FOUND.toException()
         val newDevice = deviceRepository.save(device)
         return newDevice.toDto()
     }
