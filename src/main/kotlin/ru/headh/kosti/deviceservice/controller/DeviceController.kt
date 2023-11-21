@@ -1,6 +1,7 @@
 package ru.headh.kosti.deviceservice.controller
 
 import org.springframework.web.bind.annotation.*
+import ru.headh.kosti.deviceservice.connector.DeviceConnector
 import ru.headh.kosti.deviceservice.dto.request.CreateDeviceRequest
 import ru.headh.kosti.deviceservice.dto.request.UpdateDeviceRequest
 import ru.headh.kosti.deviceservice.dto.tuya.TuyaSendCommandRequest
@@ -9,7 +10,8 @@ import ru.headh.kosti.deviceservice.service.DeviceService
 @RestController
 @RequestMapping("/api/device")
 class DeviceController(
-    val deviceService: DeviceService
+    val deviceService: DeviceService,
+    val deviceConnector: DeviceConnector
 ) {
     @PostMapping
     fun create(@RequestBody createDeviceRequest: CreateDeviceRequest) =

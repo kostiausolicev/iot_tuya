@@ -3,6 +3,7 @@ package ru.headh.kosti.deviceservice.service
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import ru.headh.kosti.deviceservice.connector.DeviceConnector
+import ru.headh.kosti.deviceservice.converter.dictionary.toTuyaCommand
 import ru.headh.kosti.deviceservice.dto.request.CreateDeviceRequest
 import ru.headh.kosti.deviceservice.dto.request.UpdateDeviceRequest
 import ru.headh.kosti.deviceservice.dto.tuya.DeviceDto
@@ -21,13 +22,18 @@ class DeviceService(
     fun create(createDeviceRequest: CreateDeviceRequest): DeviceDto {
         try {
             val tuyaId = createDeviceRequest.tuyaId
-            val capabilities = deviceConnector.getDeviceState(tuyaId)
-            deviceConnector.getDeviceInfo(createDeviceRequest.tuyaId)
+            val c = deviceConnector.getDeviceState(tuyaId)
+            val capabilities = c.mapNotNull {
+                val com: Map<String, Any> = mapOf(
+                    it["code"].toString() to it["value"]!!
+                )
+                com.toTuyaCommand()
+            }
             val newDevice = deviceRepository.findByTuyaId(tuyaId)
                 ?.also { throw ApiExceptionEnum.DEVICE_EXIST.toException() }
                 ?: createDeviceRequest.toEntity()
             val device = deviceRepository.save(newDevice)
-            return device.toDto()
+            return device.toDto(capabilities)
         } catch (_: Exception) {
             throw ApiExceptionEnum.WRONG_TUYA_ID.toException()
         }
@@ -40,11 +46,19 @@ class DeviceService(
         deviceConnector.sendCommand(tuyaId, commands)
     }
 
-    // TODO capabilities
-    fun getDevice(id: Int): DeviceDto =
-        deviceRepository.findByIdOrNull(id)
-            ?.toDto()
+    fun getDevice(id: Int): DeviceDto {
+        val device = deviceRepository.findByIdOrNull(id)
             ?: throw ApiExceptionEnum.DEVICE_NOT_FOUND.toException()
+        val tuyaId = device.tuyaId
+        val c = deviceConnector.getDeviceState(tuyaId)
+        val capabilities = c.mapNotNull {
+            val com: Map<String, Any> = mapOf(
+                it["code"].toString() to it["value"]!!
+            )
+            com.toTuyaCommand()
+        }
+        return device.toDto(capabilities)
+    }
 
     fun deleteDevice(id: Int) =
         deviceRepository.findByIdOrNull(id)
