@@ -16,7 +16,7 @@ class ColorTuyaConverter : TuyaConverter<ColorCommand> {
         data.run {
             TuyaCommand(
                 code = code.toTuyaCode() ?: throw IllegalArgumentException(),
-                value = mapper.readValue(value.toString())
+                value = mapper.writeValueAsString(value)
             )
         }
 

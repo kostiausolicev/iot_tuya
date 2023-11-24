@@ -11,7 +11,6 @@ enum class CapacityCode(
     BRIGHTNESS(ru.headh.kosti.deviceservice.util.BRIGHTNESS)
 }
 
-
 data class ColorData(
     val h: Int,
     val s: Int,
