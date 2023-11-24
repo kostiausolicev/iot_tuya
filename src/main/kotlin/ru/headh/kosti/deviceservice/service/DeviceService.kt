@@ -8,7 +8,7 @@ import ru.headh.kosti.deviceservice.dto.request.CreateDeviceRequest
 import ru.headh.kosti.deviceservice.dto.request.UpdateDeviceRequest
 import ru.headh.kosti.deviceservice.dto.tuya.DeviceDto
 import ru.headh.kosti.deviceservice.dto.tuya.SimpleDeviceDto
-import ru.headh.kosti.deviceservice.dto.tuya.TuyaSendCommandRequest
+import ru.headh.kosti.deviceservice.dto.request.TuyaSendCommandRequest
 import ru.headh.kosti.deviceservice.entity.DeviceEntity
 import ru.headh.kosti.deviceservice.enum.DeviceCategory
 import ru.headh.kosti.deviceservice.exception.ApiExceptionEnum

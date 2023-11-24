@@ -6,3 +6,9 @@ enum class CapacityCode {
     COLOR,
     BRIGHTNESS
 }
+
+data class ColorData(
+    val h: Int,
+    val s: Int,
+    val v: Int
+)
