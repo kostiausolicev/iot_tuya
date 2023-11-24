@@ -3,12 +3,15 @@ package ru.headh.kosti.deviceservice.service
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import ru.headh.kosti.deviceservice.connector.DeviceConnector
+import ru.headh.kosti.deviceservice.converter.TuyaConverter
 import ru.headh.kosti.deviceservice.converter.dictionary.toTuyaCommand
+import ru.headh.kosti.deviceservice.dto.command.Command
 import ru.headh.kosti.deviceservice.dto.request.CreateDeviceRequest
+import ru.headh.kosti.deviceservice.dto.request.SendCommandRequest
 import ru.headh.kosti.deviceservice.dto.request.UpdateDeviceRequest
 import ru.headh.kosti.deviceservice.dto.tuya.DeviceDto
 import ru.headh.kosti.deviceservice.dto.tuya.SimpleDeviceDto
-import ru.headh.kosti.deviceservice.dto.request.TuyaSendCommandRequest
+import ru.headh.kosti.deviceservice.dto.tuya.TuyaSendCommandRequest
 import ru.headh.kosti.deviceservice.entity.DeviceEntity
 import ru.headh.kosti.deviceservice.enum.DeviceCategory
 import ru.headh.kosti.deviceservice.exception.ApiExceptionEnum
@@ -17,8 +20,14 @@ import ru.headh.kosti.deviceservice.repository.DeviceRepository
 @Service
 class DeviceService(
     val deviceRepository: DeviceRepository,
-    val deviceConnector: DeviceConnector
+    val deviceConnector: DeviceConnector,
+    tuyaConverters: List<TuyaConverter<*>>
 ) {
+    private val tuyaConverters =
+        tuyaConverters
+            .filterIsInstance<TuyaConverter<Command>>()
+            .associateBy { it.code }
+
     fun create(createDeviceRequest: CreateDeviceRequest): DeviceDto {
         try {
             val tuyaId = createDeviceRequest.tuyaId
@@ -39,11 +48,15 @@ class DeviceService(
         }
     }
 
-    fun sendAction(id: Int, commands: TuyaSendCommandRequest) {
+    fun sendAction(id: Int, commands: SendCommandRequest) {
         val tuyaId = deviceRepository.findByIdOrNull(id)
             ?.tuyaId
             ?: throw ApiExceptionEnum.DEVICE_NOT_FOUND.toException()
-        deviceConnector.sendCommand(tuyaId, commands)
+        val capabilities: TuyaSendCommandRequest = commands.commands.map {
+            tuyaConverters[it.code]?.convert(it)
+                ?: throw IllegalArgumentException()
+        }.let { TuyaSendCommandRequest(it) }
+        deviceConnector.sendCommand(tuyaId, capabilities)
     }
 
     fun getDevice(id: Int): DeviceDto {

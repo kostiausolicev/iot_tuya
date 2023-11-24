@@ -3,8 +3,9 @@ package ru.headh.kosti.deviceservice.controller
 import org.springframework.web.bind.annotation.*
 import ru.headh.kosti.deviceservice.connector.DeviceConnector
 import ru.headh.kosti.deviceservice.dto.request.CreateDeviceRequest
+import ru.headh.kosti.deviceservice.dto.request.SendCommandRequest
 import ru.headh.kosti.deviceservice.dto.request.UpdateDeviceRequest
-import ru.headh.kosti.deviceservice.dto.request.TuyaSendCommandRequest
+import ru.headh.kosti.deviceservice.dto.tuya.TuyaSendCommandRequest
 import ru.headh.kosti.deviceservice.service.DeviceService
 
 @RestController
@@ -22,7 +23,7 @@ class DeviceController(
         deviceService.updateDevice(deviceId, updateDeviceRequest)
 
     @PostMapping("/{deviceId}/control")
-    fun sendCommand(@PathVariable deviceId: Int, @RequestBody commands: TuyaSendCommandRequest) =
+    fun sendCommand(@PathVariable deviceId: Int, @RequestBody commands: SendCommandRequest) =
         deviceService.sendAction(deviceId, commands)
 
     @DeleteMapping("/{deviceId}")

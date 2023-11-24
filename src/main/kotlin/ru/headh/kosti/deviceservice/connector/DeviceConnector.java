@@ -6,7 +6,7 @@ import com.tuya.connector.api.annotations.POST;
 import com.tuya.connector.api.annotations.Path;
 import java.util.List;
 import java.util.Map;
-import ru.headh.kosti.deviceservice.dto.request.TuyaSendCommandRequest;
+import ru.headh.kosti.deviceservice.dto.tuya.TuyaSendCommandRequest;
 
 public interface DeviceConnector {
     @GET("/v2.0/cloud/thing/{deviceId}")
