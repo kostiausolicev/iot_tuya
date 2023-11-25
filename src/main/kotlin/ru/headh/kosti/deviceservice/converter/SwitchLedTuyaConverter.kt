@@ -9,7 +9,7 @@ import ru.headh.kosti.deviceservice.enum.CapacityCode
 
 @Component
 class SwitchLedTuyaConverter : TuyaConverter<SwitchLedCommand> {
-    override fun convert(data: SwitchLedCommand): TuyaCommand =
+    override fun convertToTuya(data: SwitchLedCommand): TuyaCommand =
         data.run {
             TuyaCommand(
                 code = code.toTuyaCode() ?: throw IllegalArgumentException(),

@@ -8,7 +8,7 @@ import ru.headh.kosti.deviceservice.enum.CapacityCode
 
 @Component
 class BrightnessTuyaConverter: TuyaConverter<BrightnessCommand> {
-    override fun convert(data: BrightnessCommand): TuyaCommand =
+    override fun convertToTuya(data: BrightnessCommand): TuyaCommand =
         data.run {
             TuyaCommand(
                 code = code.toTuyaCode() ?: throw IllegalArgumentException(),

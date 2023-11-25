@@ -6,6 +6,7 @@ import com.tuya.connector.api.annotations.POST;
 import com.tuya.connector.api.annotations.Path;
 import java.util.List;
 import java.util.Map;
+import ru.headh.kosti.deviceservice.dto.tuya.TuyaCommand;
 import ru.headh.kosti.deviceservice.dto.tuya.TuyaSendCommandRequest;
 
 public interface DeviceConnector {
@@ -13,7 +14,7 @@ public interface DeviceConnector {
     Map<String, Object> getDeviceInfo(@Path("deviceId") String deviceId);
 
     @GET("/v1.0/iot-03/devices/{deviceId}/status")
-    List<Map<String, Object>> getDeviceState(@Path("deviceId") String deviceId);
+    List<TuyaCommand> getDeviceState(@Path("deviceId") String deviceId);
 
     @POST("/v1.0/iot-03/devices/{deviceId}/commands")
     Object sendCommand(@Path("deviceId") String deviceId, @Body TuyaSendCommandRequest body);

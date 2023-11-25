@@ -12,7 +12,7 @@ import ru.headh.kosti.deviceservice.enum.CapacityCode
 @Component
 class ColorTuyaConverter : TuyaConverter<ColorCommand> {
     private val mapper = jacksonObjectMapper()
-    override fun convert(data: ColorCommand): TuyaCommand =
+    override fun convertToTuya(data: ColorCommand): TuyaCommand =
         data.run {
             TuyaCommand(
                 code = code.toTuyaCode() ?: throw IllegalArgumentException(),

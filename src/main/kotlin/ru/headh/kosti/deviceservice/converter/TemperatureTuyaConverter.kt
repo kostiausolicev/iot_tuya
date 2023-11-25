@@ -9,7 +9,7 @@ import ru.headh.kosti.deviceservice.enum.CapacityCode
 
 @Component
 class TemperatureTuyaConverter : TuyaConverter<TemperatureCommand> {
-    override fun convert(data: TemperatureCommand): TuyaCommand =
+    override fun convertToTuya(data: TemperatureCommand): TuyaCommand =
         data.run {
             TuyaCommand(
                 code = code.toTuyaCode() ?: throw IllegalArgumentException(),

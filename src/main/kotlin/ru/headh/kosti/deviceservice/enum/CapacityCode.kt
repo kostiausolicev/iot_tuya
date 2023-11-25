@@ -1,7 +1,5 @@
 package ru.headh.kosti.deviceservice.enum
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo
-
 enum class CapacityCode(
     val value: String
 ) {
