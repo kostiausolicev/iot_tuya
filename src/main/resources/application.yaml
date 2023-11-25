@@ -11,10 +11,13 @@ spring:
     url: jdbc:postgresql://localhost:5432/device-service-db
     username: admin
     password: admin
-  # TODO Сделать миграции
   jpa:
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
     properties:
       hibernate:
         format_sql: true
-        hbm2ddl:
-          auto: update
+
+  liquibase:
+    change-log: db/changelog-master.yaml
+    enabled: true
