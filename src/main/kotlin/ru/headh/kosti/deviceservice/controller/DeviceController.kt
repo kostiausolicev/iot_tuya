@@ -17,8 +17,7 @@ import ru.headh.kosti.deviceservice.service.DeviceService
 @RestController
 @RequestMapping("/api/device")
 class DeviceController(
-    val deviceService: DeviceService,
-    val deviceConnector: DeviceConnector
+    val deviceService: DeviceService
 ) {
     @PostMapping
     fun create(@RequestBody createDeviceRequest: CreateDeviceRequest) =
