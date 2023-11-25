@@ -39,17 +39,13 @@ class DeviceService(
             .associateBy { it.code }
 
     fun create(createDeviceRequest: CreateDeviceRequest): DeviceDto {
-        try {
-            val tuyaId = createDeviceRequest.tuyaId
-            val newDevice = deviceRepository.findByTuyaId(tuyaId)
-                ?.also { throw ApiExceptionEnum.DEVICE_EXIST.toException() }
-                ?: createDeviceRequest.toEntity()
-            val device = deviceRepository.save(newDevice)
-            val capabilities = getDeviceCapabilities(tuyaId)
-            return device.toDto(capabilities)
-        } catch (_: Exception) {
-            throw ApiExceptionEnum.WRONG_TUYA_ID.toException()
-        }
+        val tuyaId = createDeviceRequest.tuyaId
+        val newDevice = deviceRepository.findByTuyaId(tuyaId)
+            ?.also { throw ApiExceptionEnum.DEVICE_EXIST.toException() }
+            ?: createDeviceRequest.toEntity()
+        val device = deviceRepository.save(newDevice)
+        val capabilities = getDeviceCapabilities(tuyaId)
+        return device.toDto(capabilities)
     }
 
     fun sendAction(id: Int, commands: SendCommandRequest) {
