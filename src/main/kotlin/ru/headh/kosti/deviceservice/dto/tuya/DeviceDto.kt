@@ -1,8 +1,10 @@
 package ru.headh.kosti.deviceservice.dto.tuya
 
+import ru.headh.kosti.deviceservice.dto.command.Command
+
 data class DeviceDto(
     val id: Int,
     val name: String,
     val category: String,
-    val capabilities: List<TuyaCommand>? = null
+    val capabilities: List<Command>? = null
 )

@@ -1,9 +1,13 @@
 package ru.headh.kosti.deviceservice.service
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import ru.headh.kosti.deviceservice.connector.DeviceConnector
+import ru.headh.kosti.deviceservice.converter.CommandConverter
 import ru.headh.kosti.deviceservice.converter.TuyaConverter
+import ru.headh.kosti.deviceservice.converter.dictionary.toCommand
 import ru.headh.kosti.deviceservice.dto.command.Command
 import ru.headh.kosti.deviceservice.dto.request.CreateDeviceRequest
 import ru.headh.kosti.deviceservice.dto.request.SendCommandRequest
@@ -20,11 +24,17 @@ import ru.headh.kosti.deviceservice.repository.DeviceRepository
 class DeviceService(
     val deviceRepository: DeviceRepository,
     val deviceConnector: DeviceConnector,
-    tuyaConverters: List<TuyaConverter<*>>
+    tuyaConverters: List<TuyaConverter<*>>,
+    commandConverters: List<CommandConverter<*>>
 ) {
     private val tuyaConverters =
         tuyaConverters
             .filterIsInstance<TuyaConverter<Command>>()
+            .associateBy { it.code }
+
+    private val commandConverters =
+        commandConverters
+            .filterIsInstance<CommandConverter<Command>>()
             .associateBy { it.code }
 
     fun create(createDeviceRequest: CreateDeviceRequest): DeviceDto {
@@ -34,7 +44,8 @@ class DeviceService(
                 ?.also { throw ApiExceptionEnum.DEVICE_EXIST.toException() }
                 ?: createDeviceRequest.toEntity()
             val device = deviceRepository.save(newDevice)
-            return device.toDto()
+            val capabilities = getDeviceCapabilities(tuyaId)
+            return device.toDto(capabilities)
         } catch (_: Exception) {
             throw ApiExceptionEnum.WRONG_TUYA_ID.toException()
         }
@@ -44,10 +55,12 @@ class DeviceService(
         val tuyaId = deviceRepository.findByIdOrNull(id)
             ?.tuyaId
             ?: throw ApiExceptionEnum.DEVICE_NOT_FOUND.toException()
-        val capabilities: TuyaSendCommandRequest = commands.commands.map {
-            tuyaConverters[it.code]?.convertToTuya(it)
-                ?: throw IllegalArgumentException()
-        }.let { TuyaSendCommandRequest(it) }
+        val capabilities: TuyaSendCommandRequest = commands.commands
+            .map {
+                tuyaConverters[it.code]
+                    ?.convertToTuya(it)
+                    ?: throw IllegalArgumentException()
+            }.let { TuyaSendCommandRequest(it) }
         deviceConnector.sendCommand(tuyaId, capabilities)
     }
 
@@ -55,8 +68,8 @@ class DeviceService(
         val device = deviceRepository.findByIdOrNull(id)
             ?: throw ApiExceptionEnum.DEVICE_NOT_FOUND.toException()
         val tuyaId = device.tuyaId
-        getDeviceCapabilities(tuyaId)
-        return device.toDto()
+        val capabilities = getDeviceCapabilities(tuyaId)
+        return device.toDto(capabilities)
     }
 
     fun deleteDevice(id: Int) =
@@ -77,11 +90,11 @@ class DeviceService(
         return newDevice.toDto()
     }
 
-    private fun getDeviceCapabilities(tuyaId: String) {
+    private fun getDeviceCapabilities(tuyaId: String): List<Command> {
         val status = deviceConnector.getDeviceState(tuyaId)
-        status.map {
-            it.code
-            it.value
+        return status.mapNotNull {
+            commandConverters[it.code.toCommand()]
+                ?.convertToCommand(it)
         }
     }
 

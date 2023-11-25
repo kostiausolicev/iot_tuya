@@ -6,5 +6,5 @@ import ru.headh.kosti.deviceservice.enum.CapacityCode
 
 interface CommandConverter<I : Command> {
     val code: CapacityCode
-    fun convertToCommand(data: I): TuyaCommand
+    fun convertToCommand(data: TuyaCommand): I
 }

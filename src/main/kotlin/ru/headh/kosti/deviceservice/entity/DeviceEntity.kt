@@ -19,7 +19,7 @@ class DeviceEntity(
     @Enumerated(EnumType.STRING)
     val category: DeviceCategory
 ) {
-    fun toDto(capabilities: List<TuyaCommand>? = null): DeviceDto =
+    fun toDto(capabilities: List<Command>? = null): DeviceDto =
         DeviceDto(
             id = id,
             name = name,

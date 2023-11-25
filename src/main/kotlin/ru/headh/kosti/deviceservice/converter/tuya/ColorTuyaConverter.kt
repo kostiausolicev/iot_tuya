@@ -1,11 +1,10 @@
-package ru.headh.kosti.deviceservice.converter
+package ru.headh.kosti.deviceservice.converter.tuya
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
 import org.springframework.stereotype.Component
+import ru.headh.kosti.deviceservice.converter.TuyaConverter
 import ru.headh.kosti.deviceservice.converter.dictionary.toTuyaCode
 import ru.headh.kosti.deviceservice.dto.command.ColorCommand
-import ru.headh.kosti.deviceservice.dto.command.Command
 import ru.headh.kosti.deviceservice.dto.tuya.TuyaCommand
 import ru.headh.kosti.deviceservice.enum.CapacityCode
 

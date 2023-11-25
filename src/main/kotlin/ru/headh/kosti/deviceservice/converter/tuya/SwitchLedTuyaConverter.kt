@@ -1,8 +1,8 @@
-package ru.headh.kosti.deviceservice.converter
+package ru.headh.kosti.deviceservice.converter.tuya
 
 import org.springframework.stereotype.Component
+import ru.headh.kosti.deviceservice.converter.TuyaConverter
 import ru.headh.kosti.deviceservice.converter.dictionary.toTuyaCode
-import ru.headh.kosti.deviceservice.dto.command.Command
 import ru.headh.kosti.deviceservice.dto.command.SwitchLedCommand
 import ru.headh.kosti.deviceservice.dto.tuya.TuyaCommand
 import ru.headh.kosti.deviceservice.enum.CapacityCode
