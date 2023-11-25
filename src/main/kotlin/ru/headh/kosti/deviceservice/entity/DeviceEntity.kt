@@ -3,10 +3,14 @@ package ru.headh.kosti.deviceservice.entity
 import ru.headh.kosti.deviceservice.dto.command.Command
 import ru.headh.kosti.deviceservice.dto.tuya.DeviceDto
 import ru.headh.kosti.deviceservice.dto.tuya.SimpleDeviceDto
-import ru.headh.kosti.deviceservice.dto.tuya.TuyaCommand
 import ru.headh.kosti.deviceservice.enum.DeviceCategory
-import javax.persistence.*
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.Table
+import javax.persistence.Enumerated
+import javax.persistence.EnumType
 import javax.persistence.GenerationType.IDENTITY
+import javax.persistence.Id
 
 @Entity
 @Table(name = "devices")

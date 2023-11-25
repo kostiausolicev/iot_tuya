@@ -1,8 +1,5 @@
 package ru.headh.kosti.deviceservice.service
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import okhttp3.internal.notify
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import ru.headh.kosti.deviceservice.connector.DeviceConnector

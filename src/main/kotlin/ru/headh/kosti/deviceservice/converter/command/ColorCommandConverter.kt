@@ -4,14 +4,10 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.springframework.stereotype.Component
 import ru.headh.kosti.deviceservice.converter.CommandConverter
-import ru.headh.kosti.deviceservice.converter.TuyaConverter
 import ru.headh.kosti.deviceservice.converter.dictionary.toCommand
-import ru.headh.kosti.deviceservice.converter.dictionary.toTuyaCode
-import ru.headh.kosti.deviceservice.dto.command.BrightnessCommand
 import ru.headh.kosti.deviceservice.dto.command.ColorCommand
 import ru.headh.kosti.deviceservice.dto.tuya.TuyaCommand
 import ru.headh.kosti.deviceservice.enum.CapacityCode
-import ru.headh.kosti.deviceservice.enum.ColorData
 
 @Component
 class ColorCommandConverter : CommandConverter<ColorCommand> {
