@@ -2,6 +2,7 @@ package ru.headh.kosti.deviceservice.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import okhttp3.internal.notify
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import ru.headh.kosti.deviceservice.connector.DeviceConnector
@@ -87,7 +88,8 @@ class DeviceService(
             ?.let { updateDeviceRequest.toEntity(it) }
             ?: throw ApiExceptionEnum.DEVICE_NOT_FOUND.toException()
         val newDevice = deviceRepository.save(device)
-        return newDevice.toDto()
+        val capabilities = getDeviceCapabilities(newDevice.tuyaId)
+        return newDevice.toDto(capabilities)
     }
 
     private fun getDeviceCapabilities(tuyaId: String): List<Command> {
@@ -100,6 +102,7 @@ class DeviceService(
 
     private fun UpdateDeviceRequest.toEntity(device: DeviceEntity): DeviceEntity =
         DeviceEntity(
+            id = device.id,
             tuyaId = device.tuyaId,
             name = this.name,
             category = device.category
