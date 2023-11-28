@@ -1,3 +1,6 @@
+server:
+  port: 8080
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/home_service_db
@@ -15,3 +18,10 @@ spring:
   liquibase:
     change-log: db/changelog-master.yaml
     enabled: true
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swag
+    disable-swagger-default-url: true
+  show-actuator: false

@@ -45,6 +45,7 @@ class HomeService(
         HomeEntity(
             id = id,
             name = this.name,
-            address = this.address
+            address = this.address,
+            ownerId = this.ownerId
         )
 }

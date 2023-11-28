@@ -2,6 +2,7 @@ package ru.headh.kosti.homeservice.entity
 
 import ru.headh.kosti.homeservice.dto.HomeDto
 import ru.headh.kosti.homeservice.dto.HomeSimpleDto
+import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.NamedEntityGraph
 import javax.persistence.NamedEntityGraphs
@@ -21,6 +22,7 @@ import javax.persistence.FetchType
         NamedAttributeNode(value = "id"),
         NamedAttributeNode(value = "name"),
         NamedAttributeNode(value = "address"),
+        NamedAttributeNode(value = "ownerId")
     ])
 )
 class HomeEntity(
@@ -29,6 +31,8 @@ class HomeEntity(
     val id: Int = -1,
     val name: String,
     val address: String?,
+    @Column(name = "owner_id")
+    val ownerId: Int,
 
     @OneToMany(mappedBy = "home", fetch = FetchType.EAGER, targetEntity = RoomEntity::class)
     var rooms: List<RoomEntity>? = null
@@ -38,6 +42,7 @@ class HomeEntity(
             id = id,
             name = name,
             address = address,
+            ownerId = ownerId,
             rooms = rooms?.map { it.toDto() } ?: emptyList()
         )
 
@@ -45,6 +50,7 @@ class HomeEntity(
         HomeSimpleDto(
             id = id,
             name = name,
-            address = address
+            address = address,
+            ownerId = ownerId
         )
 }
