@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import ru.headh.kosti.homeservice.dto.request.HomeRequest
 import ru.headh.kosti.homeservice.service.HomeService
@@ -19,11 +20,11 @@ class HomeController (val homeService: HomeService) {
         homeService.createHome(home)
 
     @GetMapping("/{homeId}")
-    fun getHome(@PathVariable homeId: Int) =
-        homeService.getHome(homeId)
+    fun getHome(@PathVariable homeId: Int, @RequestParam ownerId: Int) =
+        homeService.getHome(homeId, ownerId)
 
     @GetMapping
-    fun getHomeList() =
+    fun getHomeList(@RequestParam ownerId: Int) =
         homeService.getHomeList()
 
     @PutMapping("/{homeId}")
@@ -31,7 +32,7 @@ class HomeController (val homeService: HomeService) {
         homeService.updateHome(homeId, homeRequest)
 
     @DeleteMapping("/{homeId}")
-    fun deleteHome(@PathVariable homeId: Int) =
+    fun deleteHome(@PathVariable homeId: Int, @RequestParam ownerId: Int) =
         homeService.deleteHome(homeId)
 
 }

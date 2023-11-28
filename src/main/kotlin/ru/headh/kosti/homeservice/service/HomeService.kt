@@ -18,8 +18,10 @@ class HomeService(
         return homeRepository.save(home).toDto()
     }
 
-    fun getHome(id: Int): HomeDto =
-        homeRepository.findByIdOrNull(id)?.toDto()
+    fun getHome(id: Int, ownerId: Int): HomeDto =
+        homeRepository.findByIdOrNull(id)
+            ?.also { it.checkOwner(ownerId) }
+            ?.toDto()
             ?: throw ApiError.HOME_NOT_FOUND.toException()
 
     fun getHomeList(): List<HomeSimpleDto> =
@@ -27,19 +29,15 @@ class HomeService(
             sourceList.map { it.toSimpleDto() }
         }
 
-    fun deleteHome(id: Int) =
+    fun deleteHome(id: Int, ownerId: Int) =
         homeRepository.findByIdOrNull(id)
-            ?.let { home ->
-                homeRepository.delete(home)
-            }
+            ?.also { it.checkOwner(ownerId) }
+            ?.let { homeRepository.delete(it) }
             ?: throw ApiError.HOME_NOT_FOUND.toException()
 
     fun updateHome(id: Int, homeRequest: HomeRequest): HomeDto {
         homeRepository.findByIdOrNull(id)
-            ?.also {
-                if (it.ownerId != homeRequest.ownerId)
-                    throw ApiError.HOUSE_PROHIBITIONS.toException()
-            }
+            ?.also { it.checkOwner(homeRequest.ownerId) }
             ?: throw ApiError.HOME_NOT_FOUND.toException()
         val home: HomeEntity = homeRequest.toEntity(id)
         return homeRepository.save(home).toDto()
@@ -52,4 +50,9 @@ class HomeService(
             address = this.address,
             ownerId = this.ownerId
         )
+
+    private fun HomeEntity.checkOwner(ownerId: Int) {
+        if (this.ownerId != ownerId)
+            throw ApiError.HOUSE_IS_CANCELLED.toException()
+    }
 }
