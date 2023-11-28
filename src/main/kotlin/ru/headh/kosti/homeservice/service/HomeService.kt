@@ -36,6 +36,10 @@ class HomeService(
 
     fun updateHome(id: Int, homeRequest: HomeRequest): HomeDto {
         homeRepository.findByIdOrNull(id)
+            ?.also {
+                if (it.ownerId != homeRequest.ownerId)
+                    throw ApiError.HOUSE_PROHIBITIONS.toException()
+            }
             ?: throw ApiError.HOME_NOT_FOUND.toException()
         val home: HomeEntity = homeRequest.toEntity(id)
         return homeRepository.save(home).toDto()
