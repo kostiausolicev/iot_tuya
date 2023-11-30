@@ -12,9 +12,7 @@ spring:
   application:
     name: user-service
   kafka:
-    bootstrap-servers:
-      host: ${KAFKA_SERVER:localhost}
-      port: ${KAFKA_PORT:29092}
+    bootstrap-servers: ${KAFKA_SERVICE:localhost:29092}
 
 jwt:
   secret: ${JWT_SECRET:hjhbjhbJHBJHFBDjhbjhb873Y4UI2BUYLSDLDBjgf}
