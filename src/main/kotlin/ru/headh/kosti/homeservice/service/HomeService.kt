@@ -24,8 +24,8 @@ class HomeService(
             ?.toDto()
             ?: throw ApiError.HOME_NOT_FOUND.toException()
 
-    fun getHomeList(): List<HomeSimpleDto> =
-        homeRepository.findAll().let { sourceList ->
+    fun getHomeList(ownerId: Int): List<HomeSimpleDto> =
+        homeRepository.findAllByOwnerId(ownerId).let { sourceList ->
             sourceList.map { it.toSimpleDto() }
         }
 

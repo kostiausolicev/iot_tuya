@@ -8,5 +8,5 @@ import ru.headh.kosti.homeservice.entity.HomeEntity
 @Repository
 interface HomeRepository : JpaRepository<HomeEntity, Int> {
     @EntityGraph(value = "only_house_entity_graph")
-    override fun findAll(): List<HomeEntity>
+    fun findAllByOwnerId(ownerId: Int): List<HomeEntity>
 }

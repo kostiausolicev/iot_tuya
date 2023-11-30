@@ -25,7 +25,7 @@ class HomeController (val homeService: HomeService) {
 
     @GetMapping
     fun getHomeList(@RequestParam ownerId: Int) =
-        homeService.getHomeList()
+        homeService.getHomeList(ownerId)
 
     @PutMapping("/{homeId}")
     fun updateHome(@PathVariable homeId : Int, @RequestBody homeRequest: HomeRequest) =
@@ -33,6 +33,6 @@ class HomeController (val homeService: HomeService) {
 
     @DeleteMapping("/{homeId}")
     fun deleteHome(@PathVariable homeId: Int, @RequestParam ownerId: Int) =
-        homeService.deleteHome(homeId)
+        homeService.deleteHome(homeId, ownerId)
 
 }
