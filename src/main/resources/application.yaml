@@ -21,3 +21,10 @@ spring:
   liquibase:
     change-log: db/changelog-master.yaml
     enabled: true
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swag
+    disable-swagger-default-url: true
+  show-actuator: false

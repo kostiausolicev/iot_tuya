@@ -98,6 +98,8 @@ class DeviceService(
             id = device.id,
             tuyaId = device.tuyaId,
             name = this.name,
+            homeId = device.homeId,
+            roomId = device.roomId,
             category = device.category
         )
 
@@ -106,6 +108,8 @@ class DeviceService(
             tuyaId = this.tuyaId,
             name = this.name
                 ?: deviceConnector.getDeviceInfo(this.tuyaId)["name"].toString(),
-            category = DeviceCategory.LIGHT
+            category = DeviceCategory.LIGHT,
+            homeId = this.homeId,
+            roomId = this.roomId
         )
 }
