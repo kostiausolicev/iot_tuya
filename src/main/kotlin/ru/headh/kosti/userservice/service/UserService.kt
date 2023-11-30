@@ -35,8 +35,8 @@ class UserService(
     }
 
     fun signout(token: String) {
-        val claims = jwtService.parse(token)
-        val userId = claims?.get("id")?.asInt()
+        val claims = jwtService.getUserId(token)
+        val userId = claims
         val user = userRepository.findByIdOrNull(userId)
             ?: throw UserExceptionEnum.USER_NOT_FOUND.toUserException()
         jwtService.deleteByUser(user)

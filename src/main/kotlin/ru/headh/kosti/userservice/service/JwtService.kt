@@ -49,9 +49,9 @@ class JwtService(
         tokenRepository.findByUser(user)
             ?.let { tokenRepository.delete(it) }
 
-    fun parse(token: String) =
+    fun getUserId(token: String): Int =
         JWT.require(Algorithm.HMAC256(secret))
             .build()
             .verify(token)
-            .claims
+            .getClaim("id").asInt()
 }
