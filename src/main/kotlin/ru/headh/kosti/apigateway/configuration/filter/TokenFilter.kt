@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 import ru.headh.kosti.apigateway.dto.RequestBean
 import ru.headh.kosti.apigateway.service.TokenService
+import javax.annotation.Resource
 import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -40,7 +41,7 @@ class TokenFilter(
             }
             filterChain.doFilter(request, response)
         } catch (e: Exception) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED)
+            response.sendError(HttpServletResponse.SC_CONTINUE)
         }
     }
 }

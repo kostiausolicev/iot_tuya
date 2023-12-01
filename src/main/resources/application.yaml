@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/token_database
+    url: jdbc:postgresql://localhost:5432/gateway_token_db
     username: admin
     password: admin
   liquibase:

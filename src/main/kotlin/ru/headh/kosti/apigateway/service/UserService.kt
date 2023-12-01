@@ -1,26 +1,26 @@
 package ru.headh.kosti.apigateway.service
 
 import org.springframework.stereotype.Service
+import ru.headh.kosti.apigateway.client.UserServiceClient
+import ru.headh.kosti.apigateway.client.model.UserAuthRequestGen
+import ru.headh.kosti.apigateway.client.model.UserRegisterRequestGen
 import ru.headh.kosti.apigateway.dto.RequestBean
 import ru.headh.kosti.userservice.dto.SuccessAuthDto
 
 @Service
 class UserService(
     private val tokenService: TokenService,
+    private val userServiceClient: UserServiceClient,
     private val currentUser: RequestBean
 ) {
-    fun register(/*TODO Из swagger достать requestdto с регистрацией*/): SuccessAuthDto {
-        val userId: Int = 1 // TODO Сделать запрос на user-service с регистрацией
-        return tokenService.generate(userId)
-    }
+    fun register(registerRequest: UserRegisterRequestGen): SuccessAuthDto =
+    userServiceClient.register(registerRequest)
+        .let { tokenService.generate(it.id) }
 
-    fun auth(/*TODO Из swagger достать auth с регистрацией*/): SuccessAuthDto {
-        val userId: Int = 1 // TODO Сделать запрос на user-service с авторизацией
-        return tokenService.generate(userId)
-    }
+    fun auth(authRequest: UserAuthRequestGen): SuccessAuthDto =
+        userServiceClient.auth(authRequest)
+            .let { tokenService.generate(it.id) }
 
-    fun signout(/*TODO Из swagger достать requestdto с регистрацией*/) {
-        val userId: Int = 1 // TODO Сделать запрос на user-service
-        return tokenService.deleteByUser(userId)
-    }
+    fun signOut() =
+        tokenService.deleteByUser(currentUser.userId)
 }

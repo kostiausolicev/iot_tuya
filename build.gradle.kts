@@ -26,6 +26,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.liquibase:liquibase-core:4.24.0")
 	implementation("com.auth0:java-jwt:4.4.0")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -38,8 +39,8 @@ tasks.register("generateUserClient", GenerateTask::class) {
 	group = "openapi tools"
 	input = project.file("$projectDir/src/main/resources/openapi/user-service/api-docs.yaml").path
 	outputDir.set("$buildDir/generated")
-	modelPackage.set("ru.idea.ideaback.ideagateway.client.model")
-	apiPackage.set("ru.idea.ideaback.ideagateway.client.api")
+	modelPackage.set("ru.headh.kosti.apigateway.client.model")
+	apiPackage.set("ru.headh.kosti.apigateway.client.api")
 	generatorName.set("kotlin")
 	modelNameSuffix.set("Gen")
 	templateDir.set("$projectDir/src/main/resources/openapi/templates")
@@ -60,6 +61,7 @@ tasks.register("generateUserClient", GenerateTask::class) {
 }
 
 tasks.withType<KotlinCompile> {
+	dependsOn("generateUserClient")
 	kotlinOptions {
 		freeCompilerArgs += "-Xjsr305=strict"
 		jvmTarget = "17"
@@ -68,4 +70,20 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+sourceSets {
+	main {
+		java {
+			srcDir("${buildDir.absoluteFile}/generated/src/main/kotlin")
+		}
+	}
+}
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.kotlinOptions {
+	jvmTarget = "1.8"
+}
+val compileTestKotlin: KotlinCompile by tasks
+compileTestKotlin.kotlinOptions {
+	jvmTarget = "1.8"
 }
