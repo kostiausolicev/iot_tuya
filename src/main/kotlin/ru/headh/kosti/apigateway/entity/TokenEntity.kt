@@ -14,6 +14,6 @@ class TokenEntity(
     @Id
     @Column(name = "token", nullable = false)
     val refreshToken: UUID = UUID.randomUUID(),
-    @JoinColumn(name = "user_id")
-    val user: Int
+    val user: Int,
+    val expired: Long
 )

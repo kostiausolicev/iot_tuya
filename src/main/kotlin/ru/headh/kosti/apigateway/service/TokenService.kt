@@ -20,7 +20,7 @@ class TokenService(
     @Value("\${jwt.secret}")
     val secret: String,
     val tokenRepository: TokenRepository
-){
+) {
     fun refresh(tokenRefreshRequest: TokenRefreshRequest): SuccessAuthDto {
         val refreshToken: UUID = UUID.fromString(tokenRefreshRequest.refreshToken)
         val token = tokenRepository.findByRefreshToken(refreshToken)
@@ -35,7 +35,12 @@ class TokenService(
             .withClaim("id", userId)
             .withExpiresAt(Instant.now().plusSeconds(ttl))
             .sign(Algorithm.HMAC256(secret))
-        val refresh = tokenRepository.save(TokenEntity(user = userId))
+        val refresh = tokenRepository.save(
+            TokenEntity(
+                user = userId,
+                expired = Instant.now().plusSeconds(60 * 60 * 24 * 7).epochSecond
+            )
+        )
         return SuccessAuthDto(
             accessToken = token,
             refreshToken = refresh.refreshToken.toString(),
@@ -46,6 +51,7 @@ class TokenService(
     fun deleteByUser(user: Int) =
         tokenRepository.findByUser(user)
             ?.let { tokenRepository.delete(it) }
+            ?: throw Exception()
 
     fun getUserId(token: String): Int =
         JWT.require(Algorithm.HMAC256(secret))

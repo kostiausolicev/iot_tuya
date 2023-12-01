@@ -4,6 +4,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
+import ru.headh.kosti.apigateway.dto.RequestBean
 import ru.headh.kosti.apigateway.service.TokenService
 import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
@@ -11,7 +12,8 @@ import javax.servlet.http.HttpServletResponse
 
 @Component
 class TokenFilter(
-    private val tokenService: TokenService
+    private val tokenService: TokenService,
+    private val requestBean: RequestBean
 ) : OncePerRequestFilter() {
     override fun doFilterInternal(
         request: HttpServletRequest,
@@ -34,6 +36,7 @@ class TokenFilter(
                     emptyList()
                 )
                 SecurityContextHolder.getContext().authentication = upatoken
+                requestBean.userId = userId
             }
             filterChain.doFilter(request, response)
         } catch (e: Exception) {
