@@ -13,7 +13,6 @@ import ru.headh.kosti.userservice.repository.UserRepository
 @Service
 class UserService(
     val userRepository: UserRepository,
-    val jwtService: JwtService,
     val passwordEncoder: PasswordEncoder
 ) {
     fun register(userRegisterRequest: UserRegisterRequest): SuccessAuthDto {
@@ -22,8 +21,10 @@ class UserService(
             throw UserExceptionEnum.USER_EXIST.toUserException()
         if (userRegisterRequest.password != userRegisterRequest.confirmPassword)
             throw UserExceptionEnum.WRONG_CONFIRM_PASSWORD.toUserException()
-        val userEntity = userRepository.save(userRegisterRequest.toEntity())
-        return jwtService.generate(userEntity)
+        return userRegisterRequest
+            .toEntity()
+            .let { userRepository.save(it) }
+            .let { SuccessAuthDto(it.id) }
     }
 
     fun auth(userAuthRequest: UserAuthRequest): SuccessAuthDto {
@@ -31,15 +32,7 @@ class UserService(
             ?: throw UserExceptionEnum.WRONG_LOGIN_OR_PASSWORD.toUserException()
         if (!matchPassword(userAuthRequest.password, user.password))
             throw UserExceptionEnum.WRONG_LOGIN_OR_PASSWORD.toUserException()
-        return jwtService.generate(user)
-    }
-
-    fun signout(token: String) {
-        val claims = jwtService.getUserId(token)
-        val userId = claims
-        val user = userRepository.findByIdOrNull(userId)
-            ?: throw UserExceptionEnum.USER_NOT_FOUND.toUserException()
-        jwtService.deleteByUser(user)
+        return SuccessAuthDto(user.id)
     }
 
     private fun matchPassword(rawPass: String, encodePass: String): Boolean =
@@ -49,5 +42,6 @@ class UserService(
         UserEntity(
             name = this.name,
             username = this.username,
-            password = passwordEncoder.encode(this.password))
+            password = passwordEncoder.encode(this.password)
+        )
 }
