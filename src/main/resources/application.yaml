@@ -1,2 +1,11 @@
 server:
   port: 8079
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/token_database
+    username: admin
+    password: admin
+  liquibase:
+    change-log: classpath:/db/changelog-master.yaml
+    enabled: true
