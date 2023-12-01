@@ -20,11 +20,11 @@ class TokenFilter(
     ) {
         val header = request.getHeader("Authorization")
         var token: String? = null
-        var userId: String? = null
+        var userId: Int? = null
         try {
             if (header != null && header.startsWith("Bearer ")) {
                 token = header.substring(7)
-                userId = tokenService.getPayload(token)
+                userId = tokenService.getUserId(token)
             }
 
             if (userId != null && SecurityContextHolder.getContext().authentication == null) {
