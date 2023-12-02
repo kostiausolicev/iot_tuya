@@ -21,6 +21,6 @@ class UserService(
         userServiceClient.auth(authRequest)
             .let { tokenService.generate(it.id) }
 
-    fun signOut() =
+    fun signout() =
         tokenService.deleteByUser(currentUser.userId)
 }

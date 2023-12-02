@@ -9,7 +9,7 @@ import ru.headh.kosti.apigateway.client.model.UserRegisterRequestGen
 import ru.headh.kosti.apigateway.service.UserService
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/users")
 class UserController(
     private val userService: UserService
 ) {
@@ -20,4 +20,8 @@ class UserController(
     @PostMapping("/auth")
     fun auth(@RequestBody userAuthRequest: UserAuthRequestGen) =
         userService.auth(userAuthRequest)
+
+    @PostMapping("/signout")
+    fun signout() =
+        userService.signout()
 }
