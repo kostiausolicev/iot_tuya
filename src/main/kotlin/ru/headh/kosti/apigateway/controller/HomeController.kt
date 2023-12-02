@@ -2,7 +2,6 @@ package ru.headh.kosti.apigateway.controller
 
 import org.springframework.web.bind.annotation.*
 import ru.headh.kosti.apigateway.client.model.HomeRequestGen
-import ru.headh.kosti.apigateway.dto.RequestBean
 import ru.headh.kosti.apigateway.service.HomeService
 
 @RestController
