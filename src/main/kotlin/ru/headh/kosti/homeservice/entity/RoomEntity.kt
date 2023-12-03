@@ -14,10 +14,10 @@ import javax.persistence.EntityNotFoundException
 class RoomEntity (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Int? = null,
-    var name: String,
+    val id: Int? = null,
+    val name: String,
     @ManyToOne
-    var home: HomeEntity? = null
+    val home: HomeEntity? = null
 ) {
     fun toDto() : RoomDto =
         RoomDto(

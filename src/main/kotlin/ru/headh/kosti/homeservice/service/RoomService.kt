@@ -12,31 +12,31 @@ import ru.headh.kosti.homeservice.error.ApiError
 
 @Service
 class RoomService(val roomRepository: RoomRepository, val homeRepository: HomeRepository) {
-    fun create(homeId: Int, roomRequest: RoomRequest): RoomDto? =
-        homeRepository.findByIdOrNull(homeId)
-            ?.let { home ->
-                homeRepository.save(home)
-                roomRepository.save(
-                    roomRequest.toEntity(home)
-                ).toDto()
-            } ?: throw ApiError.HOME_NOT_FOUND.toException()
+    fun create(homeId: Int, roomRequest: RoomRequest): RoomDto? {
+        val home = homeRepository.findByIdOrNull(homeId)
+            ?: throw ApiError.HOME_NOT_FOUND.toException()
+        return roomRequest.toEntity(home)
+            .let { roomRepository.save(it) }
+            .toDto()
+    }
 
-    fun update(roomId: Int, roomRequest: RoomRequest): RoomDto? =
-        roomRepository.findByIdOrNull(roomId)?.let {
-            it.name = roomRequest.name
-            roomRepository.save(it).toDto()
-        } ?: throw ApiError.ROOM_NOT_FOUND.toException()
+    fun update(roomId: Int, roomRequest: RoomRequest): RoomDto? {
+        val room = roomRepository.findByIdOrNull(roomId)
+            ?: throw ApiError.ROOM_NOT_FOUND.toException()
+        val home = room.home
+            ?: throw ApiError.HOME_NOT_FOUND.toException()
+        return roomRequest.toEntity(home).toDto()
+    }
 
     fun delete(roomId: Int) =
         roomRepository.findByIdOrNull(roomId)
-            ?.let { room ->
-                roomRepository.delete(room)
-            } ?: ApiError.ROOM_NOT_FOUND.toException()
+            ?.let { roomRepository.delete(it) }
+            ?: ApiError.ROOM_NOT_FOUND.toException()
 
 
-    private fun RoomRequest.toEntity(home: HomeEntity) =
+    private fun RoomRequest.toEntity(home: HomeEntity, name: String? = null) =
         RoomEntity(
-            name = this.name,
+            name = name ?: this.name,
             home = home
         )
 }
