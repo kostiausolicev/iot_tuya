@@ -35,11 +35,10 @@ class UserService(
         return SuccessAuthDto(user.id)
     }
 
-    fun delete(userId: Int) {
-        val user = userRepository.findByIdOrNull(userId)
+    fun delete(userId: Int) =
+        userRepository.findByIdOrNull(userId)
+            ?.let { userRepository.delete(it) }
             ?: throw UserExceptionEnum.USER_NOT_FOUND.toUserException()
-        userRepository.delete(user)
-    }
 
 
     private fun matchPassword(rawPass: String, encodePass: String): Boolean =
