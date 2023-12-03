@@ -7,7 +7,7 @@ enum class ApiError(
     val message: String
 ) {
     HOME_NOT_FOUND(HttpStatus.NOT_FOUND, "Дом не найден"),
-    HOUSE_IS_CANCELLED(HttpStatus.FORBIDDEN, "Вы не можете выполнить это действие"),
+    ACTION_IS_CANCELLED(HttpStatus.FORBIDDEN, "Вы не можете выполнить это действие"),
     ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "Комната не найдена");
 
     fun toException() = ApiException(

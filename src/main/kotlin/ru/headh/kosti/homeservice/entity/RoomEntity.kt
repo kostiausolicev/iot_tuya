@@ -11,15 +11,15 @@ import javax.persistence.EntityNotFoundException
 
 @Entity
 @Table(name = "rooms")
-class RoomEntity (
+class RoomEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Int? = null,
+    val id: Int = -1,
     val name: String,
     @ManyToOne
     val home: HomeEntity? = null
 ) {
-    fun toDto() : RoomDto =
+    fun toDto(): RoomDto =
         RoomDto(
             id = id,
             name = name,

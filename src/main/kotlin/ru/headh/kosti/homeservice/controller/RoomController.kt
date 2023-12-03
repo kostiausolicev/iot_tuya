@@ -16,14 +16,14 @@ import ru.headh.kosti.homeservice.service.RoomService
 class RoomController(val roomService: RoomService) {
 
     @PostMapping
-    fun createRoom(@RequestParam homeId: Int, @RequestBody roomRequest: RoomRequest)=
-        roomService.create(homeId, roomRequest)
+    fun createRoom(@RequestParam homeId: Int, @RequestBody roomRequest: RoomRequest, @RequestParam ownerId: Int)=
+        roomService.create(homeId, roomRequest, ownerId)
 
     @PutMapping("/{roomId}")
-    fun updateRoom(@PathVariable roomId: Int, @RequestBody roomRequest: RoomRequest) =
-        roomService.update(roomId, roomRequest)
+    fun updateRoom(@PathVariable roomId: Int, @RequestBody roomRequest: RoomRequest, @RequestParam ownerId: Int) =
+        roomService.update(roomId, roomRequest, ownerId)
 
     @DeleteMapping("/{roomId}")
-    fun deleteRoom(@PathVariable roomId: Int) =
-        roomService.delete(roomId)
+    fun deleteRoom(@PathVariable roomId: Int, @RequestParam ownerId: Int) =
+        roomService.delete(roomId, ownerId)
 }

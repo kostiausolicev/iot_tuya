@@ -11,7 +11,8 @@ import ru.headh.kosti.homeservice.repositoty.HomeRepository
 
 @Service
 class HomeService(
-    val homeRepository: HomeRepository
+    val homeRepository: HomeRepository,
+    val roomService: RoomService
 ) {
     fun createHome(homeRequest: HomeRequest): HomeDto {
         val home: HomeEntity = homeRequest.toEntity()
@@ -29,11 +30,16 @@ class HomeService(
             sourceList.map { it.toSimpleDto() }
         }
 
-    fun deleteHome(id: Int, ownerId: Int) =
-        homeRepository.findByIdOrNull(id)
+    fun deleteHome(id: Int, ownerId: Int) {
+        val home = homeRepository.findByIdOrNull(id)
             ?.also { it.checkOwner(ownerId) }
-            ?.let { homeRepository.delete(it) }
             ?: throw ApiError.HOME_NOT_FOUND.toException()
+        val rooms = home.rooms ?: emptyList()
+        for (room in rooms)
+            roomService.delete(room.id, ownerId)
+        homeRepository.delete(home)
+    }
+
 
     fun updateHome(id: Int, homeRequest: HomeRequest): HomeDto {
         homeRepository.findByIdOrNull(id)
@@ -53,6 +59,6 @@ class HomeService(
 
     private fun HomeEntity.checkOwner(ownerId: Int) {
         if (this.ownerId != ownerId)
-            throw ApiError.HOUSE_IS_CANCELLED.toException()
+            throw ApiError.ACTION_IS_CANCELLED.toException()
     }
 }
