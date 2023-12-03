@@ -3,7 +3,7 @@ info:
   title: OpenAPI definition
   version: v0
 servers:
-- url: http://localhost:8080
+- url: http://localhost:8082
   description: Generated server url
 paths:
   /api/rooms/{roomId}:
@@ -14,6 +14,12 @@ paths:
       parameters:
       - name: roomId
         in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: ownerId
+        in: query
         required: true
         schema:
           type: integer
@@ -42,13 +48,15 @@ paths:
         schema:
           type: integer
           format: int32
+      - name: ownerId
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
       responses:
         "200":
           description: OK
-          content:
-            '*/*':
-              schema:
-                type: object
   /api/homes/{homeId}:
     get:
       tags:
@@ -125,6 +133,12 @@ paths:
       operationId: createRoom
       parameters:
       - name: homeId
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: ownerId
         in: query
         required: true
         schema:
