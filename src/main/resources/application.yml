@@ -10,10 +10,6 @@ spring:
     change-log: classpath:/db/changelog-master.yaml
     enabled: true
 
-jwt:
-  secret: hjhbjhbJHBJHFBDjhbjhb873Y4UI2BUYLSDLDBjgf
-  ttl: 3600
-
 springdoc:
   swagger-ui:
     enabled: true
