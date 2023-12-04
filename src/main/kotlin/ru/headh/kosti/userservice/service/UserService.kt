@@ -6,14 +6,18 @@ import org.springframework.stereotype.Service
 import ru.headh.kosti.userservice.dto.SuccessAuthDto
 import ru.headh.kosti.userservice.dto.request.UserAuthRequest
 import ru.headh.kosti.userservice.dto.request.UserRegisterRequest
+import ru.headh.kosti.userservice.entity.OutboxMessageEntity
 import ru.headh.kosti.userservice.entity.UserEntity
 import ru.headh.kosti.userservice.exception.enumeration.UserExceptionEnum
+import ru.headh.kosti.userservice.repository.OutboxRepository
 import ru.headh.kosti.userservice.repository.UserRepository
+import javax.transaction.Transactional
 
 @Service
 class UserService(
     val userRepository: UserRepository,
-    val passwordEncoder: PasswordEncoder
+    val passwordEncoder: PasswordEncoder,
+    val outboxRepository: OutboxRepository
 ) {
     fun register(userRegisterRequest: UserRegisterRequest): SuccessAuthDto {
         val user = userRepository.findByUsername(userRegisterRequest.username)
@@ -35,11 +39,18 @@ class UserService(
         return SuccessAuthDto(user.id)
     }
 
-    fun delete(userId: Int) =
+    @Transactional
+    fun delete(userId: Int) {
         userRepository.findByIdOrNull(userId)
             ?.let { userRepository.delete(it) }
             ?: throw UserExceptionEnum.USER_NOT_FOUND.toUserException()
-
+        outboxRepository.save(
+            OutboxMessageEntity(
+                topic = "user-delete",
+                message = "$userId"
+            )
+        )
+    }
 
     private fun matchPassword(rawPass: String, encodePass: String): Boolean =
         passwordEncoder.matches(rawPass, encodePass)

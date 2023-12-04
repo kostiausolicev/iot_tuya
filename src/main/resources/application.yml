@@ -9,6 +9,10 @@ spring:
   liquibase:
     change-log: classpath:/db/changelog-master.yaml
     enabled: true
+  application:
+    name: user-service
+  kafka:
+    bootstrap-servers: localhost:29092
 
 springdoc:
   swagger-ui:

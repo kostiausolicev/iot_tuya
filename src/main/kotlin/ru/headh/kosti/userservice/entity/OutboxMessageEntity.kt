@@ -7,7 +7,7 @@ import javax.persistence.Id
 import javax.persistence.Table
 
 @Entity
-@Table(name = "outbox_messages")
+@Table(name = "outbox")
 class OutboxMessageEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
