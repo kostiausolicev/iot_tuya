@@ -19,7 +19,7 @@ class KafkaConfig(
     @Bean
     fun producerFactory(): ProducerFactory<String, String> {
         val configProps: Map<String, Any> = mapOf(
-            ProducerConfig.BOOTSTRAP_SERVERS_CONFIG to "localhost:29092",
+            ProducerConfig.BOOTSTRAP_SERVERS_CONFIG to bootstrapAddress,
             ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG to StringSerializer::class.java,
             ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG to StringSerializer::class.java,
         )
