@@ -3,19 +3,17 @@ package ru.headh.kosti.homeservice.service
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import ru.headh.kosti.homeservice.dto.HomeDto
-import ru.headh.kosti.homeservice.dto.request.HomeRequest
 import ru.headh.kosti.homeservice.dto.HomeSimpleDto
+import ru.headh.kosti.homeservice.dto.request.HomeRequest
 import ru.headh.kosti.homeservice.entity.HomeEntity
 import ru.headh.kosti.homeservice.entity.OutboxMessageEntity
 import ru.headh.kosti.homeservice.error.ApiError
 import ru.headh.kosti.homeservice.repositoty.HomeRepository
 import ru.headh.kosti.homeservice.repositoty.OutboxRepository
-import ru.headh.kosti.homeservice.repositoty.RoomRepository
 
 @Service
 class HomeService(
     val homeRepository: HomeRepository,
-    val roomRepository: RoomRepository,
     val outboxRepository: OutboxRepository
 ) {
     fun createHome(homeRequest: HomeRequest): HomeDto {
@@ -38,9 +36,6 @@ class HomeService(
         val home = homeRepository.findByIdOrNull(id)
             ?.also { it.checkOwner(ownerId) }
             ?: throw ApiError.HOME_NOT_FOUND.toException()
-//        val rooms = home.rooms ?: emptyList()
-//        for (room in rooms)
-//            roomRepository.delete(room)
         homeRepository.delete(home)
         outboxRepository.save(
             OutboxMessageEntity(
@@ -56,7 +51,6 @@ class HomeService(
             deleteHome(home.id, ownerId)
         }
     }
-
 
     fun updateHome(id: Int, homeRequest: HomeRequest): HomeDto {
         homeRepository.findByIdOrNull(id)
