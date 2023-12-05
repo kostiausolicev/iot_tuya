@@ -71,6 +71,25 @@ class DeviceService(
             ?.let { deviceRepository.delete(it) }
             ?: throw ApiExceptionEnum.DEVICE_NOT_FOUND.toException()
 
+    fun deleteAllDeviceByHome(homeId: Int) =
+        deviceRepository.findAllByHomeId(homeId).map {
+            deviceRepository.delete(it)
+        }
+
+    fun resetAllDeviceByHome(roomId: Int) =
+        deviceRepository.findAllByRoomId(roomId).map {
+            deviceRepository.save(
+                DeviceEntity(
+                    id = it.id,
+                    tuyaId = it.tuyaId,
+                    homeId = it.homeId,
+                    category = it.category,
+                    roomId = null,
+                    name = it.name
+                )
+            )
+        }
+
     fun getDeviceList(): List<SimpleDeviceDto> =
         deviceRepository.findAll().map {
             it.toSimpleDto()
@@ -112,4 +131,5 @@ class DeviceService(
             homeId = this.homeId,
             roomId = this.roomId
         )
+
 }
