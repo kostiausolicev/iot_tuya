@@ -40,6 +40,13 @@ class HomeService(
         homeRepository.delete(home)
     }
 
+    fun deleteAllHomes(ownerId: Int) {
+        val homes = homeRepository.findAllByOwnerId(ownerId)
+        for (home in homes) {
+            deleteHome(home.id, ownerId)
+        }
+    }
+
 
     fun updateHome(id: Int, homeRequest: HomeRequest): HomeDto {
         homeRepository.findByIdOrNull(id)
