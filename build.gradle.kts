@@ -85,9 +85,35 @@ tasks.register("generateHomeClient", GenerateTask::class) {
 	)
 }
 
+tasks.register("generateDeviceClient", GenerateTask::class) {
+	group = "openapi tools"
+	input = project.file("$projectDir/src/main/resources/openapi/device-service/api-docs.yaml").path
+	outputDir.set("$buildDir/generated")
+	modelPackage.set("ru.headh.kosti.apigateway.client.model")
+	apiPackage.set("ru.headh.kosti.apigateway.client.api")
+	generatorName.set("kotlin")
+	modelNameSuffix.set("Gen")
+	templateDir.set("$projectDir/src/main/resources/openapi/templates")
+	configOptions.set(
+		mapOf(
+			"dateLibrary" to "java8-localdatetime",
+			"useTags" to "true",
+			"enumPropertyNaming" to "UPPERCASE",
+			"serializationLibrary" to "jackson",
+			"useCoroutines" to "true"
+		)
+	)
+	additionalProperties.set(
+		mapOf(
+			"removeEnumValuePrefix" to "false"
+		)
+	)
+}
+
 tasks.withType<KotlinCompile> {
 	dependsOn("generateUserClient")
 	dependsOn("generateHomeClient")
+//	dependsOn("generateDeviceClient")
 	kotlinOptions {
 		freeCompilerArgs += "-Xjsr305=strict"
 		jvmTarget = "17"

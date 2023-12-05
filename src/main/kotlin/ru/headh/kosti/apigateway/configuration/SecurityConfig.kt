@@ -26,6 +26,7 @@ class SecurityConfig(
             .antMatchers("/homes/**").authenticated()
             .antMatchers("/rooms/**").authenticated()
             .antMatchers("/signout").authenticated()
+            .antMatchers("/devices/**").authenticated()
             .anyRequest().permitAll()
             .and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

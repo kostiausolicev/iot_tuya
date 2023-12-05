@@ -4,12 +4,12 @@ import org.springframework.stereotype.Service
 import ru.headh.kosti.apigateway.client.RoomClient
 import ru.headh.kosti.apigateway.client.model.RoomDtoGen
 import ru.headh.kosti.apigateway.client.model.RoomRequestGen
-import ru.headh.kosti.apigateway.dto.RequestBean
+import ru.headh.kosti.apigateway.dto.UserOnRequest
 
 @Service
 class RoomService(
     private val roomClient: RoomClient,
-    private val currentUser: RequestBean
+    private val currentUser: UserOnRequest
 ) {
     fun create(homeId: Int, roomRequest: RoomRequestGen): RoomDtoGen =
         roomClient.createRoom(homeId, currentUser.userId, roomRequest)

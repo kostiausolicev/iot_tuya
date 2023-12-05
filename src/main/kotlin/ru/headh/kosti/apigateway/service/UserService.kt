@@ -4,14 +4,14 @@ import org.springframework.stereotype.Service
 import ru.headh.kosti.apigateway.client.UserServiceClient
 import ru.headh.kosti.apigateway.client.model.UserAuthRequestGen
 import ru.headh.kosti.apigateway.client.model.UserRegisterRequestGen
-import ru.headh.kosti.apigateway.dto.RequestBean
+import ru.headh.kosti.apigateway.dto.UserOnRequest
 import ru.headh.kosti.userservice.dto.SuccessAuthDto
 
 @Service
 class UserService(
     private val tokenService: TokenService,
     private val userServiceClient: UserServiceClient,
-    private val currentUser: RequestBean
+    private val currentUser: UserOnRequest
 ) {
     fun register(registerRequest: UserRegisterRequestGen): SuccessAuthDto =
         userServiceClient.register(registerRequest)

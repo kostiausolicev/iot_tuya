@@ -5,12 +5,12 @@ import ru.headh.kosti.apigateway.client.HomeServiceClient
 import ru.headh.kosti.apigateway.client.model.HomeDtoGen
 import ru.headh.kosti.apigateway.client.model.HomeRequestGen
 import ru.headh.kosti.apigateway.client.model.HomeSimpleDtoGen
-import ru.headh.kosti.apigateway.dto.RequestBean
+import ru.headh.kosti.apigateway.dto.UserOnRequest
 
 @Service
 class HomeService(
     private val homeServiceClient: HomeServiceClient,
-    private val currentUser: RequestBean
+    private val currentUser: UserOnRequest
 ) {
     fun createHome(home: HomeRequestGen): HomeDtoGen =
         homeServiceClient.createHome(currentUser.userId, home)

@@ -1,0 +1,279 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:8081
+  description: Generated server url
+paths:
+  /api/device/{deviceId}:
+    get:
+      tags:
+      - device-controller
+      operationId: getInfo
+      parameters:
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DeviceDto'
+    put:
+      tags:
+      - device-controller
+      operationId: update
+      parameters:
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDeviceRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DeviceDto'
+    delete:
+      tags:
+      - device-controller
+      operationId: delete
+      parameters:
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+  /api/device:
+    get:
+      tags:
+      - device-controller
+      operationId: getDeviceList
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SimpleDeviceDto'
+    post:
+      tags:
+      - device-controller
+      operationId: create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDeviceRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DeviceDto'
+  /api/device/{deviceId}/control:
+    post:
+      tags:
+      - device-controller
+      operationId: sendCommand
+      parameters:
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendCommandRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+components:
+  schemas:
+    UpdateDeviceRequest:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+    BrightnessCommand:
+      required:
+      - code
+      - value
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Command'
+      - type: object
+        properties:
+          value:
+            type: integer
+            format: int32
+    ColorCommand:
+      required:
+      - code
+      - value
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Command'
+      - type: object
+        properties:
+          value:
+            $ref: '#/components/schemas/ColorData'
+    ColorData:
+      required:
+      - h
+      - s
+      - v
+      type: object
+      properties:
+        h:
+          type: integer
+          format: int32
+        s:
+          type: integer
+          format: int32
+        v:
+          type: integer
+          format: int32
+    Command:
+      required:
+      - code
+      - value
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - SWITCH_LED
+          - TEMPERATURE
+          - COLOR
+          - BRIGHTNESS
+        value:
+          type: object
+      discriminator:
+        propertyName: code
+    DeviceDto:
+      required:
+      - category
+      - homeId
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        homeId:
+          type: integer
+          format: int32
+        category:
+          type: string
+        capabilities:
+          type: array
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/BrightnessCommand'
+            - $ref: '#/components/schemas/ColorCommand'
+            - $ref: '#/components/schemas/SwitchLedCommand'
+            - $ref: '#/components/schemas/TemperatureCommand'
+        roomId:
+          type: integer
+          format: int32
+    SwitchLedCommand:
+      required:
+      - code
+      - value
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Command'
+      - type: object
+        properties:
+          value:
+            type: boolean
+    TemperatureCommand:
+      required:
+      - code
+      - value
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Command'
+      - type: object
+        properties:
+          value:
+            type: integer
+            format: int32
+    CreateDeviceRequest:
+      required:
+      - home_id
+      - tuya_id
+      type: object
+      properties:
+        tuya_id:
+          type: string
+        name:
+          type: string
+        home_id:
+          type: integer
+          format: int32
+        room_id:
+          type: integer
+          format: int32
+    SendCommandRequest:
+      required:
+      - commands
+      type: object
+      properties:
+        commands:
+          type: array
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/BrightnessCommand'
+            - $ref: '#/components/schemas/ColorCommand'
+            - $ref: '#/components/schemas/SwitchLedCommand'
+            - $ref: '#/components/schemas/TemperatureCommand'
+    SimpleDeviceDto:
+      required:
+      - category
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        category:
+          type: string
+          enum:
+          - LIGHT
