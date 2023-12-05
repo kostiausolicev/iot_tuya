@@ -1,7 +1,10 @@
 package ru.headh.kosti.homeservice.entity
 
+import org.hibernate.annotations.OnDelete
+import org.hibernate.annotations.OnDeleteAction
 import ru.headh.kosti.homeservice.dto.HomeDto
 import ru.headh.kosti.homeservice.dto.HomeSimpleDto
+import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.NamedEntityGraph
@@ -34,7 +37,12 @@ class HomeEntity(
     @Column(name = "owner_id")
     val ownerId: Int,
 
-    @OneToMany(mappedBy = "home", fetch = FetchType.EAGER, targetEntity = RoomEntity::class)
+    @OneToMany(mappedBy = "home",
+        fetch = FetchType.EAGER,
+        targetEntity = RoomEntity::class,
+        cascade = [CascadeType.ALL],
+        orphanRemoval = true
+    )
     var rooms: List<RoomEntity>? = null
 ) {
     fun toDto(): HomeDto =

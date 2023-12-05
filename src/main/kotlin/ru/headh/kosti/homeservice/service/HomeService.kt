@@ -38,9 +38,9 @@ class HomeService(
         val home = homeRepository.findByIdOrNull(id)
             ?.also { it.checkOwner(ownerId) }
             ?: throw ApiError.HOME_NOT_FOUND.toException()
-        val rooms = home.rooms ?: emptyList()
-        for (room in rooms)
-            roomRepository.delete(room)
+//        val rooms = home.rooms ?: emptyList()
+//        for (room in rooms)
+//            roomRepository.delete(room)
         homeRepository.delete(home)
         outboxRepository.save(
             OutboxMessageEntity(
