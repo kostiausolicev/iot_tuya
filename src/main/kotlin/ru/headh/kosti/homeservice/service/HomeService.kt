@@ -6,13 +6,17 @@ import ru.headh.kosti.homeservice.dto.HomeDto
 import ru.headh.kosti.homeservice.dto.request.HomeRequest
 import ru.headh.kosti.homeservice.dto.HomeSimpleDto
 import ru.headh.kosti.homeservice.entity.HomeEntity
+import ru.headh.kosti.homeservice.entity.OutboxMessageEntity
 import ru.headh.kosti.homeservice.error.ApiError
 import ru.headh.kosti.homeservice.repositoty.HomeRepository
+import ru.headh.kosti.homeservice.repositoty.OutboxRepository
+import ru.headh.kosti.homeservice.repositoty.RoomRepository
 
 @Service
 class HomeService(
     val homeRepository: HomeRepository,
-    val roomService: RoomService
+    val roomRepository: RoomRepository,
+    val outboxRepository: OutboxRepository
 ) {
     fun createHome(homeRequest: HomeRequest): HomeDto {
         val home: HomeEntity = homeRequest.toEntity()
@@ -36,8 +40,14 @@ class HomeService(
             ?: throw ApiError.HOME_NOT_FOUND.toException()
         val rooms = home.rooms ?: emptyList()
         for (room in rooms)
-            roomService.delete(room.id, ownerId)
+            roomRepository.delete(room)
         homeRepository.delete(home)
+        outboxRepository.save(
+            OutboxMessageEntity(
+                topic = "home-delete",
+                message = "$id"
+            )
+        )
     }
 
     fun deleteAllHomes(ownerId: Int) {
