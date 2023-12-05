@@ -14,8 +14,8 @@ class UserService(
     private val currentUser: RequestBean
 ) {
     fun register(registerRequest: UserRegisterRequestGen): SuccessAuthDto =
-    userServiceClient.register(registerRequest)
-        .let { tokenService.generate(it.id) }
+        userServiceClient.register(registerRequest)
+            .let { tokenService.generate(it.id) }
 
     fun auth(authRequest: UserAuthRequestGen): SuccessAuthDto =
         userServiceClient.auth(authRequest)
@@ -23,4 +23,7 @@ class UserService(
 
     fun signout() =
         tokenService.deleteByUser(currentUser.userId)
+
+    fun delete() =
+        userServiceClient.delete(currentUser.userId)
 }

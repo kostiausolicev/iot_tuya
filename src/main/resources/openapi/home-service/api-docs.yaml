@@ -93,6 +93,12 @@ paths:
         schema:
           type: integer
           format: int32
+      - name: ownerId
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
       requestBody:
         content:
           application/json:
@@ -182,6 +188,13 @@ paths:
       tags:
       - home-controller
       operationId: createHome
+      parameters:
+      - name: ownerId
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
       requestBody:
         content:
           application/json:
@@ -221,16 +234,12 @@ components:
     HomeRequest:
       required:
       - name
-      - ownerId
       type: object
       properties:
         name:
           type: string
         address:
           type: string
-        ownerId:
-          type: integer
-          format: int32
     HomeDto:
       required:
       - id

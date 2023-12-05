@@ -13,7 +13,7 @@ class HomeService(
     private val currentUser: RequestBean
 ) {
     fun createHome(home: HomeRequestGen): HomeDtoGen =
-        homeServiceClient.createHome(home)
+        homeServiceClient.createHome(currentUser.userId, home)
 
     fun getHome(homeId: Int): HomeDtoGen =
         homeServiceClient.getHome(homeId, currentUser.userId)
@@ -22,7 +22,7 @@ class HomeService(
         homeServiceClient.getHomeList(currentUser.userId)
 
     fun updateHome(homeId: Int, homeRequest: HomeRequestGen): HomeDtoGen =
-        homeServiceClient.updateHome(homeId, homeRequest)
+        homeServiceClient.updateHome(homeId, currentUser.userId, homeRequest)
 
     fun deleteHome(homeId: Int) =
         homeServiceClient.deleteHome(homeId, currentUser.userId)
