@@ -16,8 +16,8 @@ class HomeService(
     val homeRepository: HomeRepository,
     val outboxRepository: OutboxRepository
 ) {
-    fun createHome(homeRequest: HomeRequest): HomeDto {
-        val home: HomeEntity = homeRequest.toEntity()
+    fun createHome(homeRequest: HomeRequest, ownerId: Int): HomeDto {
+        val home: HomeEntity = homeRequest.toEntity(ownerId)
         return homeRepository.save(home).toDto()
     }
 
@@ -52,20 +52,20 @@ class HomeService(
         }
     }
 
-    fun updateHome(id: Int, homeRequest: HomeRequest): HomeDto {
+    fun updateHome(id: Int, homeRequest: HomeRequest, ownerId: Int): HomeDto {
         homeRepository.findByIdOrNull(id)
-            ?.also { it.checkOwner(homeRequest.ownerId) }
+            ?.also { it.checkOwner(ownerId) }
             ?: throw ApiError.HOME_NOT_FOUND.toException()
-        val home: HomeEntity = homeRequest.toEntity(id)
+        val home: HomeEntity = homeRequest.toEntity(id, ownerId)
         return homeRepository.save(home).toDto()
     }
 
-    private fun HomeRequest.toEntity(id: Int = -1) =
+    private fun HomeRequest.toEntity(ownerId: Int, id: Int = -1) =
         HomeEntity(
             id = id,
             name = this.name,
             address = this.address,
-            ownerId = this.ownerId
+            ownerId = ownerId
         )
 
     private fun HomeEntity.checkOwner(ownerId: Int) {

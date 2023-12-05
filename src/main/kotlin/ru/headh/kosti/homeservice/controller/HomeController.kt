@@ -14,10 +14,10 @@ import ru.headh.kosti.homeservice.service.HomeService
 
 @RestController
 @RequestMapping("/api/homes")
-class HomeController (val homeService: HomeService) {
+class HomeController(val homeService: HomeService) {
     @PostMapping
-    fun createHome(@RequestBody home: HomeRequest) =
-        homeService.createHome(home)
+    fun createHome(@RequestBody home: HomeRequest, @RequestParam ownerId: Int) =
+        homeService.createHome(home, ownerId)
 
     @GetMapping("/{homeId}")
     fun getHome(@PathVariable homeId: Int, @RequestParam ownerId: Int) =
@@ -28,8 +28,12 @@ class HomeController (val homeService: HomeService) {
         homeService.getHomeList(ownerId)
 
     @PutMapping("/{homeId}")
-    fun updateHome(@PathVariable homeId : Int, @RequestBody homeRequest: HomeRequest) =
-        homeService.updateHome(homeId, homeRequest)
+    fun updateHome(
+        @PathVariable homeId: Int,
+        @RequestBody homeRequest: HomeRequest,
+        @RequestParam ownerId: Int
+    ) =
+        homeService.updateHome(homeId, homeRequest, ownerId)
 
     @DeleteMapping("/{homeId}")
     fun deleteHome(@PathVariable homeId: Int, @RequestParam ownerId: Int) =
