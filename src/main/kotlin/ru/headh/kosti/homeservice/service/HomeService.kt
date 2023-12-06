@@ -17,7 +17,8 @@ class HomeService(
     val outboxRepository: OutboxRepository
 ) {
     fun createHome(homeRequest: HomeRequest, ownerId: Int): HomeDto {
-        if (ownerId < 0) throw ApiError.WRONG_REQUEST_DATA.toException()
+        if (ownerId < 1)
+            throw ApiError.WRONG_REQUEST_DATA.toException()
         val home: HomeEntity = homeRequest.toEntity(ownerId)
         return homeRepository.save(home).toDto()
     }
@@ -28,8 +29,12 @@ class HomeService(
             ?.toDto()
             ?: throw ApiError.HOME_NOT_FOUND.toException()
 
-    fun getHomeList(ownerId: Int): List<HomeSimpleDto> =
-        homeRepository.findAllByOwnerId(ownerId).map { it.toSimpleDto() }
+    fun getHomeList(ownerId: Int): List<HomeSimpleDto> {
+        if (ownerId < 1)
+            throw ApiError.WRONG_REQUEST_DATA.toException()
+        return homeRepository.findAllByOwnerId(ownerId).map { it.toSimpleDto() }
+    }
+
 
     fun deleteHome(id: Int, ownerId: Int) {
         homeRepository.findByIdOrNull(id)
@@ -70,6 +75,8 @@ class HomeService(
     fun HomeEntity.checkOwner(ownerId: Int): HomeEntity {
         if (this.ownerId != ownerId)
             throw ApiError.ACTION_IS_CANCELLED.toException()
+        if (ownerId < 1)
+            throw ApiError.WRONG_REQUEST_DATA.toException()
         return this
     }
 }

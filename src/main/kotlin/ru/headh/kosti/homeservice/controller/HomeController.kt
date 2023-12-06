@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import ru.headh.kosti.homeservice.dto.request.HomeRequest
 import ru.headh.kosti.homeservice.service.HomeService
+import javax.validation.constraints.Min
 
 @RestController
 @RequestMapping("/api/homes")
