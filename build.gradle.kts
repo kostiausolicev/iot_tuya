@@ -33,10 +33,15 @@ dependencies {
 
     implementation("org.springdoc:springdoc-openapi-kotlin:1.6.14")
     implementation("org.springdoc:springdoc-openapi-ui:1.6.14")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springdoc:springdoc-openapi-webmvc-core:1.6.14")
 
     runtimeOnly("org.postgresql:postgresql")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("com.ninja-squad:springmockk:3.1.1")
+    testImplementation("org.testcontainers:postgresql:1.17.6")
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude(group = "org.mockito")
+    }
 }
 
 tasks.withType<KotlinCompile> {

@@ -1,5 +1,6 @@
 package ru.headh.kosti.homeservice.controller
 
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -16,8 +17,12 @@ import ru.headh.kosti.homeservice.service.HomeService
 @RequestMapping("/api/homes")
 class HomeController(val homeService: HomeService) {
     @PostMapping
-    fun createHome(@RequestBody home: HomeRequest, @RequestParam ownerId: Int) =
+    fun createHome(
+        @Validated @RequestBody home: HomeRequest,
+        @RequestParam(name = "ownerId") ownerId: Int
+    ) =
         homeService.createHome(home, ownerId)
+
 
     @GetMapping("/{homeId}")
     fun getHome(@PathVariable homeId: Int, @RequestParam ownerId: Int) =
@@ -30,7 +35,7 @@ class HomeController(val homeService: HomeService) {
     @PutMapping("/{homeId}")
     fun updateHome(
         @PathVariable homeId: Int,
-        @RequestBody homeRequest: HomeRequest,
+        @Validated @RequestBody homeRequest: HomeRequest,
         @RequestParam ownerId: Int
     ) =
         homeService.updateHome(homeId, homeRequest, ownerId)

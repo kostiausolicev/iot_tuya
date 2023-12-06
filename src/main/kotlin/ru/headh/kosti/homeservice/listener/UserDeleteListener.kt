@@ -14,5 +14,5 @@ class UserDeleteListener(
 
     )
     fun userDeleteListener(userId: String) =
-        homeService.deleteAllHomes(userId.toInt())
+        homeService.deleteAllHomesByOwner(userId.toInt())
 }

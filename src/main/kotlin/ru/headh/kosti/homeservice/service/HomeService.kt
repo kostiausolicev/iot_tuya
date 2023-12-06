@@ -17,26 +17,25 @@ class HomeService(
     val outboxRepository: OutboxRepository
 ) {
     fun createHome(homeRequest: HomeRequest, ownerId: Int): HomeDto {
+        if (ownerId < 0) throw ApiError.WRONG_REQUEST_DATA.toException()
         val home: HomeEntity = homeRequest.toEntity(ownerId)
         return homeRepository.save(home).toDto()
     }
 
     fun getHome(id: Int, ownerId: Int): HomeDto =
         homeRepository.findByIdOrNull(id)
-            ?.also { it.checkOwner(ownerId) }
+            ?.checkOwner(ownerId)
             ?.toDto()
             ?: throw ApiError.HOME_NOT_FOUND.toException()
 
     fun getHomeList(ownerId: Int): List<HomeSimpleDto> =
-        homeRepository.findAllByOwnerId(ownerId).let { sourceList ->
-            sourceList.map { it.toSimpleDto() }
-        }
+        homeRepository.findAllByOwnerId(ownerId).map { it.toSimpleDto() }
 
     fun deleteHome(id: Int, ownerId: Int) {
-        val home = homeRepository.findByIdOrNull(id)
-            ?.also { it.checkOwner(ownerId) }
+        homeRepository.findByIdOrNull(id)
+            ?.checkOwner(ownerId)
+            ?.let { homeRepository.delete(it) }
             ?: throw ApiError.HOME_NOT_FOUND.toException()
-        homeRepository.delete(home)
         outboxRepository.save(
             OutboxMessageEntity(
                 topic = "home-delete",
@@ -45,7 +44,7 @@ class HomeService(
         )
     }
 
-    fun deleteAllHomes(ownerId: Int) {
+    fun deleteAllHomesByOwner(ownerId: Int) {
         val homes = homeRepository.findAllByOwnerId(ownerId)
         for (home in homes) {
             deleteHome(home.id, ownerId)
@@ -54,7 +53,7 @@ class HomeService(
 
     fun updateHome(id: Int, homeRequest: HomeRequest, ownerId: Int): HomeDto {
         homeRepository.findByIdOrNull(id)
-            ?.also { it.checkOwner(ownerId) }
+            ?.checkOwner(ownerId)
             ?: throw ApiError.HOME_NOT_FOUND.toException()
         val home: HomeEntity = homeRequest.toEntity(id, ownerId)
         return homeRepository.save(home).toDto()
@@ -68,8 +67,9 @@ class HomeService(
             ownerId = ownerId
         )
 
-    private fun HomeEntity.checkOwner(ownerId: Int) {
+    fun HomeEntity.checkOwner(ownerId: Int): HomeEntity {
         if (this.ownerId != ownerId)
             throw ApiError.ACTION_IS_CANCELLED.toException()
+        return this
     }
 }
