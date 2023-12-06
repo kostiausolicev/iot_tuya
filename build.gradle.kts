@@ -113,8 +113,8 @@ tasks.register("generateDeviceClient", GenerateTask::class) {
 tasks.withType<KotlinCompile> {
 	dependsOn("generateUserClient")
 	dependsOn("generateHomeClient")
-//	dependsOn("generateDeviceClient")
-	kotlinOptions {
+	dependsOn("generateDeviceClient")
+	kotlinOptions {//
 		freeCompilerArgs += "-Xjsr305=strict"
 		jvmTarget = "17"
 	}
