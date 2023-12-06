@@ -5,5 +5,5 @@ import ru.headh.kosti.deviceservice.enum.ColorData
 
 class ColorCommand(
     code: CapacityCode,
-    override val value: ColorData
-) : Command(code)
+    value: ColorData
+) : Command(code, value)

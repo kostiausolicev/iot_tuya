@@ -2,6 +2,7 @@ package ru.headh.kosti.deviceservice.dto.command
 
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
+import io.swagger.v3.oas.annotations.media.Schema
 import ru.headh.kosti.deviceservice.enum.CapacityCode
 import ru.headh.kosti.deviceservice.util.BRIGHTNESS
 import ru.headh.kosti.deviceservice.util.COLOR
@@ -33,7 +34,7 @@ import ru.headh.kosti.deviceservice.util.TEMPERATURE
     )
 )
 abstract class Command (
-    val code: CapacityCode
-) {
-    abstract val value: Any
-}
+    @get:Schema(implementation = CapacityCode::class, enumAsRef = true)
+    val code: CapacityCode,
+    val value: Any
+)
