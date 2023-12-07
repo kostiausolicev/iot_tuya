@@ -9,7 +9,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.context.TestConstructor
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.transaction.annotation.Transactional
 import ru.headh.kosti.homeservice.dto.request.HomeRequest
@@ -40,7 +39,14 @@ class HomeServiceTest {
     private lateinit var homeService: HomeService
 
     @Nested
+    @Transactional
     inner class CreateHome {
+
+        @AfterEach
+        fun delete() {
+            homeRepository.deleteAllInBatch()
+            homeRepository.flush()
+        }
 
         @Test
         fun success() {
@@ -71,11 +77,12 @@ class HomeServiceTest {
                     address = null
                 )
             val ownerId = -1
-            expectApiException(ApiError.WRONG_REQUEST_DATA) {homeService.createHome(request, ownerId)}
+            expectApiException(ApiError.WRONG_REQUEST_DATA) { homeService.createHome(request, ownerId) }
         }
     }
 
     @Nested
+    @Transactional
     inner class GetHome {
         private var testHome1 = HomeEntity(
             id = 1,
@@ -99,6 +106,12 @@ class HomeServiceTest {
             homeRepository.flush()
         }
 
+        @AfterEach
+        fun delete() {
+            homeRepository.deleteAllInBatch()
+            homeRepository.flush()
+        }
+
         @Test
         fun success() {
             val id = testHome1.id
@@ -112,23 +125,23 @@ class HomeServiceTest {
         @Test
         fun `throw exception home not found`() {
             val id = -1
-            val ownerId = 1
+            val ownerId = testHome1.ownerId
 
-            expectApiException(ApiError.HOME_NOT_FOUND) {homeService.getHome(id, ownerId)}
+            expectApiException(ApiError.HOME_NOT_FOUND) { homeService.getHome(id, ownerId) }
         }
 
         @Test
         fun `throw exception action is cancelled`() {
             val id = testHome1.id
             val ownerId = testHome1.ownerId + 1
-            expectApiException(ApiError.ACTION_IS_CANCELLED) {homeService.getHome(id, ownerId)}
+            expectApiException(ApiError.ACTION_IS_CANCELLED) { homeService.getHome(id, ownerId) }
         }
 
         @Test
         fun `throw exception wrong ownerId`() {
             val id = testHome1.id
             val ownerId = -1
-            expectApiException(ApiError.WRONG_REQUEST_DATA) {homeService.getHome(id, ownerId)}
+            expectApiException(ApiError.WRONG_REQUEST_DATA) { homeService.getHome(id, ownerId) }
         }
     }
 }
