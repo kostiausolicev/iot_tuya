@@ -77,16 +77,6 @@ class HomeControllerTest {
             doRequest(request, ownerId).andExpectValidationError()
         }
 
-        @Test
-        fun `should throw no correctly ownerId`() {
-            val ownerId = -1
-            val request = HomeRequest(
-                name = "Test Home 1", address = null
-            )
-            every { homeService.createHome(request, ownerId) }.throws(ApiError.WRONG_REQUEST_DATA.toException())
-            expectApiException(ApiError.WRONG_REQUEST_DATA) { homeService.createHome(request, ownerId) }
-        }
-
         private fun doRequest(request: HomeRequest, ownerId: Int): ResultActions = mockMvc.perform(
             MockMvcRequestBuilders
                 .post("/api/homes")
@@ -111,34 +101,86 @@ class HomeControllerTest {
             doRequest(homeId, ownerId)
         }
 
-//        @ParameterizedTest
-//        @CsvSource(
-//            value = [
-//                "1,1",
-//                "1,-1"
-//            ]
-//        )
-//        fun `should throw home not found exception`(
-//            homeId: Int,
-//            ownerId: Int
-//        ) {
-//
-//        }
-
         private fun doRequest(homeId: Int, ownerId: Int): ResultActions = mockMvc.perform(
-            MockMvcRequestBuilders.get("/api/homes/$homeId").contentType(MediaType.APPLICATION_JSON)
-                .param("ownerId", ownerId.toString())
+            MockMvcRequestBuilders
+                .get("/api/homes/$homeId")
+                .param("ownerId", "$ownerId")
         )
     }
 
     @Nested
     inner class GetList {
+        @Test
+        fun success() {
+            val ownerId = 1
+            val homeId = 1
+            val expected = listOf(HomeEntity(
+                id = homeId, name = "Test Home 1", address = null, ownerId = ownerId, rooms = emptyList()
+            ).toSimpleDto())
 
+            every { homeService.getHomeList(ownerId) }.returns(expected)
+
+            doRequest(ownerId)
+        }
+
+        private fun doRequest(ownerId: Int): ResultActions = mockMvc.perform(
+            MockMvcRequestBuilders
+                .get("/api/homes/")
+                .param("ownerId", "$ownerId")
+        )
     }
 
     @Nested
     inner class UpdateHome {
+        @Test
+        fun success() {
+            val request = HomeRequest(
+                address = "New address",
+                name = "New name",
+            )
+            val homeId = 2
+            val ownerId = 1
+            val expected = HomeEntity(
+                id = homeId,
+                name = request.name,
+                address = request.address,
+                ownerId = ownerId,
+                rooms = emptyList()
+            ).toDto()
 
+            every { homeService.updateHome(homeId, request, ownerId) }.returns(expected)
+
+            doRequest(homeId, request, ownerId).andExpectJson(expected)
+        }
+
+        @ParameterizedTest
+        @CsvSource(
+            value = [
+                ",,1,1",
+                ",SomeAddress,1,1"
+            ]
+        )
+        fun `should throw exception with correct ownerId`(
+            name: String?,
+            address: String?,
+            ownerId: Int,
+            homeId: Int
+        ) {
+            val request = HomeRequest(
+                address = address,
+                name = name ?: "",
+            )
+
+            doRequest(homeId, request, ownerId).andExpectValidationError()
+        }
+
+        private fun doRequest(homeId: Int, request: HomeRequest, ownerId: Int): ResultActions = mockMvc.perform(
+            MockMvcRequestBuilders
+                .put("/api/homes/$homeId")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("ownerId", ownerId.toString())
+                .content(mapper.writeValueAsBytes(request))
+        )
     }
 
     @Nested

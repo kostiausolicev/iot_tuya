@@ -73,10 +73,10 @@ class HomeService(
         )
 
     fun HomeEntity.checkOwner(ownerId: Int): HomeEntity {
-        if (this.ownerId != ownerId)
-            throw ApiError.ACTION_IS_CANCELLED.toException()
         if (ownerId < 1)
             throw ApiError.WRONG_REQUEST_DATA.toException()
+        if (this.ownerId != ownerId)
+            throw ApiError.ACTION_IS_CANCELLED.toException()
         return this
     }
 }
