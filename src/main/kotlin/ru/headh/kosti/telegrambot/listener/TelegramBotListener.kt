@@ -2,6 +2,7 @@ package ru.headh.kosti.telegrambot.listener
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Component
+import org.springframework.stereotype.Repository
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.objects.Update
 import ru.headh.kosti.telegrambot.dto.ActionData
@@ -57,12 +58,12 @@ class TelegramBotListener(
                 message = message.text
             )
             ActionType.AUTH -> AuthActionData(
-                message.chatId.toString(),
-                message.webAppData.data
+                chatId = message.chatId.toString(),
+                message = message.webAppData.data
             )
             ActionType.REGISTER -> RegisterActionData(
-                message.chatId.toString(),
-                message.webAppData.data
+                chatId = message.chatId.toString(),
+                message = message.webAppData.data
             )
 
             else -> null

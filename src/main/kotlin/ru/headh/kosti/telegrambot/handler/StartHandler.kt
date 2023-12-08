@@ -22,11 +22,7 @@ class StartHandler(
             telegramSender.sendMessage(
                 chatId = data.chatId,
                 text = "Добро пожаловать! войдите или зарегистрируйтесь, прежде чем начать",
-                replyMarkup = ReplyKeyboardMarkup.builder()
-                    .keyboard(authKeyboard.keyboard)
-                    .resizeKeyboard(true)
-                    .oneTimeKeyboard(true)
-                    .build()
+                replyMarkup = authKeyboard.keyboard
             )
         } else {
             telegramSender.sendMessage(
