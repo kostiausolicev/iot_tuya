@@ -63,12 +63,10 @@ Telegram.WebApp.onEvent('mainButtonClicked', function(){
         const password = document.getElementById('password').value;
         const formData = {
             name: name,
-            username: username,
             password: password,
-            confirmPassword: confirm_password
         };
         formDataJSON = JSON.stringify(formData);
     }
-    tg.sendData("formDataJSON");
+    tg.sendData(formDataJSON);
     tg.close();
 });
