@@ -7,6 +7,5 @@ import java.io.Serializable
 class UserToken(
     val id: String,
     val accessToken: String,
-    val refreshToken: String,
-    val ttl: Int
+    val refreshToken: String
 ) : Serializable

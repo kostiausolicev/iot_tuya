@@ -30,10 +30,6 @@ class TelegramBotListener(
 
 
     override fun onUpdateReceived(update: Update?) {
-        update?.message?.webAppData?.let {
-            println(update.message?.text ?: "----------")
-        }
-
         val type = update?.type ?: return
 
         val data = update.toActionData() ?: return
