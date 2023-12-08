@@ -62,7 +62,7 @@ Telegram.WebApp.onEvent('mainButtonClicked', function(){
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
         const formData = {
-            name: name,
+            username: username,
             password: password,
         };
         formDataJSON = JSON.stringify(formData);
