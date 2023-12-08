@@ -16,12 +16,12 @@ class AuthKeyboard(
     private final val buttonAuth = KeyboardButton()
         .also {
             it.text = "Вход"
-            it.webApp = WebAppInfo("$webAppUrl")
+            it.webApp = WebAppInfo("$webAppUrl/?formType=auth")
         }
     private final val buttonRegister = KeyboardButton()
         .also {
             it.text = "Регистрация"
-            it.webApp = WebAppInfo("$webAppUrl/register")
+            it.webApp = WebAppInfo("$webAppUrl/?formType=register")
         }
     val keyboard = listOf(KeyboardRow(listOf(buttonAuth, buttonRegister)))
 }
