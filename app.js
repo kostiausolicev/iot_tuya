@@ -7,6 +7,18 @@ tg.MainButton.enable()
 tg.MainButton.show()
 
 Telegram.WebApp.onEvent('mainButtonClicked', function(){
-    tg.sendData("some string that we need to send");
+    var username = document.getElementById('username').value;
+    var password = document.getElementById('password').value;
+    var confirm_password = document.getElementById('confirm password').value;
+
+    var formData = {
+        username: username,
+        password: password,
+        confirm_password: confirm_password
+    };
+
+    // Получение JSON-представления объекта
+    var formDataJSON = JSON.stringify(formData);
+    tg.sendData("formDataJSON");
     tg.close();
 });
