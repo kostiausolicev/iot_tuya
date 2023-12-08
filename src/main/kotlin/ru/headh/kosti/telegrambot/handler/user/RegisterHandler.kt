@@ -1,48 +1,41 @@
-package ru.headh.kosti.telegrambot.handler
+package ru.headh.kosti.telegrambot.handler.user
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.springframework.stereotype.Component
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove
-import ru.headh.kosti.apigateway.client.model.UserAuthRequestGenGen
+import ru.headh.kosti.apigateway.client.model.UserRegisterRequestGenGen
 import ru.headh.kosti.telegrambot.aspect.AuthAndRegisterPointcut
 import ru.headh.kosti.telegrambot.client.UserServiceClient
-import ru.headh.kosti.telegrambot.dto.AuthActionData
+import ru.headh.kosti.telegrambot.dto.user.RegisterActionData
 import ru.headh.kosti.telegrambot.entity.UserToken
 import ru.headh.kosti.telegrambot.enumeration.ActionType
+import ru.headh.kosti.telegrambot.handler.ActionHandler
 import ru.headh.kosti.telegrambot.keyboard.inline.MainMenuKeyboard
-import ru.headh.kosti.telegrambot.keyboard.outline.AuthKeyboard
 import ru.headh.kosti.telegrambot.repository.RedisRepository
 import ru.headh.kosti.telegrambot.sender.TelegramSender
 
 @Component
-
-class AuthHandler(
-    private val mainMenuKeyboard: MainMenuKeyboard,
+class RegisterHandler(
     private val userClient: UserServiceClient,
+    private val mainMenuKeyboard: MainMenuKeyboard,
     private val redisRepository: RedisRepository,
     private val telegramSender: TelegramSender
-) : ActionHandler<AuthActionData> {
+) : ActionHandler<RegisterActionData> {
     private val mapper = jacksonObjectMapper()
-    override val type: ActionType = ActionType.AUTH
+    override val type: ActionType = ActionType.REGISTER
 
     @AuthAndRegisterPointcut
-    override fun handle(data: AuthActionData) {
-        val authData: UserAuthRequestGenGen = mapper.readValue(data.message)
-        val token = userClient.auth(authData)
+    override fun handle(data: RegisterActionData) {
+        val registerData: UserRegisterRequestGenGen = mapper.readValue(data.message)
+        val token = userClient.register(registerData)
 
         redisRepository.save(UserToken(data.chatId, token.accessToken, token.refreshToken))
 
         telegramSender.sendMessage(
             data.chatId,
             text = "Добро пожаловать!",
-            replyKeyboardRemove = ReplyKeyboardRemove(true)
-        )
-
-        telegramSender.sendMessage(
-            data.chatId,
-            text = "Выберите действие",
             inlineReplyMarkup = mainMenuKeyboard.keyboard
         )
     }
+
 }

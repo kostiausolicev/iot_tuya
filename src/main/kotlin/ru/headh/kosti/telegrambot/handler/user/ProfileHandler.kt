@@ -1,8 +1,9 @@
-package ru.headh.kosti.telegrambot.handler
+package ru.headh.kosti.telegrambot.handler.user
 
 import org.springframework.stereotype.Component
-import ru.headh.kosti.telegrambot.dto.ProfileActionData
+import ru.headh.kosti.telegrambot.dto.user.ProfileActionData
 import ru.headh.kosti.telegrambot.enumeration.ActionType
+import ru.headh.kosti.telegrambot.handler.ActionHandler
 import ru.headh.kosti.telegrambot.keyboard.inline.ProfileKeyboard
 import ru.headh.kosti.telegrambot.sender.TelegramSender
 

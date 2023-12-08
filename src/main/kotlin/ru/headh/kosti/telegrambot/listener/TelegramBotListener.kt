@@ -5,12 +5,16 @@ import org.springframework.stereotype.Component
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.objects.Update
 import ru.headh.kosti.telegrambot.dto.*
+import ru.headh.kosti.telegrambot.dto.user.AuthActionData
+import ru.headh.kosti.telegrambot.dto.user.ProfileActionData
+import ru.headh.kosti.telegrambot.dto.user.RegisterActionData
+import ru.headh.kosti.telegrambot.dto.user.SignoutActionData
 import ru.headh.kosti.telegrambot.util.PROFILE
 import ru.headh.kosti.telegrambot.enumeration.ActionType
 import ru.headh.kosti.telegrambot.handler.ActionHandler
 import ru.headh.kosti.telegrambot.property.TelegramBotProperty
-import ru.headh.kosti.telegrambot.sender.TelegramSender
 import ru.headh.kosti.telegrambot.util.MAIN_MENU
+import ru.headh.kosti.telegrambot.util.SIGN_OUT
 
 @Component
 @ConditionalOnProperty(value = ["telegram-bot.listener.enabled"], havingValue = "true")
@@ -42,6 +46,7 @@ class TelegramBotListener(
                 "Регистрация" -> ActionType.REGISTER
                 PROFILE -> ActionType.PROFILE
                 MAIN_MENU -> ActionType.MAIN_MENU
+                SIGN_OUT -> ActionType.SING_OUT
                 else -> null
             }
         }
@@ -72,6 +77,12 @@ class TelegramBotListener(
             )
 
             ActionType.MAIN_MENU -> MainMenuActionData(
+                chatId = message.chatId.toString(),
+                messageId = message.messageId,
+                message = callbackQuery.data
+            )
+
+            ActionType.SING_OUT -> SignoutActionData(
                 chatId = message.chatId.toString(),
                 messageId = message.messageId,
                 message = callbackQuery.data
