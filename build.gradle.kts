@@ -26,6 +26,8 @@ dependencies {
     implementation("org.telegram:telegrambots-spring-boot-starter:6.8.0")
     implementation("org.yaml:snakeyaml:2.0")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("org.springframework.data:spring-data-redis:2.7.17")
+    implementation ("redis.clients:jedis:3.10.0")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
     implementation("ch.qos.logback:logback-classic:1.2.9")
