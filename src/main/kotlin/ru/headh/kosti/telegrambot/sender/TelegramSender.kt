@@ -7,6 +7,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
 import ru.headh.kosti.telegrambot.property.TelegramBotProperty
 
@@ -17,11 +18,13 @@ class TelegramSender(
     fun sendMessage(
         chatId: String,
         text: String,
+        replyKeyboardRemove: ReplyKeyboardRemove? = null,
         inlineReplyMarkup: InlineKeyboardMarkup? = null,
         replyMarkup: ReplyKeyboardMarkup? = null
     ) = SendMessage.builder().apply {
         chatId(chatId)
         text(text)
+        replyKeyboardRemove?.let { replyMarkup(it) }
         inlineReplyMarkup?.let { replyMarkup(it) }
         replyMarkup?.let { replyMarkup(it) }
     }.build().let { execute(it) }
