@@ -2,9 +2,9 @@ let tg = window.Telegram.WebApp; //получаем объект webapp теле
 
 tg.expand(); //расширяем на все окно
 
-tg.MainButton.text = "Отправить данные"; //изменяем текст кнопки
+tg.MainButton.setText("Changed Text");
+tg.MainButton.enable()
 tg.MainButton.show()
-tg.MainButton.enable() //показываем
 
 Telegram.WebApp.onEvent('mainButtonClicked', function(){
     tg.sendData("some string that we need to send");
