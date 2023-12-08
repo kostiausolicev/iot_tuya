@@ -13,3 +13,10 @@ spring:
 jwt:
   secret: hjhbjhbJHBJHFBDjhbjhb873Y4UI2BUYLSDLDBjgf
   ttl: 3600
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    disable-swagger-default-url: true
+  show-actuator: false
