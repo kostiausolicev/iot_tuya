@@ -27,7 +27,7 @@ class TelegramSender(
     }.build().let { execute(it) }
 
     fun editMessage(
-        chatId: Long,
+        chatId: String,
         messageId: Int,
         text: String,
         inlineReplyMarkup: InlineKeyboardMarkup? = null,

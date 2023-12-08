@@ -4,5 +4,5 @@ enum class ActionType {
     START,
     REGISTER,
     AUTH,
-    SIGNOUT
+    PROFILE
 }

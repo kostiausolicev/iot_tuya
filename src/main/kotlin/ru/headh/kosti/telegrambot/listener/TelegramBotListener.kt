@@ -2,9 +2,9 @@ package ru.headh.kosti.telegrambot.listener
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Component
-import org.springframework.stereotype.Repository
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.objects.Update
+import ru.headh.kosti.telegrambot.util.PROFILE
 import ru.headh.kosti.telegrambot.dto.ActionData
 import ru.headh.kosti.telegrambot.dto.AuthActionData
 import ru.headh.kosti.telegrambot.dto.RegisterActionData
@@ -19,8 +19,6 @@ import ru.headh.kosti.telegrambot.sender.TelegramSender
 class TelegramBotListener(
     private val telegramBotProperty: TelegramBotProperty,
     actionHandlers: List<ActionHandler<*>>,
-    val sender: TelegramSender
-
 ) : TelegramLongPollingBot(telegramBotProperty.token) {
     val actionHandlers = actionHandlers
         .filterIsInstance<ActionHandler<ActionData>>()
@@ -32,7 +30,6 @@ class TelegramBotListener(
 
     override fun onUpdateReceived(update: Update?) {
         val type = update?.type ?: return
-
         val data = update.toActionData() ?: return
 
         actionHandlers[type]?.handle(data)
@@ -45,6 +42,7 @@ class TelegramBotListener(
                 "/start" -> ActionType.START
                 "Вход" -> ActionType.AUTH
                 "Регистрация" -> ActionType.REGISTER
+                PROFILE -> ActionType.PROFILE
                 else -> null
             }
         }
@@ -57,10 +55,12 @@ class TelegramBotListener(
                 chatId = message.chatId.toString(),
                 message = message.text
             )
+
             ActionType.AUTH -> AuthActionData(
                 chatId = message.chatId.toString(),
                 message = message.webAppData.data
             )
+
             ActionType.REGISTER -> RegisterActionData(
                 chatId = message.chatId.toString(),
                 message = message.webAppData.data

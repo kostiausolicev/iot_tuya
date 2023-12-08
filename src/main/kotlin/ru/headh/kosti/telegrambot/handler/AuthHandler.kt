@@ -9,12 +9,14 @@ import ru.headh.kosti.telegrambot.client.UserServiceClient
 import ru.headh.kosti.telegrambot.dto.AuthActionData
 import ru.headh.kosti.telegrambot.entity.UserToken
 import ru.headh.kosti.telegrambot.enumeration.ActionType
+import ru.headh.kosti.telegrambot.keyboard.inline.MainMenu
 import ru.headh.kosti.telegrambot.keyboard.outline.AuthKeyboard
 import ru.headh.kosti.telegrambot.repository.RedisRepository
 import ru.headh.kosti.telegrambot.sender.TelegramSender
 
 @Component
 class AuthHandler(
+    private val mainMenu: MainMenu,
     private val userClient: UserServiceClient,
     private val authKeyboard: AuthKeyboard,
     private val redisRepository: RedisRepository,
@@ -31,7 +33,8 @@ class AuthHandler(
 
             telegramSender.sendMessage(
                 data.chatId,
-                text = "Добро пожаловать!"
+                text = "Добро пожаловать!",
+                inlineReplyMarkup = mainMenu.keyboard
             )
         } catch (ex: Exception) {
             val message: Map<String, Any> = ex.message
