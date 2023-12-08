@@ -1,2 +1,9 @@
 server:
   port: 8070
+
+telegram-bot:
+  listener:
+    enabled: true
+  config:
+    name: test1_spring_bot
+    token: 5628183243:AAHQBbXtbFkvyqvJ1VKbg12bICp5_ApDkPs

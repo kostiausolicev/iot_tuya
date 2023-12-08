@@ -2,13 +2,11 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 
 plugins {
-    id ("org.liquibase.gradle") version "2.0.4"
     id("org.springframework.boot") version "2.7.17"
     id("org.openapi.generator") version "6.6.0"
     id("io.spring.dependency-management") version "1.0.15.RELEASE"
     kotlin("jvm") version "1.6.21"
     kotlin("plugin.spring") version "1.6.21"
-    kotlin("plugin.jpa") version "1.6.21"
 }
 
 group = "ru.headh.kosti"
@@ -22,18 +20,15 @@ repositories {
     mavenCentral()
 }
 
-extra["springCloudVersion"] = "2023.0.0"
-
 dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.telegram:telegrambots-spring-boot-starter:6.1.0")
+    implementation("org.telegram:telegrambots-spring-boot-starter:6.8.0")
+    implementation("org.yaml:snakeyaml:2.0")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-}
 
-dependencyManagement {
-    imports {
-        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
-    }
+    implementation("ch.qos.logback:logback-classic:1.2.9")
 }
 
 tasks.register("generateGatewayClient", GenerateTask::class) {
@@ -71,4 +66,20 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir("${buildDir.absoluteFile}/generated/src/main/kotlin")
+        }
+    }
+}
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.kotlinOptions {
+    jvmTarget = "1.8"
+}
+val compileTestKotlin: KotlinCompile by tasks
+compileTestKotlin.kotlinOptions {
+    jvmTarget = "1.8"
 }
