@@ -12,16 +12,50 @@
 
 <h1>Введите данные:</h1>
 
-<form id="myForm">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required><br>
+<div id="dynamicFormContainer"></div>
 
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required><br>
+<script>
+    // Функция для извлечения значения параметра из URL
+    function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
 
-    <label for="confirm password">Repeat password:</label>
-    <input type="password" id="confirm password" name="confirm password" required><br>
-</form>
+    // Получение значения параметра formType из URL
+    var formType = getParameterByName('formType');
+
+    // Изменение содержимого страницы в зависимости от значения параметра
+    if (formType === 'auth') {
+        document.getElementById('dynamicFormContainer').innerHTML = `
+            <form id="myForm">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required><br>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required><br>
+
+                <label for="confirm password">Repeat password:</label>
+                <input type="password" id="confirm password" name="confirm password" required><br>
+            </form>
+        `;
+    } else if (formType === 'register') {
+        document.getElementById('dynamicFormContainer').innerHTML = `
+            <h1>Форма 2</h1>
+            <form id="myForm">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required><br>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required><br>
+            </form>
+        `;
+    }
+</script>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="app.js"></script>
