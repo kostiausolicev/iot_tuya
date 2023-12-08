@@ -1,20 +1,9 @@
-let tg = window.Telegram.WebApp;
+let tg = window.Telegram.WebApp; //получаем объект webapp телеграма
 
-let p = document.createElement("p");
+tg.expand(); //расширяем на все окно
 
-let data = tg.initDataUnsafe;
-p.innerText = JSON.stringify(data);
-let tableDiv = document.getElementById("table_div");
-tableDiv.appendChild(p);
-
-// let table = document.createElement("table");
-//
-// let tHead = document.createElement("thead");
-// let tBody = document.createElement("tbody");
-//
-// let tableDiv = document.getElementById("table_div");
-//
-// let data = tg.initDataUnsafe.user.id;
-//
-//
-// tableDiv.appendChild(table);
+tg.MainButton.text = "Changed Text"; //изменяем текст кнопки
+tg.MainButton.setText("Changed Text1"); //изменяем текст кнопки иначе
+tg.MainButton.textColor = "#F55353"; //изменяем цвет текста кнопки
+tg.MainButton.color = "#143F6B"; //изменяем цвет бэкграунда кнопки
+tg.MainButton.setParams({"color": "#143F6B"}); //так изменяются все параметры
