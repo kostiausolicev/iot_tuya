@@ -4,15 +4,13 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.objects.Update
+import ru.headh.kosti.telegrambot.dto.*
 import ru.headh.kosti.telegrambot.util.PROFILE
-import ru.headh.kosti.telegrambot.dto.ActionData
-import ru.headh.kosti.telegrambot.dto.AuthActionData
-import ru.headh.kosti.telegrambot.dto.RegisterActionData
-import ru.headh.kosti.telegrambot.dto.StartActionData
 import ru.headh.kosti.telegrambot.enumeration.ActionType
 import ru.headh.kosti.telegrambot.handler.ActionHandler
 import ru.headh.kosti.telegrambot.property.TelegramBotProperty
 import ru.headh.kosti.telegrambot.sender.TelegramSender
+import ru.headh.kosti.telegrambot.util.MAIN_MENU
 
 @Component
 @ConditionalOnProperty(value = ["telegram-bot.listener.enabled"], havingValue = "true")
@@ -43,6 +41,7 @@ class TelegramBotListener(
                 "Вход" -> ActionType.AUTH
                 "Регистрация" -> ActionType.REGISTER
                 PROFILE -> ActionType.PROFILE
+                MAIN_MENU -> ActionType.MAIN_MENU
                 else -> null
             }
         }
@@ -64,6 +63,18 @@ class TelegramBotListener(
             ActionType.REGISTER -> RegisterActionData(
                 chatId = message.chatId.toString(),
                 message = message.webAppData.data
+            )
+
+            ActionType.PROFILE -> ProfileActionData(
+                chatId = message.chatId.toString(),
+                messageId = message.messageId,
+                message = callbackQuery.data
+            )
+
+            ActionType.MAIN_MENU -> MainMenuActionData(
+                chatId = message.chatId.toString(),
+                messageId = message.messageId,
+                message = callbackQuery.data
             )
 
             else -> null

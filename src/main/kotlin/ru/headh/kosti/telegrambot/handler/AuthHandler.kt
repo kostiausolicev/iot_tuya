@@ -9,14 +9,14 @@ import ru.headh.kosti.telegrambot.client.UserServiceClient
 import ru.headh.kosti.telegrambot.dto.AuthActionData
 import ru.headh.kosti.telegrambot.entity.UserToken
 import ru.headh.kosti.telegrambot.enumeration.ActionType
-import ru.headh.kosti.telegrambot.keyboard.inline.MainMenu
+import ru.headh.kosti.telegrambot.keyboard.inline.MainMenuKeyboard
 import ru.headh.kosti.telegrambot.repository.RedisRepository
 import ru.headh.kosti.telegrambot.sender.TelegramSender
 
 @Component
 
 class AuthHandler(
-    private val mainMenu: MainMenu,
+    private val mainMenuKeyboard: MainMenuKeyboard,
     private val userClient: UserServiceClient,
     private val redisRepository: RedisRepository,
     private val telegramSender: TelegramSender
@@ -34,7 +34,7 @@ class AuthHandler(
         telegramSender.sendMessage(
             data.chatId,
             text = "Добро пожаловать!",
-            inlineReplyMarkup = mainMenu.keyboard
+            inlineReplyMarkup = mainMenuKeyboard.keyboard
         )
     }
 }

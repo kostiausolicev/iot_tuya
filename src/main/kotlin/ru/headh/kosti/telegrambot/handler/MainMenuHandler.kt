@@ -1,24 +1,24 @@
 package ru.headh.kosti.telegrambot.handler
 
 import org.springframework.stereotype.Component
-import ru.headh.kosti.telegrambot.dto.ProfileActionData
+import ru.headh.kosti.telegrambot.dto.MainMenuActionData
 import ru.headh.kosti.telegrambot.enumeration.ActionType
-import ru.headh.kosti.telegrambot.keyboard.inline.ProfileKeyboard
+import ru.headh.kosti.telegrambot.keyboard.inline.MainMenuKeyboard
 import ru.headh.kosti.telegrambot.sender.TelegramSender
 
 @Component
-class ProfileHandler(
-    private val profileKeyboard: ProfileKeyboard,
+class MainMenuHandler(
+    private val mainMenuKeyboard: MainMenuKeyboard,
     private val telegramSender: TelegramSender
-) : ActionHandler<ProfileActionData> {
-    override val type: ActionType = ActionType.PROFILE
+) : ActionHandler<MainMenuActionData> {
+    override val type: ActionType = ActionType.MAIN_MENU
 
-    override fun handle(data: ProfileActionData) {
+    override fun handle(data: MainMenuActionData) {
         telegramSender.editMessage(
             chatId = data.chatId,
             messageId = data.messageId,
             text = "Выберите действие:",
-            inlineReplyMarkup = profileKeyboard.keyboard
+            inlineReplyMarkup = mainMenuKeyboard.keyboard
         )
     }
 }

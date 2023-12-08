@@ -27,7 +27,7 @@ class StartHandler(
         } else {
             telegramSender.sendMessage(
                 chatId = data.chatId,
-                text = "Привет"
+                text = "Выбери действие:"
             )
         }
     }

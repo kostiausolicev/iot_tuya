@@ -8,7 +8,7 @@ import ru.headh.kosti.telegrambot.util.GET_HOME_LIST
 import ru.headh.kosti.telegrambot.util.PROFILE
 
 @Component
-class MainMenu {
+class MainMenuKeyboard {
     private final val buttonHome = InlineKeyboardButton()
         .also {
             it.text = "Мои дома"
