@@ -18,9 +18,8 @@ function getParameterByName(name, url) {
 
 let formType = getParameterByName('formType');
 
-if (formType === 'auth') {
+if (formType === 'register') {
     document.getElementById('dynamicFormContainer').innerHTML = `
-        <form id="myForm">
              <label for="name">Username:</label>
             <input type="text" id="name" name="name" required><br>
 
@@ -32,29 +31,26 @@ if (formType === 'auth') {
 
             <label for="confirm_password">Repeat password:</label>
             <input type="password" id="confirm_password" name="confirm_password" required><br>
-        </form>
     `;
-} else if (formType === 'register') {
+} else if (formType === 'auth') {
     document.getElementById('dynamicFormContainer').innerHTML = `
-        <form id="myForm">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required><br>
 
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required><br>
-        </form>
     `;
 }
 
 
 Telegram.WebApp.onEvent('mainButtonClicked', function(){
-    const name = document.getElementById('name').value;
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-    const confirm_password = document.getElementById('confirm password').value;
 
     let formDataJSON;
-    if (formType === 'auth') {
+    if (formType === 'register') {
+        const name = document.getElementById('name').value;
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const confirm_password = document.getElementById('confirm password').value;
         const formData = {
             name: name,
             username: username,
@@ -62,7 +58,9 @@ Telegram.WebApp.onEvent('mainButtonClicked', function(){
             confirm_password: confirm_password
         };
         formDataJSON = JSON.stringify(formData);
-    } else if (formType === 'register') {
+    } else if (formType === 'auth') {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
         const formData = {
             name: name,
             username: username,
