@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.objects.Update
 import ru.headh.kosti.telegrambot.dto.ActionData
+import ru.headh.kosti.telegrambot.dto.AuthActionData
+import ru.headh.kosti.telegrambot.dto.RegisterActionData
 import ru.headh.kosti.telegrambot.dto.StartActionData
 import ru.headh.kosti.telegrambot.enumeration.ActionType
 import ru.headh.kosti.telegrambot.handler.ActionHandler
@@ -28,6 +30,10 @@ class TelegramBotListener(
 
 
     override fun onUpdateReceived(update: Update?) {
+        update?.message?.webAppData?.let {
+            println(update.message?.text ?: "----------")
+        }
+
         val type = update?.type ?: return
 
         val data = update.toActionData() ?: return
@@ -37,13 +43,14 @@ class TelegramBotListener(
 
     private val Update.type: ActionType?
         get() {
-            val actionType = message?.text ?: callbackQuery?.data
+            val actionType = message?.text ?: message?.webAppData?.buttonText ?: callbackQuery?.data
             return when (actionType) {
                 "/start" -> ActionType.START
+                "Вход" -> ActionType.AUTH
+                "Регистрация" -> ActionType.REGISTER
                 else -> null
             }
         }
-
 
     private fun Update.toActionData(): ActionData? {
         val message = message ?: callbackQuery.message
@@ -53,6 +60,15 @@ class TelegramBotListener(
                 chatId = message.chatId.toString(),
                 message = message.text
             )
+            ActionType.AUTH -> AuthActionData(
+                message.chatId.toString(),
+                message.webAppData.data
+            )
+            ActionType.REGISTER -> RegisterActionData(
+                message.chatId.toString(),
+                message.webAppData.data
+            )
+
             else -> null
         }
     }
