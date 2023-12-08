@@ -55,7 +55,7 @@ Telegram.WebApp.onEvent('mainButtonClicked', function(){
             name: name,
             username: username,
             password: password,
-            confirm_password: confirm_password
+            confirmPassword: confirm_password
         };
         formDataJSON = JSON.stringify(formData);
     } else if (formType === 'auth') {
