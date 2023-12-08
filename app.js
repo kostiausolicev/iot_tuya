@@ -20,7 +20,7 @@ let formType = getParameterByName('formType');
 
 if (formType === 'register') {
     document.getElementById('dynamicFormContainer').innerHTML = `
-             <label for="name">Username:</label>
+            <label for="name">Username:</label>
             <input type="text" id="name" name="name" required><br>
 
             <label for="username">Username:</label>
@@ -63,7 +63,7 @@ Telegram.WebApp.onEvent('mainButtonClicked', function(){
         const password = document.getElementById('password').value;
         const formData = {
             username: username,
-            password: password,
+            password: password
         };
         formDataJSON = JSON.stringify(formData);
     }
