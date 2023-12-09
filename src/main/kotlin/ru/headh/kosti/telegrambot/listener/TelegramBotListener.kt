@@ -6,6 +6,7 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.objects.Update
 import ru.headh.kosti.telegrambot.dto.*
 import ru.headh.kosti.telegrambot.dto.device.*
+import ru.headh.kosti.telegrambot.dto.home.home.CreateHomeActionData
 import ru.headh.kosti.telegrambot.dto.home.home.DeleteHomeActionData
 import ru.headh.kosti.telegrambot.dto.home.home.GetHomeActionData
 import ru.headh.kosti.telegrambot.dto.home.home.GetHomeListActionData
@@ -59,12 +60,16 @@ class TelegramBotListener(
                 SIGN_OUT -> ActionType.SING_OUT
                 DELETE_USER -> ActionType.DELETE_USER
 
+//                "Новый дом" ->
+                CREATE_HOME -> ActionType.CREATE_HOME
                 GET_HOME_LIST -> ActionType.GET_HOME_LIST
                 GET_HOME -> ActionType.GET_HOME
                 DELETE_HOME -> ActionType.DELETE_HOME
 
+//                "Новая комната" ->
                 GET_ROOM_LIST -> ActionType.GET_ROOM_LIST
 
+//                "Новое устройство" ->
                 GET_DEVICE -> ActionType.GET_DEVICE
                 GET_DEVICE_LIST -> ActionType.GET_DEVICE_LIST
                 CHANGE_DEVICE_STATE -> ActionType.CHANGE_DEVICE_STATE
@@ -124,6 +129,12 @@ class TelegramBotListener(
             )
 
             ActionType.DELETE_USER -> DeleteActionData(
+                chatId = message.chatId.toString(),
+                messageId = message.messageId,
+                message = callbackQuery.data
+            )
+
+            ActionType.CREATE_HOME -> CreateHomeActionData(
                 chatId = message.chatId.toString(),
                 messageId = message.messageId,
                 message = callbackQuery.data

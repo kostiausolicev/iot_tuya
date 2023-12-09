@@ -9,7 +9,7 @@ import ru.headh.kosti.telegrambot.util.*
 class DeviceKeyboard {
     private final val buttonCreate = InlineKeyboardButton()
         .also {
-            it.text = "Создать"
+            it.text = "Новое устройство"
             it.callbackData = CREATE_DEVICE
         }
     private final val buttonBack = InlineKeyboardButton()

@@ -11,7 +11,7 @@ import ru.headh.kosti.telegrambot.util.MAIN_MENU
 class HomeKeyboard {
     private final val buttonCreate = InlineKeyboardButton()
         .also {
-            it.text = "Создать"
+            it.text = "Новый дом"
             it.callbackData = CREATE_HOME
         }
     private final val buttonBack = InlineKeyboardButton()
