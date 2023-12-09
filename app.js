@@ -34,21 +34,17 @@ if (formType === 'register') {
 } else if (formType === 'auth') {
     drawAuth()
 }
-// else if (formType === 'create' && obj === 'home') {
-//     drawCreateHome()
-//         } else if (formType === 'create' && obj === 'room') {
-//     drawCreateRoom()
-//         } else if (formType === 'create' && obj === 'device') {
-//     drawCreateDevice()
-//         } else if (formType === 'update' && obj === 'home') {
-//
-// } else if (formType === 'update' && obj === 'room') {
-//
-// } else if (formType === 'update' && obj === 'device') {
-//
-// } else if(formType === 'change') {
-//
-// }
+else if (formType === 'create' && obj === 'home') {
+    drawCreateHome()
+        } else if (formType === 'create' && obj === 'room') {
+    drawCreateRoom()
+        } else if (formType === 'create' && obj === 'device') {
+    drawCreateDevice()
+        } else if (formType === 'update' && obj === 'home') {
+} else if (formType === 'update' && obj === 'room') {
+} else if (formType === 'update' && obj === 'device') {
+} else if(formType === 'change') {
+}
 
 Telegram.WebApp.onEvent('mainButtonClicked', function(){
 
@@ -58,21 +54,21 @@ Telegram.WebApp.onEvent('mainButtonClicked', function(){
     } else if (formType === 'auth') {
         formDataJSON = parseAuthToJson()
     }
-    // else if (formType === 'create' && obj === 'home') {
-    //     formDataJSON = parseHomeToJson()
-    // } else if (formType === 'create' && obj === 'room') {
-    //     formDataJSON = parseRoomToJson()
-    // } else if (formType === 'create' && obj === 'device') {
-    //     formDataJSON = parseDeviceToJson()
-    // } else if (formType === 'update' && obj === 'home') {
-    //     formDataJSON = parseAuthToJson()
-    // } else if (formType === 'update' && obj === 'room') {
-    //     formDataJSON = parseAuthToJson()
-    // } else if (formType === 'update' && obj === 'device') {
-    //     formDataJSON = parseAuthToJson()
-    // } else if(formType === 'change') {
-    //     formDataJSON = parseAuthToJson()
-    // }
+    else if (formType === 'create' && obj === 'home') {
+        formDataJSON = parseHomeToJson()
+    } else if (formType === 'create' && obj === 'room') {
+        formDataJSON = parseRoomToJson()
+    } else if (formType === 'create' && obj === 'device') {
+        formDataJSON = parseDeviceToJson()
+    } else if (formType === 'update' && obj === 'home') {
+        formDataJSON = parseAuthToJson()
+    } else if (formType === 'update' && obj === 'room') {
+        formDataJSON = parseAuthToJson()
+    } else if (formType === 'update' && obj === 'device') {
+        formDataJSON = parseAuthToJson()
+    } else if(formType === 'change') {
+        formDataJSON = parseAuthToJson()
+    }
     tg.sendData(formDataJSON);
     tg.close();
 });
