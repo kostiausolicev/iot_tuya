@@ -81,6 +81,26 @@ else if (formType === 'create' && obj === 'device') {
             <input type="text" id="room_id" name="room_id" required><br>
     `;
 }
+else if (formType === 'send_command') {
+    document.getElementById('dynamicFormContainer').innerHTML = `
+            <h1>Введите данные:</h1>
+            <label for="switch_led">SWITCH_LED:</label>
+            <input type="checkbox" id="switch_led_check" name="switch_led_check">
+            <input type="text" id="switch_led" name="switch_led"><br>
+            
+            <input type="checkbox" id="temperature_check" name="temperature_check">
+            <label for="temperature">TEMPERATURE:</label>
+            <input type="text" id="temperature" name="temperature"><br>
+            
+            <input type="checkbox" id="brightness_check" name="brightness_check">
+            <label for="brightness">BRIGHTNESS:</label>
+            <input type="text" id="brightness" name="brightness"><br>
+            
+            <input type="checkbox" id="color_check" name="color_check">
+            <label for="color">COLOR:</label>
+            <input type="color" id="color" name="color"><br>
+    `;
+}
 else {
     document.getElementById('dynamicFormContainer').innerHTML = `
             <h1>Ты не сюда попал</h1>
@@ -143,13 +163,36 @@ Telegram.WebApp.onEvent('mainButtonClicked', function(){
         };
         formDataJSON = JSON.stringify(formData);
     }
-    else if (formType === 'update' && obj === 'home') {
-        const name = document.getElementById('home_name').value;
-        const address = document.getElementById('home_address').value;
-        const formData = {
-            name: name,
-            address: address
-        };
+    else if (formType === 'send_command') {
+        const switch_led = document.getElementById('switch_led').value;
+        const temperature = document.getElementById('temperature').value;
+        const brightness = document.getElementById('brightness').value;
+        const color = document.getElementById('color').value;
+        const formData = [];
+        if (document.getElementById('switch_led_check').value) {
+            formData.push({
+                code: 'SWITCH_LED',
+                value: switch_led
+            })
+        }
+        if (document.getElementById('temperature_check').value) {
+            formData.push({
+                code: 'TEMPERATURE',
+                value: temperature
+            })
+        }
+        if (document.getElementById('brightness_check').value) {
+            formData.push({
+                code: 'BRIGHTNESS',
+                value: brightness
+            })
+        }
+        if (document.getElementById('color_check').value) {
+            formData.push({
+                code: 'COLOR',
+                value: JSON.stringify(color)
+            })
+        }
         formDataJSON = JSON.stringify(formData);
     }
     tg.sendData(formDataJSON);
