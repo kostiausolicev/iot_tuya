@@ -2,6 +2,7 @@ package ru.headh.kosti.telegrambot.handler.user
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
+import ru.headh.kosti.telegrambot.aspect.CheckAndUpdateToken
 import ru.headh.kosti.telegrambot.client.UserServiceClient
 import ru.headh.kosti.telegrambot.dto.user.DeleteActionData
 import ru.headh.kosti.telegrambot.dto.user.SignoutActionData
@@ -20,6 +21,7 @@ class DeleteUserHandler(
 ) : ActionHandler<DeleteActionData> {
     override val type: ActionType = ActionType.DELETE_USER
 
+    @CheckAndUpdateToken
     override fun handle(data: DeleteActionData) {
         redisRepository.findByIdOrNull(data.chatId)
             .also { redisRepository.delete(it!!) }

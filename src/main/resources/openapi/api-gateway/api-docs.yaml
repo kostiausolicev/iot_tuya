@@ -231,6 +231,24 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/SuccessAuthDto'
+  /users/refresh:
+    post:
+      tags:
+      - user-controller
+      operationId: refresh
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SuccessAuthDto'
   /users/auth:
     post:
       tags:
@@ -536,6 +554,13 @@ components:
         ttl:
           type: integer
           format: int64
+    TokenRefreshRequest:
+      required:
+      - refreshToken
+      type: object
+      properties:
+        refreshToken:
+          type: string
     UserAuthRequestGen:
       required:
       - password

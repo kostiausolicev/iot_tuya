@@ -2,6 +2,7 @@ package ru.headh.kosti.telegrambot.handler.user
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
+import ru.headh.kosti.telegrambot.aspect.CheckAndUpdateToken
 import ru.headh.kosti.telegrambot.client.UserServiceClient
 import ru.headh.kosti.telegrambot.dto.user.SignoutActionData
 import ru.headh.kosti.telegrambot.enumeration.ActionType
@@ -19,6 +20,7 @@ class SignoutHandler(
 ) : ActionHandler<SignoutActionData> {
     override val type: ActionType = ActionType.SING_OUT
 
+    @CheckAndUpdateToken
     override fun handle(data: SignoutActionData) {
         redisRepository.findByIdOrNull(data.chatId)
             .also { redisRepository.delete(it!!) }
