@@ -172,25 +172,28 @@ Telegram.WebApp.onEvent('mainButtonClicked', function(){
         const temperature = document.getElementById('temperature').value;
         const brightness = document.getElementById('brightness').value;
         const color = document.getElementById('color').value;
-        const formData = [];
+
         if (document.getElementById('switch_led_check').checked) {
             formData.push({
                 code: 'SWITCH_LED',
                 value: switch_led
-            })
+            });
         }
+
         if (document.getElementById('temperature_check').checked) {
             formData.push({
                 code: 'TEMPERATURE',
                 value: temperature
-            })
+            });
         }
+
         if (document.getElementById('brightness_check').checked) {
             formData.push({
                 code: 'BRIGHTNESS',
                 value: brightness
-            })
+            });
         }
+
         if (document.getElementById('color_check').checked) {
             formData.push({
                 code: 'COLOR',
@@ -199,8 +202,13 @@ Telegram.WebApp.onEvent('mainButtonClicked', function(){
                     s: tinycolor(color).toRgb().s,
                     v: tinycolor(color).toRgb().v,
                 }
-            })
+            });
         }
+
+        formDataJSON = JSON.stringify({
+            deviceId: document.getElementById('device_id').value,
+            commands: formData
+        });
         formDataJSON = JSON.stringify({
             deviceId: document.getElementById('device_id').value,
             commands: formData
