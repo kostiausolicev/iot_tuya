@@ -176,7 +176,7 @@ Telegram.WebApp.onEvent('mainButtonClicked', function(){
         if (document.getElementById('switch_led_check').checked) {
             formData.push({
                 code: 'SWITCH_LED',
-                value: switch_led === "true"
+                value: switch_led
             });
         }
 
