@@ -1,3 +1,5 @@
+import 'templates/*'
+
 let tg = window.Telegram.WebApp;
 
 tg.expand(); //расширяем на все окно
@@ -23,17 +25,20 @@ if (formType === 'register') {
     drawRegister()
 } else if (formType === 'auth') {
     drawAuth()
-}
-else if (formType === 'create' && obj === 'home') {
+} else if (formType === 'create' && obj === 'home') {
     drawCreateHome()
-        } else if (formType === 'create' && obj === 'room') {
+} else if (formType === 'create' && obj === 'room') {
     drawCreateRoom()
-        } else if (formType === 'create' && obj === 'device') {
+} else if (formType === 'create' && obj === 'device') {
     drawCreateDevice()
-        } else if (formType === 'update' && obj === 'home') {
+} else if (formType === 'update' && obj === 'home') {
+
 } else if (formType === 'update' && obj === 'room') {
+
 } else if (formType === 'update' && obj === 'device') {
+
 } else if(formType === 'change') {
+
 }
 
 Telegram.WebApp.onEvent('mainButtonClicked', function(){
@@ -43,8 +48,7 @@ Telegram.WebApp.onEvent('mainButtonClicked', function(){
         formDataJSON = parseRegisterToJson()
     } else if (formType === 'auth') {
         formDataJSON = parseAuthToJson()
-    }
-    else if (formType === 'create' && obj === 'home') {
+    } else if (formType === 'create' && obj === 'home') {
         formDataJSON = parseHomeToJson()
     } else if (formType === 'create' && obj === 'room') {
         formDataJSON = parseRoomToJson()
