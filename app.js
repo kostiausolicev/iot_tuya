@@ -18,21 +18,21 @@ function getParameterByName(name, url) {
 
 let dynamicFormContainer = document.getElementById('dynamicFormContainer');
 
-dynamicFormContainer.style.backgroundColor = tg.ThemeParams.bg_color;
-
-let labels = dynamicFormContainer.querySelectorAll('label');
-for (let label of labels) {
-    label.style.color = tg.ThemeParams.text_color;
-    label.style.fontFamily = 'Arial, sans-serif';
-    label.style.textAlign = 'center';
-}
-
-let h1 = dynamicFormContainer.querySelector('h1');
-if (h1) {
-    h1.style.color = tg.ThemeParams.text_color;
-    h1.style.fontFamily = 'Arial, sans-serif';
-    h1.style.textAlign = 'center';
-}
+// dynamicFormContainer.style.backgroundColor = tg.ThemeParams.bg_color;
+//
+// let labels = dynamicFormContainer.querySelectorAll('label');
+// for (let label of labels) {
+//     label.style.color = tg.ThemeParams.text_color;
+//     label.style.fontFamily = 'Arial, sans-serif';
+//     label.style.textAlign = 'center';
+// }
+//
+// let h1 = dynamicFormContainer.querySelector('h1');
+// if (h1) {
+//     h1.style.color = tg.ThemeParams.text_color;
+//     h1.style.fontFamily = 'Arial, sans-serif';
+//     h1.style.textAlign = 'center';
+// }
 
 let formType = getParameterByName('formType');
 
