@@ -7,7 +7,7 @@ import ru.headh.kosti.telegrambot.client.HomeServiceClient
 import ru.headh.kosti.telegrambot.dto.home.home.GetHomeListActionData
 import ru.headh.kosti.telegrambot.enumeration.ActionType
 import ru.headh.kosti.telegrambot.handler.ActionHandler
-import ru.headh.kosti.telegrambot.keyboard.inline.home.HomeListKeyboard
+import ru.headh.kosti.telegrambot.keyboard.inline.home.home.HomeListKeyboard
 import ru.headh.kosti.telegrambot.repository.RedisRepository
 import ru.headh.kosti.telegrambot.sender.TelegramSender
 

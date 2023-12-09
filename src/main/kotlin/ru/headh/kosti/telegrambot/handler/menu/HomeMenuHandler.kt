@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component
 import ru.headh.kosti.telegrambot.dto.menu.HomeMenuActionData
 import ru.headh.kosti.telegrambot.enumeration.ActionType
 import ru.headh.kosti.telegrambot.handler.ActionHandler
-import ru.headh.kosti.telegrambot.keyboard.inline.home.HomeKeyboard
+import ru.headh.kosti.telegrambot.keyboard.inline.home.home.HomeKeyboard
 import ru.headh.kosti.telegrambot.sender.TelegramSender
 
 @Component

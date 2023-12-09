@@ -8,6 +8,7 @@ import ru.headh.kosti.telegrambot.dto.*
 import ru.headh.kosti.telegrambot.dto.home.home.DeleteHomeActionData
 import ru.headh.kosti.telegrambot.dto.home.home.GetHomeActionData
 import ru.headh.kosti.telegrambot.dto.home.home.GetHomeListActionData
+import ru.headh.kosti.telegrambot.dto.home.room.GetRoomListActionData
 import ru.headh.kosti.telegrambot.dto.menu.DeviceMenuActionData
 import ru.headh.kosti.telegrambot.dto.menu.HomeMenuActionData
 import ru.headh.kosti.telegrambot.dto.menu.MainMenuActionData
@@ -58,6 +59,8 @@ class TelegramBotListener(
                 GET_HOME_LIST -> ActionType.GET_HOME_LIST
                 GET_HOME -> ActionType.GET_HOME
                 DELETE_HOME -> ActionType.DELETE_HOME
+
+                GET_ROOM_LIST -> ActionType.GET_ROOM_LIST
                 else -> null
             }
         }
@@ -130,6 +133,12 @@ class TelegramBotListener(
             )
 
             ActionType.DELETE_HOME -> DeleteHomeActionData(
+                chatId = message.chatId.toString(),
+                messageId = message.messageId,
+                message = callbackQuery.data
+            )
+
+            ActionType.GET_ROOM_LIST -> GetRoomListActionData(
                 chatId = message.chatId.toString(),
                 messageId = message.messageId,
                 message = callbackQuery.data
