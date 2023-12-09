@@ -34,7 +34,8 @@ class RoomService(
         val home = room.home!!
         if (home.ownerId != ownerId)
             throw ApiError.ACTION_IS_CANCELLED.toException()
-        return roomRequest.toEntity(home).toDto()
+        return roomRequest.toEntity(home = home, id = roomId)
+            .let { roomRepository.save(it) }.toDto()
     }
 
     fun delete(roomId: Int, ownerId: Int) {
@@ -51,8 +52,9 @@ class RoomService(
         )
     }
 
-    private fun RoomRequest.toEntity(home: HomeEntity, name: String? = null) =
+    private fun RoomRequest.toEntity(home: HomeEntity, name: String? = null, id: Int = -1) =
         RoomEntity(
+            id = id,
             name = name ?: this.name,
             home = home
         )
