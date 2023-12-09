@@ -4,21 +4,19 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.objects.Update
-import ru.headh.kosti.telegrambot.dto.*
+import ru.headh.kosti.telegrambot.dto.ActionData
+import ru.headh.kosti.telegrambot.dto.StartActionData
 import ru.headh.kosti.telegrambot.dto.device.*
-import ru.headh.kosti.telegrambot.dto.home.home.CreateHomeActionData
-import ru.headh.kosti.telegrambot.dto.home.home.DeleteHomeActionData
-import ru.headh.kosti.telegrambot.dto.home.home.GetHomeActionData
-import ru.headh.kosti.telegrambot.dto.home.home.GetHomeListActionData
+import ru.headh.kosti.telegrambot.dto.home.home.*
+import ru.headh.kosti.telegrambot.dto.home.room.CreateRoomActionData
 import ru.headh.kosti.telegrambot.dto.home.room.GetRoomListActionData
+import ru.headh.kosti.telegrambot.dto.home.room.WasCreatedRoomActionData
 import ru.headh.kosti.telegrambot.dto.menu.DeviceMenuActionData
 import ru.headh.kosti.telegrambot.dto.menu.HomeMenuActionData
 import ru.headh.kosti.telegrambot.dto.menu.MainMenuActionData
 import ru.headh.kosti.telegrambot.dto.user.*
 import ru.headh.kosti.telegrambot.enumeration.ActionType
 import ru.headh.kosti.telegrambot.handler.ActionHandler
-import ru.headh.kosti.telegrambot.handler.device.ChangeDeviceStateHandler
-import ru.headh.kosti.telegrambot.handler.device.GetDeviceHandler
 import ru.headh.kosti.telegrambot.property.TelegramBotProperty
 import ru.headh.kosti.telegrambot.util.*
 
@@ -60,16 +58,18 @@ class TelegramBotListener(
                 SIGN_OUT -> ActionType.SING_OUT
                 DELETE_USER -> ActionType.DELETE_USER
 
-//                "Новый дом" ->
+                "Новый дом" -> ActionType.WAS_CREATED_HOME
                 CREATE_HOME -> ActionType.CREATE_HOME
                 GET_HOME_LIST -> ActionType.GET_HOME_LIST
                 GET_HOME -> ActionType.GET_HOME
                 DELETE_HOME -> ActionType.DELETE_HOME
 
-//                "Новая комната" ->
+                "Новая комната" -> ActionType.WAS_CREATED_ROOM
+                CREATE_ROOM -> ActionType.CREATE_ROOM
                 GET_ROOM_LIST -> ActionType.GET_ROOM_LIST
 
-//                "Новое устройство" ->
+                "Новое устройство" -> ActionType.WAS_CREATED_DEVICE
+                CREATE_DEVICE -> ActionType.CREATE_DEVICE
                 GET_DEVICE -> ActionType.GET_DEVICE
                 GET_DEVICE_LIST -> ActionType.GET_DEVICE_LIST
                 CHANGE_DEVICE_STATE -> ActionType.CHANGE_DEVICE_STATE
@@ -83,10 +83,7 @@ class TelegramBotListener(
         val message = message ?: callbackQuery.message
 
         return when (type) {
-            ActionType.START -> StartActionData(
-                chatId = message.chatId.toString(),
-                message = message.text
-            )
+            ActionType.START -> StartActionData(chatId = message.chatId.toString(), message = message.text)
 
             ActionType.MAIN_MENU -> MainMenuActionData(
                 chatId = message.chatId.toString(),
@@ -106,10 +103,8 @@ class TelegramBotListener(
                 message = callbackQuery.data
             )
 
-            ActionType.AUTH -> AuthActionData(
-                chatId = message.chatId.toString(),
-                message = message.webAppData.data
-            )
+            // USER
+            ActionType.AUTH -> AuthActionData(chatId = message.chatId.toString(), message = message.webAppData.data)
 
             ActionType.REGISTER -> RegisterActionData(
                 chatId = message.chatId.toString(),
@@ -134,6 +129,7 @@ class TelegramBotListener(
                 message = callbackQuery.data
             )
 
+            // HOME
             ActionType.CREATE_HOME -> CreateHomeActionData(
                 chatId = message.chatId.toString(),
                 messageId = message.messageId,
@@ -158,12 +154,32 @@ class TelegramBotListener(
                 message = callbackQuery.data
             )
 
+            ActionType.WAS_CREATED_HOME -> WasCreatedHomeActionData(
+                chatId = message.chatId.toString(),
+                messageId = message.messageId,
+                message = message.webAppData.data
+            )
+
+            // ROOM
             ActionType.GET_ROOM_LIST -> GetRoomListActionData(
                 chatId = message.chatId.toString(),
                 messageId = message.messageId,
                 message = callbackQuery.data
             )
 
+            ActionType.CREATE_ROOM -> CreateRoomActionData(
+                chatId = message.chatId.toString(),
+                messageId = message.messageId,
+                message = callbackQuery.data
+            )
+
+            ActionType.WAS_CREATED_ROOM -> WasCreatedRoomActionData(
+                chatId = message.chatId.toString(),
+                messageId = message.messageId,
+                message = message.webAppData.data
+            )
+
+            // DEVICE
             ActionType.GET_DEVICE -> GetDeviceActionData(
                 chatId = message.chatId.toString(),
                 messageId = message.messageId,
@@ -192,6 +208,18 @@ class TelegramBotListener(
                 chatId = message.chatId.toString(),
                 messageId = message.messageId,
                 message = callbackQuery.data
+            )
+
+            ActionType.CREATE_DEVICE -> CreateDeviceActionData(
+                chatId = message.chatId.toString(),
+                messageId = message.messageId,
+                message = callbackQuery.data
+            )
+
+            ActionType.WAS_CREATED_DEVICE -> WasCreatedDeviceActionData(
+                chatId = message.chatId.toString(),
+                messageId = message.messageId,
+                message = message.webAppData.data
             )
 
             else -> null
