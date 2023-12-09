@@ -199,8 +199,8 @@ Telegram.WebApp.onEvent('mainButtonClicked', function(){
                 code: 'COLOR',
                 value: {
                     h: tinycolor(color).toHsv().h,
-                    s: tinycolor(color).toHsv().s,
-                    v: tinycolor(color).toHsv().v,
+                    s: tinycolor(color).toHsv().s * 100,
+                    v: tinycolor(color).toHsv().v * 100,
                 }
             });
         }
