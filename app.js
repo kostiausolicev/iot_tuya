@@ -16,10 +16,29 @@ function getParameterByName(name, url) {
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
+let dynamicFormContainer = document.getElementById('dynamicFormContainer');
+
+dynamicFormContainer.style.backgroundColor = tg.ThemeParams.bg_color;
+
+let labels = dynamicFormContainer.querySelectorAll('label');
+for (let label of labels) {
+    label.style.color = tg.ThemeParams.text_color;
+    label.style.fontFamily = 'Arial, sans-serif';
+    label.style.textAlign = 'center';
+}
+
+let h1 = dynamicFormContainer.querySelector('h1');
+if (h1) {
+    h1.style.color = tg.ThemeParams.text_color;
+    h1.style.fontFamily = 'Arial, sans-serif';
+    h1.style.textAlign = 'center';
+}
+
 let formType = getParameterByName('formType');
 
 if (formType === 'register') {
     document.getElementById('dynamicFormContainer').innerHTML = `
+            <h1>Введите данные:</h1>
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" required><br>
 
@@ -34,6 +53,7 @@ if (formType === 'register') {
     `;
 } else if (formType === 'auth') {
     document.getElementById('dynamicFormContainer').innerHTML = `
+            <h1>Введите данные:</h1>
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required><br>
 
@@ -41,7 +61,6 @@ if (formType === 'register') {
             <input type="password" id="password" name="password" required><br>
     `;
 }
-
 
 Telegram.WebApp.onEvent('mainButtonClicked', function(){
 
