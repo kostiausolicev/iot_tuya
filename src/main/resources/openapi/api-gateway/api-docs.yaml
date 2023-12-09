@@ -12,6 +12,11 @@ paths:
       - room-controller
       operationId: updateRoom
       parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
       - name: roomId
         in: path
         required: true
@@ -36,6 +41,11 @@ paths:
       - room-controller
       operationId: deleteRoom
       parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
       - name: roomId
         in: path
         required: true
@@ -51,6 +61,11 @@ paths:
       - home-controller
       operationId: getHome
       parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
       - name: homeId
         in: path
         required: true
@@ -69,6 +84,11 @@ paths:
       - home-controller
       operationId: updateHome
       parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
       - name: homeId
         in: path
         required: true
@@ -93,6 +113,11 @@ paths:
       - home-controller
       operationId: deleteHome
       parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
       - name: homeId
         in: path
         required: true
@@ -108,6 +133,11 @@ paths:
       - device-controller
       operationId: getInfo
       parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
       - name: deviceId
         in: path
         required: true
@@ -126,6 +156,11 @@ paths:
       - device-controller
       operationId: update
       parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
       - name: deviceId
         in: path
         required: true
@@ -150,6 +185,11 @@ paths:
       - device-controller
       operationId: delete_1
       parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
       - name: deviceId
         in: path
         required: true
@@ -164,6 +204,12 @@ paths:
       tags:
       - user-controller
       operationId: signout
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
       responses:
         "200":
           description: OK
@@ -209,6 +255,11 @@ paths:
       - room-controller
       operationId: createRoom
       parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
       - name: homeId
         in: query
         required: true
@@ -233,6 +284,12 @@ paths:
       tags:
       - home-controller
       operationId: createHome
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
       requestBody:
         content:
           application/json:
@@ -251,6 +308,12 @@ paths:
       tags:
       - device-controller
       operationId: getDeviceList
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
       responses:
         "200":
           description: OK
@@ -264,6 +327,12 @@ paths:
       tags:
       - device-controller
       operationId: create
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
       requestBody:
         content:
           application/json:
@@ -283,6 +352,11 @@ paths:
       - device-controller
       operationId: sendCommand
       parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
       - name: deviceId
         in: path
         required: true
@@ -303,6 +377,12 @@ paths:
       tags:
       - home-controller
       operationId: getHomeList
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
       responses:
         "200":
           description: OK
@@ -317,6 +397,12 @@ paths:
       tags:
       - user-controller
       operationId: delete
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
       responses:
         "200":
           description: OK
