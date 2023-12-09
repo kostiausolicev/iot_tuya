@@ -60,7 +60,7 @@ class HomeService(
         homeRepository.findByIdOrNull(id)
             ?.checkOwner(ownerId)
             ?: throw ApiError.HOME_NOT_FOUND.toException()
-        val home: HomeEntity = homeRequest.toEntity(id, ownerId)
+        val home: HomeEntity = homeRequest.toEntity(id = id, ownerId = ownerId)
         return homeRepository.save(home).toDto()
     }
 
