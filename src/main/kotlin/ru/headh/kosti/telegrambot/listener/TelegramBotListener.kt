@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.objects.Update
 import ru.headh.kosti.telegrambot.dto.*
+import ru.headh.kosti.telegrambot.dto.home.home.GetHomeActionData
 import ru.headh.kosti.telegrambot.dto.home.home.GetHomeListActionData
 import ru.headh.kosti.telegrambot.dto.menu.DeviceMenuActionData
 import ru.headh.kosti.telegrambot.dto.menu.HomeMenuActionData
@@ -38,7 +39,9 @@ class TelegramBotListener(
 
     private val Update.type: ActionType?
         get() {
-            val actionType = message?.text ?: message?.webAppData?.buttonText ?: callbackQuery?.data
+            val actionType = (message?.text ?: message?.webAppData?.buttonText ?: callbackQuery?.data)
+                ?.let { it.split(":")[0] }
+                ?: return null
             return when (actionType) {
                 "/start" -> ActionType.START
                 MAIN_MENU -> ActionType.MAIN_MENU
@@ -52,6 +55,7 @@ class TelegramBotListener(
                 DELETE_USER -> ActionType.DELETE_USER
 
                 GET_HOME_LIST -> ActionType.GET_HOME_LIST
+                GET_HOME -> ActionType.GET_HOME
                 else -> null
             }
         }
@@ -112,6 +116,12 @@ class TelegramBotListener(
             )
 
             ActionType.GET_HOME_LIST -> GetHomeListActionData(
+                chatId = message.chatId.toString(),
+                messageId = message.messageId,
+                message = callbackQuery.data
+            )
+
+            ActionType.GET_HOME -> GetHomeActionData(
                 chatId = message.chatId.toString(),
                 messageId = message.messageId,
                 message = callbackQuery.data

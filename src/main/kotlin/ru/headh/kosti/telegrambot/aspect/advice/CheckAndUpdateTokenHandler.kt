@@ -29,8 +29,6 @@ class CheckAndUpdateTokenHandler(
         redisRepository.findByIdOrNull(data.chatId)
             ?.let { redisRepository.delete(it) }
 
-        println(ex.toString())
-
         telegramSender.editMessage(
             chatId = data.chatId,
             text = "Произошла ошибка, необходима авторизация",
