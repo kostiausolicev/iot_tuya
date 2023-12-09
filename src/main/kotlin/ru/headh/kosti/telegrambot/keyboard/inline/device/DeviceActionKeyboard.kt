@@ -33,7 +33,7 @@ class DeviceActionKeyboard {
 
     private fun buttons(home: Int) =
         listOf(
-            listOf(buttonRename(home), buttonNewState(home), buttonNewState(home)),
+            listOf(buttonRename(home), buttonNewState(home)),
             listOf(buttonDelete(home)),
             listOf(buttonBack())
         )
