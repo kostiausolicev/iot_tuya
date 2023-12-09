@@ -194,7 +194,11 @@ Telegram.WebApp.onEvent('mainButtonClicked', function(){
         if (document.getElementById('color_check').value) {
             formData.push({
                 code: 'COLOR',
-                value: JSON.stringify(color)
+                value: {
+                    h: tinycolor(color).toRgb().h,
+                    s: tinycolor(color).toRgb().s,
+                    v: tinycolor(color).toRgb().v,
+                }
             })
         }
         formDataJSON = JSON.stringify({
