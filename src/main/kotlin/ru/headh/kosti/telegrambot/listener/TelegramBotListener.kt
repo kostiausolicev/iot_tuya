@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.objects.Update
 import ru.headh.kosti.telegrambot.dto.*
+import ru.headh.kosti.telegrambot.dto.home.home.GetHomeListActionData
 import ru.headh.kosti.telegrambot.dto.menu.DeviceMenuActionData
 import ru.headh.kosti.telegrambot.dto.menu.HomeMenuActionData
 import ru.headh.kosti.telegrambot.dto.menu.MainMenuActionData
@@ -49,6 +50,8 @@ class TelegramBotListener(
                 PROFILE -> ActionType.PROFILE
                 SIGN_OUT -> ActionType.SING_OUT
                 DELETE_USER -> ActionType.DELETE_USER
+
+                GET_HOME_LIST -> ActionType.GET_HOME_LIST
                 else -> null
             }
         }
@@ -103,6 +106,12 @@ class TelegramBotListener(
             )
 
             ActionType.DELETE_USER -> DeleteActionData(
+                chatId = message.chatId.toString(),
+                messageId = message.messageId,
+                message = callbackQuery.data
+            )
+
+            ActionType.GET_HOME_LIST -> GetHomeListActionData(
                 chatId = message.chatId.toString(),
                 messageId = message.messageId,
                 message = callbackQuery.data

@@ -6,6 +6,7 @@ import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Pointcut
+import org.glassfish.hk2.utilities.reflection.Logger
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import ru.headh.kosti.apigateway.client.model.TokenRefreshRequestGen
@@ -24,11 +25,11 @@ class CheckAndUpdateTokenHandler(
     private val redisRepository: RedisRepository,
     private val userServiceClient: UserServiceClient
 ) {
-    private val mapper = jacksonObjectMapper()
-
-    private fun errorHandler(data: ActionData) {
+    private fun errorHandler(data: ActionData, ex: Exception) {
         redisRepository.findByIdOrNull(data.chatId)
             ?.let { redisRepository.delete(it) }
+
+        println(ex.toString())
 
         telegramSender.editMessage(
             chatId = data.chatId,
@@ -51,7 +52,7 @@ class CheckAndUpdateTokenHandler(
         val data = pjp.args[0] as ActionData
         try {
             pjp.proceed()
-        } catch (_: Exception) {
+        } catch (ex1: Exception) {
             try {
                 val tokens = redisRepository.findByIdOrNull(data.chatId)
                     ?: throw Exception()
@@ -59,8 +60,8 @@ class CheckAndUpdateTokenHandler(
                     .let { UserToken(data.chatId, it.accessToken, it.refreshToken) }
                     .let { redisRepository.save(it) }
                 pjp.proceed()
-            } catch (_: Exception) {
-                errorHandler(data)
+            } catch (ex2: Exception) {
+                errorHandler(data, ex2)
             }
         }
     }

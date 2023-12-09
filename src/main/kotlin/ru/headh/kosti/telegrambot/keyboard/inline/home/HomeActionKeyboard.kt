@@ -1,28 +1,26 @@
-package ru.headh.kosti.telegrambot.keyboard.inline
+package ru.headh.kosti.telegrambot.keyboard.inline.home
 
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
-import ru.headh.kosti.telegrambot.util.CREATE_HOME
-import ru.headh.kosti.telegrambot.util.GET_HOME_LIST
-import ru.headh.kosti.telegrambot.util.MAIN_MENU
+import ru.headh.kosti.telegrambot.util.*
 
 @Component
-class HomeKeyboard {
+class HomeActionKeyboard {
     private final val buttonCreate = InlineKeyboardButton()
         .also {
-            it.text = "Создать"
-            it.callbackData = CREATE_HOME
+            it.text = "Изменить"
+            it.callbackData = UPDATE_HOME
         }
     private final val buttonBack = InlineKeyboardButton()
         .also {
             it.text = "Назад"
-            it.callbackData = MAIN_MENU
+            it.callbackData = GET_HOME_LIST
         }
     private final val buttonList = InlineKeyboardButton()
         .also {
-            it.text = "Мои дома"
-            it.callbackData = GET_HOME_LIST
+            it.text = "Комнаты"
+            it.callbackData = GET_ROOM_LIST
         }
     private val buttons = listOf(listOf(buttonCreate, buttonList), listOf(buttonBack))
     val keyboard = InlineKeyboardMarkup(buttons)
