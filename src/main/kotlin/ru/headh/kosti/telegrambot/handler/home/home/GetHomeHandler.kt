@@ -31,7 +31,7 @@ class GetHomeHandler(
             chatId = data.chatId,
             messageId = data.messageId,
             text = "Выберите действие с домом ${home?.name}",
-            inlineReplyMarkup = homeActionKeyboard.keyboard
+            inlineReplyMarkup = homeActionKeyboard.keyboard(homeId)
         )
     }
 }
