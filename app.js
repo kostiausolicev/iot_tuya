@@ -172,7 +172,7 @@ Telegram.WebApp.onEvent('mainButtonClicked', function(){
         const temperature = document.getElementById('temperature').value;
         const brightness = document.getElementById('brightness').value;
         const color = document.getElementById('color').value;
-
+        let formData = []
         if (document.getElementById('switch_led_check').checked) {
             formData.push({
                 code: 'SWITCH_LED',
