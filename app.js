@@ -1,13 +1,3 @@
-import drawAuth from 'templates/auth.js'
-import parseAuthToJson from 'templates/auth.js'
-import drawRegister from 'templates/register.js'
-import parseRegisterToJson from 'templates/register.js'
-import drawCreateDevice from 'templates/createDevice.js'
-import parseDeviceToJson from 'templates/createDevice.js'
-import drawCreateHome from 'templates/createHome.js'
-import parseHomeToJson from 'templates/createHome.js'
-import drawCreateRoom from 'templates/createRoom.js'
-import parseRoomToJson from 'templates/createRoom.js'
 let tg = window.Telegram.WebApp;
 
 tg.expand(); //расширяем на все окно
