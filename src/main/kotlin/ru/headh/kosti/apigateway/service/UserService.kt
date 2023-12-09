@@ -6,6 +6,8 @@ import ru.headh.kosti.apigateway.client.model.UserAuthRequestGen
 import ru.headh.kosti.apigateway.client.model.UserRegisterRequestGen
 import ru.headh.kosti.apigateway.dto.UserOnRequest
 import ru.headh.kosti.userservice.dto.SuccessAuthDto
+import ru.headh.kosti.userservice.dto.request.TokenRefreshRequest
+import java.util.*
 
 @Service
 class UserService(
@@ -26,4 +28,7 @@ class UserService(
 
     fun delete() =
         userServiceClient.delete(currentUser.userId)
+
+    fun refresh(token: TokenRefreshRequest): SuccessAuthDto =
+        tokenService.refresh(token)
 }
