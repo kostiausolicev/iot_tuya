@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.objects.Update
 import ru.headh.kosti.telegrambot.dto.*
+import ru.headh.kosti.telegrambot.dto.device.*
 import ru.headh.kosti.telegrambot.dto.home.home.DeleteHomeActionData
 import ru.headh.kosti.telegrambot.dto.home.home.GetHomeActionData
 import ru.headh.kosti.telegrambot.dto.home.home.GetHomeListActionData
@@ -15,6 +16,8 @@ import ru.headh.kosti.telegrambot.dto.menu.MainMenuActionData
 import ru.headh.kosti.telegrambot.dto.user.*
 import ru.headh.kosti.telegrambot.enumeration.ActionType
 import ru.headh.kosti.telegrambot.handler.ActionHandler
+import ru.headh.kosti.telegrambot.handler.device.ChangeDeviceStateHandler
+import ru.headh.kosti.telegrambot.handler.device.GetDeviceHandler
 import ru.headh.kosti.telegrambot.property.TelegramBotProperty
 import ru.headh.kosti.telegrambot.util.*
 
@@ -61,6 +64,12 @@ class TelegramBotListener(
                 DELETE_HOME -> ActionType.DELETE_HOME
 
                 GET_ROOM_LIST -> ActionType.GET_ROOM_LIST
+
+                GET_DEVICE -> ActionType.GET_DEVICE
+                GET_DEVICE_LIST -> ActionType.GET_DEVICE_LIST
+                CHANGE_DEVICE_STATE -> ActionType.CHANGE_DEVICE_STATE
+                DELETE_DEVICE -> ActionType.DELETE_DEVICE
+                UPDATE_DEVICE -> ActionType.UPDATE_DEVICE
                 else -> null
             }
         }
@@ -139,6 +148,36 @@ class TelegramBotListener(
             )
 
             ActionType.GET_ROOM_LIST -> GetRoomListActionData(
+                chatId = message.chatId.toString(),
+                messageId = message.messageId,
+                message = callbackQuery.data
+            )
+
+            ActionType.GET_DEVICE -> GetDeviceActionData(
+                chatId = message.chatId.toString(),
+                messageId = message.messageId,
+                message = callbackQuery.data
+            )
+
+            ActionType.GET_DEVICE_LIST -> GetDeviceListActionData(
+                chatId = message.chatId.toString(),
+                messageId = message.messageId,
+                message = callbackQuery.data
+            )
+
+            ActionType.DELETE_DEVICE -> DeleteDeviceActionData(
+                chatId = message.chatId.toString(),
+                messageId = message.messageId,
+                message = callbackQuery.data
+            )
+
+            ActionType.UPDATE_DEVICE -> UpdateDeviceActionData(
+                chatId = message.chatId.toString(),
+                messageId = message.messageId,
+                message = callbackQuery.data
+            )
+
+            ActionType.CHANGE_DEVICE_STATE -> ChangeDeviceStateActionData(
                 chatId = message.chatId.toString(),
                 messageId = message.messageId,
                 message = callbackQuery.data
