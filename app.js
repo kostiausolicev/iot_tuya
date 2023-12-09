@@ -132,7 +132,7 @@ Telegram.WebApp.onEvent('mainButtonClicked', function(){
         const room_id = document.getElementById('room_id').value;
         const formData = {
             tuya_id: tuya_id,
-            name: name,
+            name: name != null ? name : null,
             home_id: home_id,
             room_id: room_id,
         };
