@@ -7,7 +7,6 @@ import ru.headh.kosti.apigateway.client.model.UserRegisterRequestGen
 import ru.headh.kosti.apigateway.dto.UserOnRequest
 import ru.headh.kosti.userservice.dto.SuccessAuthDto
 import ru.headh.kosti.userservice.dto.request.TokenRefreshRequest
-import java.util.*
 
 @Service
 class UserService(

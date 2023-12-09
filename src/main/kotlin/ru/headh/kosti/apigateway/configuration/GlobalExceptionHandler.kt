@@ -18,12 +18,12 @@ class GlobalExceptionHandler {
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ExceptionDto("Ошибка сервера", "SERVER_ERROR"))
         val code = ex.substring(0, 3).toIntOrNull()
-        try {
+        return try {
             val message = ex.substring(7, ex.length - 1)
             val dto: ExceptionDto = mapper.readValue(message)
-            return ResponseEntity.status(code!!).body(dto)
+            ResponseEntity.status(code!!).body(dto)
         } catch (_: Exception) {
-            return ResponseEntity.status(code!!).body("Что-то произошло")
+            ResponseEntity.status(code!!).body("Что-то произошло")
         }
     }
 }
