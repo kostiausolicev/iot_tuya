@@ -5,15 +5,15 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
 import ru.headh.kosti.apigateway.client.model.HomeDtoGenGen
 import ru.headh.kosti.apigateway.client.model.RoomDtoGenGen
+import ru.headh.kosti.telegrambot.util.GET_HOME
 import ru.headh.kosti.telegrambot.util.GET_ROOM
-import ru.headh.kosti.telegrambot.util.HOME_MENU
 
 @Component
 class RoomListKeyboard {
     private final fun buttonBack(homeId: Int) = InlineKeyboardButton()
         .also {
             it.text = "Назад"
-            it.callbackData = "$HOME_MENU:$homeId"
+            it.callbackData = "$GET_HOME:$homeId"
         }
 
     private final fun rooms(homesRoom: List<RoomDtoGenGen>): List<InlineKeyboardButton> =
