@@ -1,4 +1,4 @@
-package ru.headh.kosti.telegrambot.keyboard.inline
+package ru.headh.kosti.telegrambot.keyboard.inline.device
 
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup

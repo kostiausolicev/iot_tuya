@@ -3,7 +3,7 @@ package ru.headh.kosti.telegrambot.keyboard.inline.device
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
-import ru.headh.kosti.apigateway.client.model.DeviceDtoGenGen
+import ru.headh.kosti.apigateway.client.model.SimpleDeviceDtoGenGen
 import ru.headh.kosti.telegrambot.util.DEVICE_MENU
 import ru.headh.kosti.telegrambot.util.GET_DEVICE
 
@@ -15,7 +15,7 @@ class GetDeviceListKeyboard {
             it.callbackData = DEVICE_MENU
         }
 
-    private final fun devices(devices: List<DeviceDtoGenGen>): List<InlineKeyboardButton> =
+    private final fun devices(devices: List<SimpleDeviceDtoGenGen>): List<InlineKeyboardButton> =
         devices.map {
             InlineKeyboardButton.builder()
                 .text(it.name)
@@ -23,7 +23,7 @@ class GetDeviceListKeyboard {
                 .build()
         }
 
-    fun keyboard(devices: List<DeviceDtoGenGen>): InlineKeyboardMarkup {
+    fun keyboard(devices: List<SimpleDeviceDtoGenGen>): InlineKeyboardMarkup {
         val buttons = mutableListOf(listOf(buttonBack))
         devices(devices).map {
             buttons.add(listOf(it))
