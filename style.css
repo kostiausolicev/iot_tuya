@@ -1,20 +1,22 @@
 body {
-    background-color: #1a1a1a; /* Темный фон */
-    color: #ffffff; /* Светлый текст */
-    text-align: center; /* Выравнивание по центру */
+    background-color: var(--tg-theme-bg-color);
+    color: var(--tg-theme-text-color);
+    font-family: Arial, sans-serif; /* Шрифт Arial */
+    text-align: center;
 }
 
 #dynamicFormContainer {
-    margin: 50px auto; /* Отступы и центрирование блока формы */
-    max-width: 400px; /* Максимальная ширина блока формы */
+    margin: 50px auto;
+    max-width: 400px;
     padding: 20px;
-    background-color: #292929; /* Цвет фона блока формы */
-    border-radius: 8px; /* Скругление углов блока формы */
+    background-color: #292929;
+    border-radius: 8px;
 }
 
 label {
     display: block;
     margin-bottom: 8px;
+    color: var(--tg-theme-text-color); /* Используем переменную для цвета текста */
 }
 
 input {
@@ -26,15 +28,6 @@ input {
     border-radius: 4px;
 }
 
-input[type="button"] {
-    background-color: #4CAF50; /* Зеленая кнопка */
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-input[type="button"]:hover {
-    background-color: #45a049; /* Зеленая кнопка при наведении */
+h1 {
+    font-family: Arial, sans-serif;
 }
