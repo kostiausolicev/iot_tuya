@@ -173,25 +173,25 @@ Telegram.WebApp.onEvent('mainButtonClicked', function(){
         const brightness = document.getElementById('brightness').value;
         const color = document.getElementById('color').value;
         const formData = [];
-        if (document.getElementById('switch_led_check').value) {
+        if (document.getElementById('switch_led_check').checked) {
             formData.push({
                 code: 'SWITCH_LED',
                 value: switch_led
             })
         }
-        if (document.getElementById('temperature_check').value) {
+        if (document.getElementById('temperature_check').checked) {
             formData.push({
                 code: 'TEMPERATURE',
                 value: temperature
             })
         }
-        if (document.getElementById('brightness_check').value) {
+        if (document.getElementById('brightness_check').checked) {
             formData.push({
                 code: 'BRIGHTNESS',
                 value: brightness
             })
         }
-        if (document.getElementById('color_check').value) {
+        if (document.getElementById('color_check').checked) {
             formData.push({
                 code: 'COLOR',
                 value: {
