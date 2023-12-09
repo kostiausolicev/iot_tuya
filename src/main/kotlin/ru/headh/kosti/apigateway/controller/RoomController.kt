@@ -10,14 +10,22 @@ class RoomController(
     private val roomService: RoomService
 ) {
     @PostMapping
-    fun createRoom(@RequestParam homeId: Int, @RequestBody roomRequest: RoomRequestGen)=
+    fun createRoom(
+        @RequestHeader("Authorization") token: String,
+        @RequestParam homeId: Int,
+        @RequestBody roomRequest: RoomRequestGen
+    ) =
         roomService.create(homeId, roomRequest)
 
     @PutMapping("/{roomId}")
-    fun updateRoom(@PathVariable roomId: Int, @RequestBody roomRequest: RoomRequestGen) =
+    fun updateRoom(
+        @RequestHeader("Authorization") token: String,
+        @PathVariable roomId: Int,
+        @RequestBody roomRequest: RoomRequestGen
+    ) =
         roomService.update(roomId, roomRequest)
 
     @DeleteMapping("/{roomId}")
-    fun deleteRoom(@PathVariable roomId: Int) =
+    fun deleteRoom(@RequestHeader("Authorization") token: String, @PathVariable roomId: Int) =
         roomService.delete(roomId)
 }

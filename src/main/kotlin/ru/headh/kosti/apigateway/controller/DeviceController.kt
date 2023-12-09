@@ -13,27 +13,38 @@ class DeviceController(
     private val deviceService: DeviceService
 ) {
     @PostMapping
-    fun create(@RequestBody createDeviceRequest: CreateDeviceRequestGen) =
+    fun create(
+        @RequestHeader("Authorization") token: String,
+        @RequestBody createDeviceRequest: CreateDeviceRequestGen
+    ) =
         deviceService.create(createDeviceRequest)
 
     @PutMapping("/{deviceId}")
-    fun update(@PathVariable deviceId: Int, @RequestBody updateDeviceRequest: UpdateDeviceRequestGen) =
+    fun update(
+        @RequestHeader("Authorization") token: String,
+        @PathVariable deviceId: Int,
+        @RequestBody updateDeviceRequest: UpdateDeviceRequestGen
+    ) =
         deviceService.updateDevice(deviceId, updateDeviceRequest)
 
     @PostMapping("/{deviceId}/control")
-    fun sendCommand(@PathVariable deviceId: Int, @RequestBody commands: SendCommandRequestGen) =
+    fun sendCommand(
+        @RequestHeader("Authorization") token: String,
+        @PathVariable deviceId: Int,
+        @RequestBody commands: SendCommandRequestGen
+    ) =
         deviceService.sendAction(deviceId, commands)
 
     @DeleteMapping("/{deviceId}")
-    fun delete(@PathVariable deviceId: Int) =
+    fun delete(@RequestHeader("Authorization") token: String, @PathVariable deviceId: Int) =
         deviceService.deleteDevice(deviceId)
 
     @GetMapping
-    fun getDeviceList() =
+    fun getDeviceList(@RequestHeader("Authorization") token: String) =
         deviceService.getDeviceList()
 
     @GetMapping("/{deviceId}")
-    fun getInfo(@PathVariable deviceId: Int): DeviceDtoGen {
+    fun getInfo(@RequestHeader("Authorization") token: String, @PathVariable deviceId: Int): DeviceDtoGen {
         val device = deviceService.getDevice(deviceId)
         return device
     }

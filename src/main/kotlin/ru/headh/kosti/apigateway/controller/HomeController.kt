@@ -10,22 +10,26 @@ class HomeController(
     private val homeService: HomeService
 ) {
     @PostMapping
-    fun createHome(@RequestBody home: HomeRequestGen) =
+    fun createHome(@RequestHeader("Authorization") token: String, @RequestBody home: HomeRequestGen) =
         homeService.createHome(home)
 
     @GetMapping("/{homeId}")
-    fun getHome(@PathVariable homeId: Int) =
+    fun getHome(@RequestHeader("Authorization") token: String, @PathVariable homeId: Int) =
         homeService.getHome(homeId)
 
     @GetMapping("/")
-    fun getHomeList() =
+    fun getHomeList(@RequestHeader("Authorization") token: String) =
         homeService.getHomeList()
 
     @PutMapping("/{homeId}")
-    fun updateHome(@PathVariable homeId : Int, @RequestBody homeRequest: HomeRequestGen) =
+    fun updateHome(
+        @RequestHeader("Authorization") token: String,
+        @PathVariable homeId: Int,
+        @RequestBody homeRequest: HomeRequestGen
+    ) =
         homeService.updateHome(homeId, homeRequest)
 
     @DeleteMapping("/{homeId}")
-    fun deleteHome(@PathVariable homeId: Int) =
+    fun deleteHome(@RequestHeader("Authorization") token: String, @PathVariable homeId: Int) =
         homeService.deleteHome(homeId)
 }
