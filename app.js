@@ -84,6 +84,10 @@ else if (formType === 'create' && obj === 'device') {
 else if (formType === 'send_command') {
     document.getElementById('dynamicFormContainer').innerHTML = `
             <h1>Введите данные:</h1>
+            
+            <label for="device_id">DeviceID:</label>
+            <input type="text" id="device_id" name="device_id"><br>
+            
             <label for="switch_led">SWITCH_LED:</label>
             <input type="checkbox" id="switch_led_check" name="switch_led_check">
             <input type="text" id="switch_led" name="switch_led"><br>
@@ -193,7 +197,10 @@ Telegram.WebApp.onEvent('mainButtonClicked', function(){
                 value: JSON.stringify(color)
             })
         }
-        formDataJSON = JSON.stringify(formData);
+        formDataJSON = JSON.stringify({
+            deviceId: document.getElementById('device_id').value,
+            commands: formData
+        });
     }
     tg.sendData(formDataJSON);
     tg.close();
