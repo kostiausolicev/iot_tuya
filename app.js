@@ -28,7 +28,8 @@ if (formType === 'auth') {
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required><br>
     `;
-} else if (formType === 'register') {
+}
+else if (formType === 'register') {
     document.getElementById('dynamicFormContainer').innerHTML = `
             <h1>Введите данные:</h1>
             <label for="name">Name:</label>
@@ -43,7 +44,8 @@ if (formType === 'auth') {
             <label for="confirm_password">Repeat password:</label>
             <input type="password" id="confirm_password" name="confirm_password" required><br>
     `;
-} else if (formType === 'create' && obj === 'home') {
+}
+else if (formType === 'create' && obj === 'home') {
     document.getElementById('dynamicFormContainer').innerHTML = `
             <h1>Введите данные:</h1>
             <label for="name">Name:</label>
@@ -52,22 +54,31 @@ if (formType === 'auth') {
             <label for="home_address">Address:</label>
             <input type="text" id="home_address" name="home_address" required><br>
     `;
-} else if (formType === 'create' && obj === 'room') {
+}
+else if (formType === 'create' && obj === 'room') {
     document.getElementById('dynamicFormContainer').innerHTML = `
             <h1>Введите данные:</h1>
             <label for="name">Name:</label>
             <input type="text" id="room_name" name="room_name" required><br>
     `;
-} else if (formType === 'create' && obj === 'device') {
+}
+else if (formType === 'create' && obj === 'device') {
     document.getElementById('dynamicFormContainer').innerHTML = `
             <h1>Введите данные:</h1>
-            <label for="name">Name:</label>
-            <input type="text" id="home_name" name="home_name" required><br>
+            <label for="tuya_id">TuyaID:</label>
+            <input type="text" id="tuya_id" name="tuya_id" required><br>
 
-            <label for="home_address">Address:</label>
-            <input type="text" id="home_address" name="home_address" required><br>
+            <label for="device_name">Name:</label>
+            <input type="text" id="device_name" name="device_name" required><br>
+            
+            <label for="home_id">HomeID:</label>
+            <input type="text" id="home_id" name="name" required><br>
+            
+            <label for="room_id">RoomID:</label>
+            <input type="text" id="room_id" name="room_id" required><br>
     `;
-} else {
+}
+else {
     document.getElementById('dynamicFormContainer').innerHTML = `
             <h1>Ты не сюда попал</h1>
     `
@@ -115,7 +126,17 @@ Telegram.WebApp.onEvent('mainButtonClicked', function(){
         formDataJSON = JSON.stringify(formData);
     }
     else if (formType === 'create' && obj === 'device') {
-        formDataJSON = parseDeviceToJson()
+        const name = document.getElementById('device_name').value;
+        const tuya_id = document.getElementById('tuya_id').value;
+        const home_id = document.getElementById('home_id').value;
+        const room_id = document.getElementById('room_id').value;
+        const formData = {
+            tuya_id: tuya_id,
+            name: name,
+            home_id: home_id,
+            room_id: room_id,
+        };
+        formDataJSON = JSON.stringify(formData);
     }
     else if (formType === 'update' && obj === 'home') {
         const name = document.getElementById('home_name').value;
