@@ -1,5 +1,3 @@
-import 'templates/*'
-
 let tg = window.Telegram.WebApp;
 
 tg.expand(); //расширяем на все окно
@@ -21,47 +19,112 @@ function getParameterByName(name, url) {
 let formType = getParameterByName('formType');
 let obj = getParameterByName('obj');
 
-if (formType === 'register') {
-    drawRegister()
-} else if (formType === 'auth') {
-    drawAuth()
+if (formType === 'auth') {
+    document.getElementById('dynamicFormContainer').innerHTML = `
+            <h1>Введите данные:</h1>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required><br>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required><br>
+    `;
+} else if (formType === 'register') {
+    document.getElementById('dynamicFormContainer').innerHTML = `
+            <h1>Введите данные:</h1>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required><br>
+
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required><br>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required><br>
+
+            <label for="confirm_password">Repeat password:</label>
+            <input type="password" id="confirm_password" name="confirm_password" required><br>
+    `;
 } else if (formType === 'create' && obj === 'home') {
-    drawCreateHome()
+    document.getElementById('dynamicFormContainer').innerHTML = `
+            <h1>Введите данные:</h1>
+            <label for="name">Name:</label>
+            <input type="text" id="home_name" name="home_name" required><br>
+
+            <label for="home_address">Address:</label>
+            <input type="text" id="home_address" name="home_address" required><br>
+    `;
 } else if (formType === 'create' && obj === 'room') {
-    drawCreateRoom()
+    document.getElementById('dynamicFormContainer').innerHTML = `
+            <h1>Введите данные:</h1>
+            <label for="name">Name:</label>
+            <input type="text" id="room_name" name="room_name" required><br>
+    `;
 } else if (formType === 'create' && obj === 'device') {
-    drawCreateDevice()
-} else if (formType === 'update' && obj === 'home') {
+    document.getElementById('dynamicFormContainer').innerHTML = `
+            <h1>Введите данные:</h1>
+            <label for="name">Name:</label>
+            <input type="text" id="home_name" name="home_name" required><br>
 
-} else if (formType === 'update' && obj === 'room') {
-
-} else if (formType === 'update' && obj === 'device') {
-
-} else if(formType === 'change') {
-
+            <label for="home_address">Address:</label>
+            <input type="text" id="home_address" name="home_address" required><br>
+    `;
+} else {
+    document.getElementById('dynamicFormContainer').innerHTML = `
+            <h1>Ты не сюда попал</h1>
+    `
 }
 
 Telegram.WebApp.onEvent('mainButtonClicked', function(){
 
     let formDataJSON;
     if (formType === 'register') {
-        formDataJSON = parseRegisterToJson()
-    } else if (formType === 'auth') {
-        formDataJSON = parseAuthToJson()
-    } else if (formType === 'create' && obj === 'home') {
-        formDataJSON = parseHomeToJson()
-    } else if (formType === 'create' && obj === 'room') {
-        formDataJSON = parseRoomToJson()
-    } else if (formType === 'create' && obj === 'device') {
+        const name = document.getElementById('name').value;
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const confirm_password = document.getElementById('confirm_password').value;
+        const formData = {
+            name: name,
+            username: username,
+            password: password,
+            confirmPassword: confirm_password
+        };
+        formDataJSON = JSON.stringify(formData);
+    }
+    else if (formType === 'auth') {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const formData = {
+            username: username,
+            password: password
+        };
+        formDataJSON = JSON.stringify(formData);
+    }
+    else if (formType === 'create' && obj === 'home') {
+        const name = document.getElementById('home_name').value;
+        const address = document.getElementById('home_address').value;
+        const formData = {
+            name: name,
+            address: address
+        };
+        formDataJSON = JSON.stringify(formData);
+    }
+    else if (formType === 'create' && obj === 'room') {
+        const name = document.getElementById('room_name').value;
+        const formData = {
+            name: name
+        };
+        formDataJSON = JSON.stringify(formData);
+    }
+    else if (formType === 'create' && obj === 'device') {
         formDataJSON = parseDeviceToJson()
-    } else if (formType === 'update' && obj === 'home') {
-        formDataJSON = parseAuthToJson()
-    } else if (formType === 'update' && obj === 'room') {
-        formDataJSON = parseAuthToJson()
-    } else if (formType === 'update' && obj === 'device') {
-        formDataJSON = parseAuthToJson()
-    } else if(formType === 'change') {
-        formDataJSON = parseAuthToJson()
+    }
+    else if (formType === 'update' && obj === 'home') {
+        const name = document.getElementById('home_name').value;
+        const address = document.getElementById('home_address').value;
+        const formData = {
+            name: name,
+            address: address
+        };
+        formDataJSON = JSON.stringify(formData);
     }
     tg.sendData(formDataJSON);
     tg.close();
