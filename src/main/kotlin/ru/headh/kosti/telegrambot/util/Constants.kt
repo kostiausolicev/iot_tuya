@@ -1,6 +1,8 @@
 package ru.headh.kosti.telegrambot.util
 
 const val MAIN_MENU = "MAIN_MENU"
+const val HOME_MENU = "HOME_MENU"
+const val DEVICE_MENU = "DEVICE_MENU"
 
 const val DELETE_USER = "DELETE_USER"
 const val SIGN_OUT = "SIGN_OUT"

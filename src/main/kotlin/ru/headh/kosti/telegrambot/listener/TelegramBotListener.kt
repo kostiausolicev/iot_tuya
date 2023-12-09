@@ -5,14 +5,14 @@ import org.springframework.stereotype.Component
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.objects.Update
 import ru.headh.kosti.telegrambot.dto.*
+import ru.headh.kosti.telegrambot.dto.menu.DeviceMenuActionData
+import ru.headh.kosti.telegrambot.dto.menu.HomeMenuActionData
+import ru.headh.kosti.telegrambot.dto.menu.MainMenuActionData
 import ru.headh.kosti.telegrambot.dto.user.*
-import ru.headh.kosti.telegrambot.util.PROFILE
 import ru.headh.kosti.telegrambot.enumeration.ActionType
 import ru.headh.kosti.telegrambot.handler.ActionHandler
 import ru.headh.kosti.telegrambot.property.TelegramBotProperty
-import ru.headh.kosti.telegrambot.util.DELETE_USER
-import ru.headh.kosti.telegrambot.util.MAIN_MENU
-import ru.headh.kosti.telegrambot.util.SIGN_OUT
+import ru.headh.kosti.telegrambot.util.*
 
 @Component
 @ConditionalOnProperty(value = ["telegram-bot.listener.enabled"], havingValue = "true")
@@ -40,10 +40,13 @@ class TelegramBotListener(
             val actionType = message?.text ?: message?.webAppData?.buttonText ?: callbackQuery?.data
             return when (actionType) {
                 "/start" -> ActionType.START
+                MAIN_MENU -> ActionType.MAIN_MENU
+                HOME_MENU -> ActionType.HOME_MENU
+                DEVICE_MENU -> ActionType.DEVICE_MENU
+
                 "Вход" -> ActionType.AUTH
                 "Регистрация" -> ActionType.REGISTER
                 PROFILE -> ActionType.PROFILE
-                MAIN_MENU -> ActionType.MAIN_MENU
                 SIGN_OUT -> ActionType.SING_OUT
                 DELETE_USER -> ActionType.DELETE_USER
                 else -> null
@@ -59,6 +62,24 @@ class TelegramBotListener(
                 message = message.text
             )
 
+            ActionType.MAIN_MENU -> MainMenuActionData(
+                chatId = message.chatId.toString(),
+                messageId = message.messageId,
+                message = callbackQuery.data
+            )
+
+            ActionType.HOME_MENU -> HomeMenuActionData(
+                chatId = message.chatId.toString(),
+                messageId = message.messageId,
+                message = callbackQuery.data
+            )
+
+            ActionType.DEVICE_MENU -> DeviceMenuActionData(
+                chatId = message.chatId.toString(),
+                messageId = message.messageId,
+                message = callbackQuery.data
+            )
+
             ActionType.AUTH -> AuthActionData(
                 chatId = message.chatId.toString(),
                 message = message.webAppData.data
@@ -70,12 +91,6 @@ class TelegramBotListener(
             )
 
             ActionType.PROFILE -> ProfileActionData(
-                chatId = message.chatId.toString(),
-                messageId = message.messageId,
-                message = callbackQuery.data
-            )
-
-            ActionType.MAIN_MENU -> MainMenuActionData(
                 chatId = message.chatId.toString(),
                 messageId = message.messageId,
                 message = callbackQuery.data
