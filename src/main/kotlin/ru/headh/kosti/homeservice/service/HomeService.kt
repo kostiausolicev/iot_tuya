@@ -8,8 +8,10 @@ import ru.headh.kosti.homeservice.dto.request.HomeRequest
 import ru.headh.kosti.homeservice.entity.HomeEntity
 import ru.headh.kosti.homeservice.entity.OutboxMessageEntity
 import ru.headh.kosti.homeservice.error.ApiError
+import ru.headh.kosti.homeservice.error.ApiException
 import ru.headh.kosti.homeservice.repositoty.HomeRepository
 import ru.headh.kosti.homeservice.repositoty.OutboxRepository
+import javax.persistence.EntityNotFoundException
 
 @Service
 class HomeService(
@@ -25,7 +27,7 @@ class HomeService(
 
     fun getHome(id: Int, ownerId: Int): HomeDto =
         homeRepository.findByIdOrNull(id)
-            ?.checkOwner(ownerId)
+            ?.also { it.checkOwner(ownerId) }
             ?.toDto()
             ?: throw ApiError.HOME_NOT_FOUND.toException()
 
@@ -37,7 +39,7 @@ class HomeService(
 
     fun deleteHome(id: Int, ownerId: Int) {
         homeRepository.findByIdOrNull(id)
-            ?.checkOwner(ownerId)
+            ?.also { it.checkOwner(ownerId) }
             ?.let { homeRepository.delete(it) }
             ?: throw ApiError.HOME_NOT_FOUND.toException()
         outboxRepository.save(
@@ -63,6 +65,11 @@ class HomeService(
         return homeRepository.save(home).toDto()
     }
 
+    fun checkOwner(ownerId: Int, homeId: Int) =
+        homeRepository.findByIdOrNull(homeId)
+            ?.checkOwner(ownerId)
+            ?: throw ApiError.HOME_NOT_FOUND.toException()
+
     private fun HomeRequest.toEntity(ownerId: Int, id: Int = -1) =
         HomeEntity(
             id = id,
@@ -71,11 +78,11 @@ class HomeService(
             ownerId = ownerId
         )
 
-    fun HomeEntity.checkOwner(ownerId: Int): HomeEntity {
+    private fun HomeEntity.checkOwner(ownerId: Int): Boolean {
         if (ownerId < 1)
             throw ApiError.WRONG_REQUEST_DATA.toException()
         if (this.ownerId != ownerId)
             throw ApiError.ACTION_IS_CANCELLED.toException()
-        return this
+        return true
     }
 }

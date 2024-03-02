@@ -24,6 +24,9 @@ class HomeController(val homeService: HomeService) {
     ) =
         homeService.createHome(home, ownerId)
 
+    @GetMapping("/check/{ownerId}/{homeId}")
+    fun checkOwner(@PathVariable ownerId: Int, @PathVariable homeId: Int) =
+        homeService.checkOwner(ownerId, homeId)
 
     @GetMapping("/{homeId}")
     fun getHome(@PathVariable homeId: Int, @RequestParam ownerId: Int) =
