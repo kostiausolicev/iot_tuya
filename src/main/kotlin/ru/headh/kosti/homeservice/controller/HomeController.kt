@@ -20,32 +20,32 @@ class HomeController(val homeService: HomeService) {
     @PostMapping
     fun createHome(
         @Validated @RequestBody home: HomeRequest,
-        @RequestParam(name = "ownerId") ownerId: Int
+        @RequestParam(name = "ownerId") ownerId: Int,
     ) =
         homeService.createHome(home, ownerId)
 
-    @GetMapping("/check/{ownerId}/{homeId}")
-    fun checkOwner(@PathVariable ownerId: Int, @PathVariable homeId: Int) =
+    @GetMapping("/check/{homeId}")
+    fun checkOwner(@PathVariable homeId: Int, @RequestParam(name = "ownerId") ownerId: Int) =
         homeService.checkOwner(ownerId, homeId)
 
     @GetMapping("/{homeId}")
-    fun getHome(@PathVariable homeId: Int, @RequestParam ownerId: Int) =
+    fun getHome(@PathVariable homeId: Int, @RequestParam(name = "ownerId") ownerId: Int) =
         homeService.getHome(homeId, ownerId)
 
     @GetMapping
-    fun getHomeList(@RequestParam ownerId: Int) =
+    fun getHomeList(@RequestParam(name = "ownerId") ownerId: Int) =
         homeService.getHomeList(ownerId)
 
     @PutMapping("/{homeId}")
     fun updateHome(
         @PathVariable homeId: Int,
         @Validated @RequestBody homeRequest: HomeRequest,
-        @RequestParam ownerId: Int
+        @RequestParam(name = "ownerId") ownerId: Int,
     ) =
         homeService.updateHome(homeId, homeRequest, ownerId)
 
     @DeleteMapping("/{homeId}")
-    fun deleteHome(@PathVariable homeId: Int, @RequestParam ownerId: Int) =
+    fun deleteHome(@PathVariable homeId: Int, @RequestParam(name = "ownerId") ownerId: Int) =
         homeService.deleteHome(homeId, ownerId)
 
 }
