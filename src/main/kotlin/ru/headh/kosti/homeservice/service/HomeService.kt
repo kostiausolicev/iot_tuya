@@ -14,7 +14,7 @@ import ru.headh.kosti.homeservice.repositoty.OutboxRepository
 @Service
 class HomeService(
     val homeRepository: HomeRepository,
-    val outboxRepository: OutboxRepository
+    val outboxRepository: OutboxRepository,
 ) {
     fun createHome(homeRequest: HomeRequest, ownerId: Int): HomeDto {
         if (ownerId < 1)
@@ -34,7 +34,6 @@ class HomeService(
             throw ApiError.WRONG_REQUEST_DATA.toException()
         return homeRepository.findAllByOwnerId(ownerId).map { it.toSimpleDto() }
     }
-
 
     fun deleteHome(id: Int, ownerId: Int) {
         homeRepository.findByIdOrNull(id)

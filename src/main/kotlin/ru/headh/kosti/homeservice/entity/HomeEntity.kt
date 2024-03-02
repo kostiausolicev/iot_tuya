@@ -50,7 +50,6 @@ class HomeEntity(
             id = id,
             name = name,
             address = address,
-            ownerId = ownerId,
             rooms = rooms?.map { it.toDto() } ?: emptyList()
         )
 
@@ -59,6 +58,5 @@ class HomeEntity(
             id = id,
             name = name,
             address = address,
-            ownerId = ownerId
         )
 }

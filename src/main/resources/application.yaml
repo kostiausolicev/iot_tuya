@@ -3,9 +3,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/home_service_db
-    username: admin
-    password: admin
+    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/home-service-db}
+    username: ${POSTGRES_USERNAME:admin}
+    password: ${POSTGRES_PASSWORD:admin}
     generate-dll: none
 
   jpa:

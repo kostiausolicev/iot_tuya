@@ -17,7 +17,7 @@ class RoomEntity(
     val id: Int = -1,
     val name: String,
     @ManyToOne
-    val home: HomeEntity? = null
+    val home: HomeEntity
 ) {
     fun toDto(): RoomDto =
         RoomDto(
