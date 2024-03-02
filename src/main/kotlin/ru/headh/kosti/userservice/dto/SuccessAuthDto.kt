@@ -1,5 +1,7 @@
 package ru.headh.kosti.userservice.dto
 
 data class SuccessAuthDto(
-    val id: Int
+    val accessToken: String,
+    val refreshToken: String,
+    val ttl: Long
 )

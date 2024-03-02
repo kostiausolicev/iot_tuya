@@ -15,9 +15,10 @@ import javax.transaction.Transactional
 
 @Service
 class UserService(
-    val userRepository: UserRepository,
-    val passwordEncoder: PasswordEncoder,
-    val outboxRepository: OutboxRepository
+    private val userRepository: UserRepository,
+    private val passwordEncoder: PasswordEncoder,
+    private val outboxRepository: OutboxRepository,
+    private val tokenService: TokenService
 ) {
     fun register(userRegisterRequest: UserRegisterRequest): SuccessAuthDto {
         val user = userRepository.findByUsername(userRegisterRequest.username)
@@ -28,7 +29,7 @@ class UserService(
         return userRegisterRequest
             .toEntity()
             .let { userRepository.save(it) }
-            .let { SuccessAuthDto(it.id) }
+            .let { tokenService.generate(it.id) }
     }
 
     fun auth(userAuthRequest: UserAuthRequest): SuccessAuthDto {
@@ -36,7 +37,7 @@ class UserService(
             ?: throw UserExceptionEnum.WRONG_LOGIN_OR_PASSWORD.toUserException()
         if (!matchPassword(userAuthRequest.password, user.password))
             throw UserExceptionEnum.WRONG_LOGIN_OR_PASSWORD.toUserException()
-        return SuccessAuthDto(user.id)
+        return tokenService.generate(user.id)
     }
 
     @Transactional
@@ -51,6 +52,9 @@ class UserService(
             )
         )
     }
+
+    fun signout(user: Int) =
+        tokenService.deleteByUser(user)
 
     private fun matchPassword(rawPass: String, encodePass: String): Boolean =
         passwordEncoder.matches(rawPass, encodePass)
