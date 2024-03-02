@@ -7,12 +7,9 @@ import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
-import ru.headh.kosti.apigateway.client.model.HomeRequestGenGen
 import ru.headh.kosti.apigateway.client.model.RoomRequestGenGen
 import ru.headh.kosti.telegrambot.aspect.CheckAndUpdateToken
-import ru.headh.kosti.telegrambot.client.HomeServiceClient
 import ru.headh.kosti.telegrambot.client.RoomServiceClient
-import ru.headh.kosti.telegrambot.dto.home.home.WasCreatedHomeActionData
 import ru.headh.kosti.telegrambot.dto.home.room.WasCreatedRoomActionData
 import ru.headh.kosti.telegrambot.enumeration.ActionType
 import ru.headh.kosti.telegrambot.handler.ActionHandler
