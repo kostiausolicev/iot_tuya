@@ -10,3 +10,8 @@ springdoc:
     path: /swagger-ui.html
     disable-swagger-default-url: true
   show-actuator: false
+
+path:
+  user: ${USER_SERVICE_PATH:http://localhost:8080}
+  home: ${HOME_SERVICE_PATH:http://localhost:8082}
+  device: ${DEVICE_SERVICE_PATH:http://localhost:8081}
