@@ -6,7 +6,22 @@ servers:
 - url: http://localhost:8080
   description: Generated server url
 paths:
-  /api/register:
+  /api/users/signout:
+    post:
+      tags:
+      - user-controller
+      operationId: signout
+      parameters:
+      - name: user
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+  /api/users/register:
     post:
       tags:
       - user-controller
@@ -24,7 +39,7 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/SuccessAuthDto'
-  /api/auth:
+  /api/users/auth:
     post:
       tags:
       - user-controller
@@ -42,7 +57,25 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/SuccessAuthDto'
-  /api/delete/{userId}:
+  /api/tokens/refresh:
+    post:
+      tags:
+      - token-controller
+      operationId: refresh
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SuccessAuthDto'
+  /api/users/delete/{userId}:
     delete:
       tags:
       - user-controller
@@ -77,12 +110,18 @@ components:
           type: string
     SuccessAuthDto:
       required:
-      - id
+      - accessToken
+      - refreshToken
+      - ttl
       type: object
       properties:
-        id:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+        ttl:
           type: integer
-          format: int32
+          format: int64
     UserAuthRequest:
       required:
       - password
@@ -92,4 +131,11 @@ components:
         username:
           type: string
         password:
+          type: string
+    TokenRefreshRequest:
+      required:
+      - refreshToken
+      type: object
+      properties:
+        refreshToken:
           type: string

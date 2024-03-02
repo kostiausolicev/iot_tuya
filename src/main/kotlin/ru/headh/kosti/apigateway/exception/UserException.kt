@@ -1,4 +1,4 @@
-package ru.headh.kosti.userservice.exception
+package ru.headh.kosti.apigateway.exception
 
 import org.springframework.http.HttpStatus
 

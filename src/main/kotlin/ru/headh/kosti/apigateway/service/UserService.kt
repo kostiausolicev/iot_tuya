@@ -1,33 +1,32 @@
 package ru.headh.kosti.apigateway.service
 
 import org.springframework.stereotype.Service
+import ru.headh.kosti.apigateway.client.TokenClient
 import ru.headh.kosti.apigateway.client.UserServiceClient
+import ru.headh.kosti.apigateway.client.model.SuccessAuthDtoGen
+import ru.headh.kosti.apigateway.client.model.TokenRefreshRequestGen
 import ru.headh.kosti.apigateway.client.model.UserAuthRequestGen
 import ru.headh.kosti.apigateway.client.model.UserRegisterRequestGen
 import ru.headh.kosti.apigateway.dto.UserOnRequest
-import ru.headh.kosti.userservice.dto.SuccessAuthDto
-import ru.headh.kosti.userservice.dto.request.TokenRefreshRequest
 
 @Service
 class UserService(
-    private val tokenService: TokenService,
+    private val tokenClient: TokenClient,
     private val userServiceClient: UserServiceClient,
     private val currentUser: UserOnRequest
 ) {
-    fun register(registerRequest: UserRegisterRequestGen): SuccessAuthDto =
+    fun register(registerRequest: UserRegisterRequestGen): Any =
         userServiceClient.register(registerRequest)
-            .let { tokenService.generate(it.id) }
 
-    fun auth(authRequest: UserAuthRequestGen): SuccessAuthDto =
+    fun auth(authRequest: UserAuthRequestGen): Any =
         userServiceClient.auth(authRequest)
-            .let { tokenService.generate(it.id) }
-
-    fun signout() =
-        tokenService.deleteByUser(currentUser.userId)
 
     fun delete() =
         userServiceClient.delete(currentUser.userId)
 
-    fun refresh(token: TokenRefreshRequest): SuccessAuthDto =
-        tokenService.refresh(token)
+    fun refresh(refreshToken: TokenRefreshRequestGen): SuccessAuthDtoGen =
+        tokenClient.refresh(refreshToken)
+
+    fun signout() =
+        userServiceClient.signout(currentUser.userId)
 }

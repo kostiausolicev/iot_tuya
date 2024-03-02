@@ -1,18 +1,8 @@
 server:
   port: 8079
 
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/gateway_token_db
-    username: admin
-    password: admin
-  liquibase:
-    change-log: classpath:/db/changelog-master.yaml
-    enabled: true
-
 jwt:
   secret: hjhbjhbJHBJHFBDjhbjhb873Y4UI2BUYLSDLDBjgf
-  ttl: 3600
 
 springdoc:
   swagger-ui:

@@ -1,11 +1,11 @@
 package ru.headh.kosti.apigateway.controller
 
 import org.springframework.web.bind.annotation.*
+import ru.headh.kosti.apigateway.client.model.SuccessAuthDtoGen
+import ru.headh.kosti.apigateway.client.model.TokenRefreshRequestGen
 import ru.headh.kosti.apigateway.client.model.UserAuthRequestGen
 import ru.headh.kosti.apigateway.client.model.UserRegisterRequestGen
 import ru.headh.kosti.apigateway.service.UserService
-import ru.headh.kosti.userservice.dto.SuccessAuthDto
-import ru.headh.kosti.userservice.dto.request.TokenRefreshRequest
 
 @RestController
 @RequestMapping("/users")
@@ -21,7 +21,7 @@ class UserController(
         userService.auth(userAuthRequest)
 
     @PostMapping("/refresh")
-    fun refresh(@RequestBody refreshToken: TokenRefreshRequest): SuccessAuthDto =
+    fun refresh(@RequestBody refreshToken: TokenRefreshRequestGen): SuccessAuthDtoGen =
         userService.refresh(refreshToken)
 
     @PostMapping("/signout")

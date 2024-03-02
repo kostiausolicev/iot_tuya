@@ -3,21 +3,27 @@ info:
   title: OpenAPI definition
   version: v0
 servers:
-  - url: http://localhost:8081
-    description: Generated server url
+- url: http://localhost:8081
+  description: Generated server url
 paths:
   /api/device/{deviceId}:
     get:
       tags:
-        - device-controller
+      - device-controller
       operationId: getInfo
       parameters:
-        - name: deviceId
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int32
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: ownerId
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
       responses:
         "200":
           description: OK
@@ -27,15 +33,21 @@ paths:
                 $ref: '#/components/schemas/DeviceDto'
     put:
       tags:
-        - device-controller
+      - device-controller
       operationId: update
       parameters:
-        - name: deviceId
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int32
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: ownerId
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
       requestBody:
         content:
           application/json:
@@ -51,23 +63,36 @@ paths:
                 $ref: '#/components/schemas/DeviceDto'
     delete:
       tags:
-        - device-controller
+      - device-controller
       operationId: delete
       parameters:
-        - name: deviceId
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int32
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: ownerId
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
       responses:
         "200":
           description: OK
   /api/device:
     get:
       tags:
-        - device-controller
+      - device-controller
       operationId: getDeviceList
+      parameters:
+      - name: ownerId
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
       responses:
         "200":
           description: OK
@@ -79,7 +104,7 @@ paths:
                   $ref: '#/components/schemas/SimpleDeviceDto'
     post:
       tags:
-        - device-controller
+      - device-controller
       operationId: create
       requestBody:
         content:
@@ -97,15 +122,21 @@ paths:
   /api/device/{deviceId}/control:
     post:
       tags:
-        - device-controller
+      - device-controller
       operationId: sendCommand
       parameters:
-        - name: deviceId
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int32
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: ownerId
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
       requestBody:
         content:
           application/json:
@@ -119,36 +150,36 @@ components:
   schemas:
     UpdateDeviceRequest:
       required:
-        - name
+      - name
       type: object
       properties:
         name:
           type: string
     BrightnessCommand:
       required:
-        - code
-        - value
+      - code
+      - value
       type: object
       allOf:
-        - $ref: '#/components/schemas/Command'
+      - $ref: '#/components/schemas/Command'
     CapacityCode:
       type: string
       enum:
-        - SWITCH_LED
-        - TEMPERATURE
-        - COLOR
-        - BRIGHTNESS
+      - SWITCH_LED
+      - TEMPERATURE
+      - COLOR
+      - BRIGHTNESS
     ColorCommand:
       required:
-        - code
-        - value
+      - code
+      - value
       type: object
       allOf:
-        - $ref: '#/components/schemas/Command'
+      - $ref: '#/components/schemas/Command'
     Command:
       required:
-        - code
-        - value
+      - code
+      - value
       type: object
       properties:
         code:
@@ -159,10 +190,10 @@ components:
         propertyName: code
     DeviceDto:
       required:
-        - category
-        - homeId
-        - id
-        - name
+      - category
+      - homeId
+      - id
+      - name
       type: object
       properties:
         id:
@@ -179,31 +210,31 @@ components:
           type: array
           items:
             oneOf:
-              - $ref: '#/components/schemas/BrightnessCommand'
-              - $ref: '#/components/schemas/ColorCommand'
-              - $ref: '#/components/schemas/SwitchLedCommand'
-              - $ref: '#/components/schemas/TemperatureCommand'
+            - $ref: '#/components/schemas/BrightnessCommand'
+            - $ref: '#/components/schemas/ColorCommand'
+            - $ref: '#/components/schemas/SwitchLedCommand'
+            - $ref: '#/components/schemas/TemperatureCommand'
         roomId:
           type: integer
           format: int32
     SwitchLedCommand:
       required:
-        - code
-        - value
+      - code
+      - value
       type: object
       allOf:
-        - $ref: '#/components/schemas/Command'
+      - $ref: '#/components/schemas/Command'
     TemperatureCommand:
       required:
-        - code
-        - value
+      - code
+      - value
       type: object
       allOf:
-        - $ref: '#/components/schemas/Command'
+      - $ref: '#/components/schemas/Command'
     CreateDeviceRequest:
       required:
-        - home_id
-        - tuya_id
+      - home_id
+      - tuya_id
       type: object
       properties:
         tuya_id:
@@ -218,22 +249,22 @@ components:
           format: int32
     SendCommandRequest:
       required:
-        - commands
+      - commands
       type: object
       properties:
         commands:
           type: array
           items:
             oneOf:
-              - $ref: '#/components/schemas/BrightnessCommand'
-              - $ref: '#/components/schemas/ColorCommand'
-              - $ref: '#/components/schemas/SwitchLedCommand'
-              - $ref: '#/components/schemas/TemperatureCommand'
+            - $ref: '#/components/schemas/BrightnessCommand'
+            - $ref: '#/components/schemas/ColorCommand'
+            - $ref: '#/components/schemas/SwitchLedCommand'
+            - $ref: '#/components/schemas/TemperatureCommand'
     SimpleDeviceDto:
       required:
-        - category
-        - id
-        - name
+      - category
+      - id
+      - name
       type: object
       properties:
         id:
@@ -244,4 +275,4 @@ components:
         category:
           type: string
           enum:
-            - LIGHT
+          - LIGHT
