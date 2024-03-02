@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+        - name: api-gateway
+          image: usoltsev0k/
+          imagePullPolicy: Always
+          env:
+            - name: POSTGRES_URL
+              value: "jdbc:postgresql://traffic-db:5432/TrafficDB" # Обратите внимание, что здесь используется имя сервиса базы данных
+            - name: POSTGRES_PASSWORD
+              value: "admin"
+            - name: POSTGRES_USER
+              value: "admin"
