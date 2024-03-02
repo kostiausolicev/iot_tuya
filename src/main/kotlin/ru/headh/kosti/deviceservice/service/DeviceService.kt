@@ -1,7 +1,12 @@
 package ru.headh.kosti.deviceservice.service
 
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.http.HttpMethod
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
+import org.springframework.web.client.RestTemplate
+import org.springframework.web.client.exchange
 import ru.headh.kosti.deviceservice.connector.DeviceConnector
 import ru.headh.kosti.deviceservice.converter.CommandConverter
 import ru.headh.kosti.deviceservice.converter.TuyaConverter
@@ -20,10 +25,13 @@ import ru.headh.kosti.deviceservice.repository.DeviceRepository
 
 @Service
 class DeviceService(
-    val deviceRepository: DeviceRepository,
-    val deviceConnector: DeviceConnector,
+    private val deviceRepository: DeviceRepository,
+    private val deviceConnector: DeviceConnector,
+    private val restTemplate: RestTemplate,
+    @Value("\${home-service.url}")
+    private val baseUrl: String,
     tuyaConverters: List<TuyaConverter<*>>,
-    commandConverters: List<CommandConverter<*>>
+    commandConverters: List<CommandConverter<*>>,
 ) {
     private val tuyaConverters =
         tuyaConverters
@@ -45,8 +53,9 @@ class DeviceService(
         return device.toDto(capabilities)
     }
 
-    fun sendAction(id: Int, commands: SendCommandRequest) {
+    fun sendAction(id: Int, commands: SendCommandRequest, ownerId: Int) {
         val tuyaId = deviceRepository.findByIdOrNull(id)
+            ?.also { it.checkOwner(ownerId) }
             ?.tuyaId
             ?: throw ApiExceptionEnum.DEVICE_NOT_FOUND.toException()
         val capabilities: TuyaSendCommandRequest = commands.commands
@@ -58,16 +67,18 @@ class DeviceService(
         deviceConnector.sendCommand(tuyaId, capabilities)
     }
 
-    fun getDevice(id: Int): DeviceDto {
+    fun getDevice(id: Int, ownerId: Int): DeviceDto {
         val device = deviceRepository.findByIdOrNull(id)
+            ?.also { it.checkOwner(ownerId) }
             ?: throw ApiExceptionEnum.DEVICE_NOT_FOUND.toException()
         val tuyaId = device.tuyaId
         val capabilities = getDeviceCapabilities(tuyaId)
         return device.toDto(capabilities)
     }
 
-    fun deleteDevice(id: Int) =
+    fun deleteDevice(id: Int, ownerId: Int) =
         deviceRepository.findByIdOrNull(id)
+            ?.also { it.checkOwner(ownerId) }
             ?.let { deviceRepository.delete(it) }
             ?: throw ApiExceptionEnum.DEVICE_NOT_FOUND.toException()
 
@@ -90,13 +101,15 @@ class DeviceService(
             )
         }
 
-    fun getDeviceList(): List<SimpleDeviceDto> =
+    fun getDeviceList(ownerId: Int): List<SimpleDeviceDto> =
         deviceRepository.findAll().map {
+            it.checkOwner(ownerId)
             it.toSimpleDto()
         }
 
-    fun updateDevice(deviceId: Int, updateDeviceRequest: UpdateDeviceRequest): DeviceDto {
+    fun updateDevice(deviceId: Int, updateDeviceRequest: UpdateDeviceRequest, ownerId: Int): DeviceDto {
         val device = deviceRepository.findByIdOrNull(deviceId)
+            ?.also { it.checkOwner(ownerId) }
             ?.let { updateDeviceRequest.toEntity(it) }
             ?: throw ApiExceptionEnum.DEVICE_NOT_FOUND.toException()
         val newDevice = deviceRepository.save(device)
@@ -131,5 +144,20 @@ class DeviceService(
             homeId = this.homeId,
             roomId = this.roomId
         )
+
+    private fun DeviceEntity.checkOwner(ownerId: Int): Boolean {
+        val url = "$baseUrl/${this.homeId}?ownerId=$ownerId"
+
+        val responseEntity = restTemplate.exchange<Boolean>(url, HttpMethod.GET, null)
+        val body = responseEntity.body
+        if (body != null) {
+            if (!body) {
+                throw ApiExceptionEnum.ACTION_IS_CANCELED.toException()
+            }
+            return true
+        } else {
+            throw ApiExceptionEnum.ACTION_IS_CANCELED.toException()
+        }
+    }
 
 }

@@ -1,14 +1,6 @@
 package ru.headh.kosti.deviceservice.controller
 
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
-import ru.headh.kosti.deviceservice.connector.DeviceConnector
+import org.springframework.web.bind.annotation.*
 import ru.headh.kosti.deviceservice.dto.request.CreateDeviceRequest
 import ru.headh.kosti.deviceservice.dto.request.SendCommandRequest
 import ru.headh.kosti.deviceservice.dto.request.UpdateDeviceRequest
@@ -17,29 +9,37 @@ import ru.headh.kosti.deviceservice.service.DeviceService
 @RestController
 @RequestMapping("/api/device")
 class DeviceController(
-    val deviceService: DeviceService
+    val deviceService: DeviceService,
 ) {
     @PostMapping
     fun create(@RequestBody createDeviceRequest: CreateDeviceRequest) =
         deviceService.create(createDeviceRequest)
 
     @PutMapping("/{deviceId}")
-    fun update(@PathVariable deviceId: Int, @RequestBody updateDeviceRequest: UpdateDeviceRequest) =
-        deviceService.updateDevice(deviceId, updateDeviceRequest)
+    fun update(
+        @PathVariable deviceId: Int,
+        @RequestBody updateDeviceRequest: UpdateDeviceRequest,
+        @RequestParam(name = "ownerId") ownerId: Int,
+    ) =
+        deviceService.updateDevice(deviceId, updateDeviceRequest, ownerId)
 
     @PostMapping("/{deviceId}/control")
-    fun sendCommand(@PathVariable deviceId: Int, @RequestBody commands: SendCommandRequest) =
-        deviceService.sendAction(deviceId, commands)
+    fun sendCommand(
+        @PathVariable deviceId: Int,
+        @RequestBody commands: SendCommandRequest,
+        @RequestParam(name = "ownerId") ownerId: Int,
+    ) =
+        deviceService.sendAction(deviceId, commands, ownerId)
 
     @DeleteMapping("/{deviceId}")
-    fun delete(@PathVariable deviceId: Int) =
-        deviceService.deleteDevice(deviceId)
+    fun delete(@PathVariable deviceId: Int, @RequestParam(name = "ownerId") ownerId: Int) =
+        deviceService.deleteDevice(deviceId, ownerId)
 
     @GetMapping
-    fun getDeviceList() =
-        deviceService.getDeviceList()
+    fun getDeviceList(@RequestParam(name = "ownerId") ownerId: Int) =
+        deviceService.getDeviceList(ownerId)
 
     @GetMapping("/{deviceId}")
-    fun getInfo(@PathVariable deviceId: Int) =
-        deviceService.getDevice(deviceId)
+    fun getInfo(@PathVariable deviceId: Int, @RequestParam(name = "ownerId") ownerId: Int) =
+        deviceService.getDevice(deviceId, ownerId)
 }
