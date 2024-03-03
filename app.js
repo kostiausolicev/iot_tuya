@@ -1,6 +1,6 @@
 let tg = window.Telegram.WebApp;
 
-tg.expand(); //расширяем на все окно
+tg.expand();
 
 tg.MainButton.setText("Отправить данные");
 tg.MainButton.enable()
@@ -9,7 +9,7 @@ tg.MainButton.show()
 function getParameterByName(name, url) {
     if (!url) url = window.location.href;
     name = name.replace(/[\[\]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+    const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
         results = regex.exec(url);
     if (!results) return null;
     if (!results[2]) return '';
@@ -18,6 +18,7 @@ function getParameterByName(name, url) {
 
 let formType = getParameterByName('formType');
 let obj = getParameterByName('obj');
+let id = parseInt(getParameterByName('id'))
 
 if (formType === 'auth') {
     document.getElementById('dynamicFormContainer').innerHTML = `
@@ -84,10 +85,7 @@ else if (formType === 'create' && obj === 'device') {
 else if (formType === 'send_command') {
     document.getElementById('dynamicFormContainer').innerHTML = `
             <h1>Введите данные:</h1>
-            
-            <label for="device_id">DeviceID:</label>
-            <input type="text" id="device_id" name="device_id"><br>
-            
+                        
             <label for="switch_led">SWITCH_LED:</label>
             <input type="checkbox" id="switch_led_check" name="switch_led_check">
             <input type="text" id="switch_led" name="switch_led"><br>
@@ -206,11 +204,7 @@ Telegram.WebApp.onEvent('mainButtonClicked', function(){
         }
 
         formDataJSON = JSON.stringify({
-            deviceId: document.getElementById('device_id').value,
-            commands: formData
-        });
-        formDataJSON = JSON.stringify({
-            deviceId: document.getElementById('device_id').value,
+            deviceId: id,
             commands: formData
         });
     }
