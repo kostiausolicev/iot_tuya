@@ -3,7 +3,6 @@ package ru.headh.kosti.deviceservice.service
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpMethod
-import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.exchange
@@ -43,11 +42,15 @@ class DeviceService(
             .filterIsInstance<CommandConverter<Command>>()
             .associateBy { it.code }
 
-    fun create(createDeviceRequest: CreateDeviceRequest): DeviceDto {
+    fun create(createDeviceRequest: CreateDeviceRequest, ownerId: Int): DeviceDto {
         val tuyaId = createDeviceRequest.tuyaId
         val newDevice = deviceRepository.findByTuyaId(tuyaId)
             ?.also { throw ApiExceptionEnum.DEVICE_EXIST.toException() }
-            ?: createDeviceRequest.toEntity()
+            ?: run {
+                if (!checkOwner(createDeviceRequest.homeId, ownerId))
+                    throw ApiExceptionEnum.ACTION_IS_CANCELED.toException()
+                createDeviceRequest.toEntity()
+            }
         val device = deviceRepository.save(newDevice)
         val capabilities = getDeviceCapabilities(tuyaId)
         return device.toDto(capabilities)
@@ -55,7 +58,7 @@ class DeviceService(
 
     fun sendAction(id: Int, commands: SendCommandRequest, ownerId: Int) {
         val tuyaId = deviceRepository.findByIdOrNull(id)
-            ?.also { it.checkOwner(ownerId) }
+            ?.also { checkOwner(it.homeId, ownerId) }
             ?.tuyaId
             ?: throw ApiExceptionEnum.DEVICE_NOT_FOUND.toException()
         val capabilities: TuyaSendCommandRequest = commands.commands
@@ -69,7 +72,7 @@ class DeviceService(
 
     fun getDevice(id: Int, ownerId: Int): DeviceDto {
         val device = deviceRepository.findByIdOrNull(id)
-            ?.also { it.checkOwner(ownerId) }
+            ?.also { checkOwner(it.homeId, ownerId) }
             ?: throw ApiExceptionEnum.DEVICE_NOT_FOUND.toException()
         val tuyaId = device.tuyaId
         val capabilities = getDeviceCapabilities(tuyaId)
@@ -78,7 +81,7 @@ class DeviceService(
 
     fun deleteDevice(id: Int, ownerId: Int) =
         deviceRepository.findByIdOrNull(id)
-            ?.also { it.checkOwner(ownerId) }
+            ?.also { checkOwner(it.homeId, ownerId) }
             ?.let { deviceRepository.delete(it) }
             ?: throw ApiExceptionEnum.DEVICE_NOT_FOUND.toException()
 
@@ -103,13 +106,13 @@ class DeviceService(
 
     fun getDeviceList(ownerId: Int): List<SimpleDeviceDto> =
         deviceRepository.findAll().map {
-            it.checkOwner(ownerId)
+            checkOwner(it.homeId, ownerId)
             it.toSimpleDto()
         }
 
     fun updateDevice(deviceId: Int, updateDeviceRequest: UpdateDeviceRequest, ownerId: Int): DeviceDto {
         val device = deviceRepository.findByIdOrNull(deviceId)
-            ?.also { it.checkOwner(ownerId) }
+            ?.also { checkOwner(it.homeId, ownerId) }
             ?.let { updateDeviceRequest.toEntity(it) }
             ?: throw ApiExceptionEnum.DEVICE_NOT_FOUND.toException()
         val newDevice = deviceRepository.save(device)
@@ -145,18 +148,14 @@ class DeviceService(
             roomId = this.roomId
         )
 
-    private fun DeviceEntity.checkOwner(ownerId: Int): Boolean {
-        val url = "$baseUrl/${this.homeId}?ownerId=$ownerId"
-
-        val responseEntity = restTemplate.exchange<Boolean>(url, HttpMethod.GET, null)
-        val body = responseEntity.body
-        if (body != null) {
-            if (!body) {
-                throw ApiExceptionEnum.ACTION_IS_CANCELED.toException()
-            }
-            return true
-        } else {
-            throw ApiExceptionEnum.ACTION_IS_CANCELED.toException()
+    private fun checkOwner(homeId: Int, ownerId: Int): Boolean {
+        val url = "$baseUrl/${homeId}?ownerId=$ownerId"
+        return try {
+            val responseEntity = restTemplate.exchange<Boolean>(url, HttpMethod.GET, null)
+            val body = responseEntity.body
+            body ?: false
+        } catch (ex: Exception) {
+            false
         }
     }
 

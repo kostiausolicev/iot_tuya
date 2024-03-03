@@ -12,8 +12,11 @@ class DeviceController(
     val deviceService: DeviceService,
 ) {
     @PostMapping
-    fun create(@RequestBody createDeviceRequest: CreateDeviceRequest) =
-        deviceService.create(createDeviceRequest)
+    fun create(
+        @RequestBody createDeviceRequest: CreateDeviceRequest,
+        @RequestParam(name = "ownerId") ownerId: Int,
+    ) =
+        deviceService.create(createDeviceRequest, ownerId)
 
     @PutMapping("/{deviceId}")
     fun update(
