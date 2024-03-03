@@ -16,14 +16,14 @@ class GlobalExceptionHandler {
         val ex = exception.message
             ?: return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ExceptionDto("Ошибка сервера", "SERVER_ERROR"))
+                .body(ExceptionDto("{\"message\":\"Ошибка сервера\"}", "SERVER_ERROR"))
         val code = ex.substring(0, 3).toIntOrNull()
         return try {
             val message = ex.substring(7, ex.length - 1)
             val dto: ExceptionDto = mapper.readValue(message)
             ResponseEntity.status(code!!).body(dto)
         } catch (_: Exception) {
-            ResponseEntity.status(code!!).body("Что-то произошло")
+            ResponseEntity.status(code!!).body("{\"message\":\"Что-то произошло\"}")
         }
     }
 }

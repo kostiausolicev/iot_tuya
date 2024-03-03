@@ -13,7 +13,7 @@ class DeviceService(
     private val currentUser: UserOnRequest
 ) {
     fun create(createDeviceRequest: CreateDeviceRequestGen) =
-        deviceServiceClient.create(createDeviceRequest)
+        deviceServiceClient.create( currentUser.userId, createDeviceRequest)
 
     fun updateDevice(deviceId: Int, updateDeviceRequest: UpdateDeviceRequestGen) =
         deviceServiceClient.update(deviceId, currentUser.userId, updateDeviceRequest)
