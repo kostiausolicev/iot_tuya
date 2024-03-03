@@ -35,8 +35,8 @@ class WasCreatedDeviceHandler(
             CreateDeviceRequestGenGen(
                 tuyaId = it["tuya_id"].toString(),
                 name = if (it["name"].toString() == "") null else it["name"].toString(),
-                homeId = it["home_id"].toString().toInt(),
-                roomId = if (it["room_id"].toString() == "") null else it["room_id"].toString().toInt(),
+                homeId = it["home_id"].toString().toIntOrNull() ?: -1,
+                roomId = it["room_id"].toString().toIntOrNull()
             )
         })
         telegramSender.sendMessage(

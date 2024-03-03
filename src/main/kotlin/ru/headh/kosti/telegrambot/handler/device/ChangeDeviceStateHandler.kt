@@ -17,6 +17,7 @@ class ChangeDeviceStateHandler(
 
     @CheckAndUpdateToken
     override fun handle(data: ChangeDeviceStateActionData) {
+        val deviceId = data.message.split(":")[1].toInt()
         telegramSender.deleteMessage(
             chatId = data.chatId,
             messageId = data.messageId
@@ -24,7 +25,7 @@ class ChangeDeviceStateHandler(
         telegramSender.sendMessage(
             chatId = data.chatId,
             text = "Нажмите на кнопку для изменения состояния устройства",
-            replyMarkup = changeDeviceStateKeyboard.keyboard
+            replyMarkup = changeDeviceStateKeyboard.keyboard(deviceId)
         )
     }
 }

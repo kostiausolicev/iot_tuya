@@ -12,15 +12,15 @@ class ChangeDeviceStateKeyboard(
     @Value("\${telegram-bot.web-app.url}")
     private val webAppUrl: String,
 ) {
-    private final val createDevice = KeyboardButton()
+    private final fun changeDeviceButton(id: Int) = KeyboardButton()
         .also {
             it.text = "Изменить состояние"
-            it.webApp = WebAppInfo("$webAppUrl/?formType=send_command")
+            it.webApp = WebAppInfo("$webAppUrl/?formType=send_command&id=$id")
         }
-    final val buttons = listOf(KeyboardRow(listOf(createDevice)))
+    final fun buttons(id: Int) = listOf(KeyboardRow(listOf(changeDeviceButton(id))))
 
-    val keyboard: ReplyKeyboardMarkup = ReplyKeyboardMarkup.builder()
-        .keyboard(buttons)
+    final fun keyboard(id: Int): ReplyKeyboardMarkup = ReplyKeyboardMarkup.builder()
+        .keyboard(buttons(id))
         .resizeKeyboard(true)
         .oneTimeKeyboard(true)
         .build()

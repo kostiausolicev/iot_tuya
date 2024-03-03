@@ -6,7 +6,6 @@ import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Pointcut
-import org.glassfish.hk2.utilities.reflection.Logger
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
@@ -26,7 +25,7 @@ class CheckAndUpdateTokenHandler(
     private val telegramSender: TelegramSender,
     private val authKeyboard: AuthKeyboard,
     private val redisRepository: RedisRepository,
-    private val userServiceClient: UserServiceClient
+    private val userServiceClient: UserServiceClient,
 ) {
     private val mapper = jacksonObjectMapper()
 
@@ -34,10 +33,9 @@ class CheckAndUpdateTokenHandler(
         redisRepository.findByIdOrNull(data.chatId)
             ?.let { redisRepository.delete(it) }
         println(ex.toString())
-        telegramSender.editMessage(
+        telegramSender.sendMessage(
             chatId = data.chatId,
             text = "Произошла ошибка, необходима авторизация",
-            messageId = data.messageId
         )
         telegramSender.sendMessage(
             chatId = data.chatId,
@@ -57,6 +55,12 @@ class CheckAndUpdateTokenHandler(
             pjp.proceed()
         } catch (ex1: Exception) {
             try {
+                val exceptionMap: Map<String, String> = ex1.message
+                    ?.also { println(it) }
+                    ?.let { it.substring(7, it.length - 1) }
+                    ?.also { println(it) }
+                    ?.let { mapper.readValue(it) }
+                    ?: emptyMap()
                 val code: String = ex1.message
                     ?.substring(0, 3)
                     ?.let { mapper.readValue(it) }
@@ -70,11 +74,12 @@ class CheckAndUpdateTokenHandler(
                             .let { redisRepository.save(it) }
                         pjp.proceed()
                     }
+
                     "400" -> {
-                        telegramSender.editMessage(
+                        telegramSender.deleteMessage(chatId = data.chatId, messageId = data.messageId)
+                        telegramSender.sendMessage(
                             chatId = data.chatId,
-                            text = "Ресурс не найден",
-                            messageId = data.messageId,
+                            text = exceptionMap["message"] ?: "Что-то пошло не так",
                             inlineReplyMarkup = InlineKeyboardMarkup(
                                 listOf(
                                     listOf(
@@ -87,11 +92,12 @@ class CheckAndUpdateTokenHandler(
                             )
                         )
                     }
+
                     "500" -> {
-                        telegramSender.editMessage(
+                        telegramSender.deleteMessage(chatId = data.chatId, messageId = data.messageId)
+                        telegramSender.sendMessage(
                             chatId = data.chatId,
                             text = "Произошла ошибка",
-                            messageId = data.messageId,
                             inlineReplyMarkup = InlineKeyboardMarkup(
                                 listOf(
                                     listOf(
@@ -104,11 +110,12 @@ class CheckAndUpdateTokenHandler(
                             )
                         )
                     }
+
                     "502" -> {
-                        telegramSender.editMessage(
+                        telegramSender.deleteMessage(chatId = data.chatId, messageId = data.messageId)
+                        telegramSender.sendMessage(
                             chatId = data.chatId,
                             text = "Произошла ошибка",
-                            messageId = data.messageId,
                             inlineReplyMarkup = InlineKeyboardMarkup(
                                 listOf(
                                     listOf(
@@ -121,11 +128,12 @@ class CheckAndUpdateTokenHandler(
                             )
                         )
                     }
+
                     else -> {
-                        telegramSender.editMessage(
+                        telegramSender.deleteMessage(chatId = data.chatId, messageId = data.messageId)
+                        telegramSender.sendMessage(
                             chatId = data.chatId,
                             text = "Произошла ошибка",
-                            messageId = data.messageId,
                             inlineReplyMarkup = InlineKeyboardMarkup(
                                 listOf(
                                     listOf(

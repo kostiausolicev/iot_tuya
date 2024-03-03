@@ -2,13 +2,11 @@ package ru.headh.kosti.telegrambot.aspect.advice
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import org.aspectj.lang.JoinPoint
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Pointcut
 import org.springframework.stereotype.Component
-import org.telegram.telegrambots.meta.api.objects.Update
 import ru.headh.kosti.telegrambot.dto.ActionData
 import ru.headh.kosti.telegrambot.keyboard.outline.AuthKeyboard
 import ru.headh.kosti.telegrambot.sender.TelegramSender
