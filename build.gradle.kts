@@ -14,7 +14,7 @@ plugins {
 }
 
 group = "ru.headh.kosti"
-version = "0.0.1-SNAPSHOT"
+version = "1.0"
 
 java {
 	sourceCompatibility = JavaVersion.VERSION_17
@@ -115,12 +115,6 @@ tasks.register("generateDeviceClient", GenerateTask::class) {
 	)
 }
 
-tasks.withType<BootJar> {
-	archiveBaseName.set("api-gateway")
-	archiveVersion.set("")
-	destinationDirectory.set(file("$buildDir/target"))
-}
-
 tasks.withType<KotlinCompile> {
 	dependsOn("generateUserClient")
 	dependsOn("generateHomeClient")
@@ -144,9 +138,5 @@ sourceSets {
 }
 val compileKotlin: KotlinCompile by tasks
 compileKotlin.kotlinOptions {
-	jvmTarget = "17"
-}
-val compileTestKotlin: KotlinCompile by tasks
-compileTestKotlin.kotlinOptions {
 	jvmTarget = "17"
 }
