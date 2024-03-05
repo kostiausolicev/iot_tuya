@@ -2,7 +2,7 @@ server:
   port: 8079
 
 jwt:
-  secret: hjhbjhbJHBJHFBDjhbjhb873Y4UI2BUYLSDLDBjgf
+  secret: ${JWT_SECRET:hjhbjhbJHBJHFBDjhbjhb873Y4UI2BUYLSDLDBjgf}
 
 springdoc:
   swagger-ui:

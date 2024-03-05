@@ -37,6 +37,7 @@ dependencies {
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
+	implementation(kotlin("stdlib-jdk8"))
 }
 
 tasks.register("generateUserClient", GenerateTask::class) {
@@ -143,9 +144,9 @@ sourceSets {
 }
 val compileKotlin: KotlinCompile by tasks
 compileKotlin.kotlinOptions {
-	jvmTarget = "1.8"
+	jvmTarget = "17"
 }
 val compileTestKotlin: KotlinCompile by tasks
 compileTestKotlin.kotlinOptions {
-	jvmTarget = "1.8"
+	jvmTarget = "17"
 }
