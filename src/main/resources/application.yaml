@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/home-service-db}
+    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/home_service_db}
     username: ${POSTGRES_USERNAME:admin}
     password: ${POSTGRES_PASSWORD:admin}
     generate-dll: none
@@ -18,11 +18,11 @@ spring:
   application:
     name: home-service
   kafka:
-    bootstrap-servers: localhost:29092
+    bootstrap-servers: ${KAFKA_SERVICE:localhost:29092}
 
 springdoc:
   swagger-ui:
     enabled: true
-    path: /swag
+    path: /swagger-ui.html
     disable-swagger-default-url: true
   show-actuator: false

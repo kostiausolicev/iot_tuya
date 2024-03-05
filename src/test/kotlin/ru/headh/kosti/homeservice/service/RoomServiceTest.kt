@@ -124,7 +124,8 @@ class RoomServiceTest {
         )
         private var testRoom1 = RoomEntity(
             id = 1,
-            name = "Name"
+            name = "Name",
+            home = home
         )
 
         @BeforeEach
@@ -213,7 +214,8 @@ class RoomServiceTest {
         )
         private var testRoom1 = RoomEntity(
             id = 1,
-            name = "Name"
+            name = "Name",
+            home = home
         )
 
         @BeforeEach
