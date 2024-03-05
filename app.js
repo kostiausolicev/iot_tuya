@@ -76,20 +76,28 @@ else if (formType === 'create' && obj === 'room') {
 }
 else if (formType === 'create' && obj === 'device') {
     document.getElementById('dynamicFormContainer').innerHTML = `
-            <h1>Введите данные:</h1>
-            <label for="tuya_id">TuyaID:</label>
-            <input type="text" id="tuya_id" name="tuya_id" required><br>
+        <h1>Введите данные:</h1>
+        <label for="tuya_id">TuyaID:</label>
+        <input type="text" id="tuya_id" name="tuya_id" required><br>
 
-            <label for="device_name">Name:</label>
-            <input type="text" id="device_name" name="device_name" required><br>
-            
-            <label for="home_id">HomeID:</label>
-            <input type="text" id="home_id" name="name" required><br>
-            
-            <label for="room_id">RoomID:</label>
-            <input type="text" id="room_id" name="room_id" required><br>
+        <label for="device_name">Name:</label>
+        <input type="text" id="device_name" name="device_name"><br>
+
+        <label for="home_id">HomeID:</label>
+        <select id="home_id" name="home_id" required></select><br>
     `;
+
+    const homeIdSelect = document.getElementById('home_id');
+
+    // Заполняем выпадающий список вариантами из массива homes
+    homes.forEach(home => {
+        const option = document.createElement('option');
+        option.value = home;  // Значение опции
+        option.text = home;   // Текст опции
+        homeIdSelect.appendChild(option); // Добавляем опцию в список
+    });
 }
+
 else if (formType === 'send_command') {
     document.getElementById('dynamicFormContainer').innerHTML = `
             <h1>Введите данные:</h1>
@@ -164,12 +172,11 @@ Telegram.WebApp.onEvent('mainButtonClicked', function(){
         const name = document.getElementById('device_name').value;
         const tuya_id = document.getElementById('tuya_id').value;
         const home_id = document.getElementById('home_id').value;
-        const room_id = document.getElementById('room_id').value;
         const formData = {
             tuya_id: tuya_id,
             name: name != null ? name : null,
             home_id: home_id,
-            room_id: room_id,
+            room_id: null,
         };
         formDataJSON = JSON.stringify(formData);
     }
