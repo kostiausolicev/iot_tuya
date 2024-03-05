@@ -3,24 +3,26 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/users_headh_db
-    username: admin
-    password: admin
+    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/users_headh_db}
+    username: ${POSTGRES_USERNAME:admin}
+    password: ${POSTGRES_PASSWORD:admin}
   liquibase:
     change-log: classpath:/db/changelog-master.yaml
     enabled: true
   application:
     name: user-service
   kafka:
-    bootstrap-servers: localhost:29092
+    bootstrap-servers:
+      host: ${KAFKA_SERVER:localhost}
+      port: ${KAFKA_PORT:29092}
 
 jwt:
-  secret: hjhbjhbJHBJHFBDjhbjhb873Y4UI2BUYLSDLDBjgf
+  secret: ${JWT_SECRET:hjhbjhbJHBJHFBDjhbjhb873Y4UI2BUYLSDLDBjgf}
   ttl: 3600
 
 springdoc:
   swagger-ui:
     enabled: true
-    path: /swag
+    path: /swagger-ui.html
     disable-swagger-default-url: true
   show-actuator: false

@@ -13,13 +13,15 @@ import org.springframework.kafka.core.ProducerFactory
 @Configuration
 @EnableKafka
 class KafkaConfig(
-    @Value(value = "\${spring.kafka.bootstrap-servers}")
+    @Value(value = "\${spring.kafka.bootstrap-servers.host}")
     private val bootstrapAddress: String,
+    @Value(value = "\${spring.kafka.bootstrap-servers.port}")
+    private val bootstrapPort: String,
 ) {
     @Bean
     fun producerFactory(): ProducerFactory<String, String> {
         val configProps: Map<String, Any> = mapOf(
-            ProducerConfig.BOOTSTRAP_SERVERS_CONFIG to bootstrapAddress,
+            ProducerConfig.BOOTSTRAP_SERVERS_CONFIG to "${bootstrapAddress}:$bootstrapPort",
             ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG to StringSerializer::class.java,
             ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG to StringSerializer::class.java,
         )
