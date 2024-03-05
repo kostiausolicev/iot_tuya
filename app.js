@@ -13,12 +13,20 @@ function getParameterByName(name, url) {
         results = regex.exec(url);
     if (!results) return null;
     if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
+    const value = decodeURIComponent(results[2].replace(/\+/g, " "));
+    // Если значение является строкой в формате JSON, то парсим его
+    try {
+        return JSON.parse(value);
+    } catch (error) {
+        return value;
+    }
 }
 
 let formType = getParameterByName('formType');
 let obj = getParameterByName('obj');
-let id = parseInt(getParameterByName('id'))
+let id = parseInt(getParameterByName('id'));
+let homes = getParameterByName('homes');
+
 
 if (formType === 'auth') {
     document.getElementById('dynamicFormContainer').innerHTML = `
