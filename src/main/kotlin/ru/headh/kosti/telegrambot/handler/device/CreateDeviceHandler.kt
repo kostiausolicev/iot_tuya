@@ -24,7 +24,7 @@ class CreateDeviceHandler(
         telegramSender.sendMessage(
             chatId = data.chatId,
             text = "Нажмите на кнопку для создания устройства",
-            replyMarkup = createDeviceKeyboard.keyboard
+            replyMarkup = createDeviceKeyboard.keyboard(data.chatId)
         )
     }
 }
