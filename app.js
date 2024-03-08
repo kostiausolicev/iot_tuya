@@ -78,13 +78,13 @@ else if (formType === 'create' && obj === 'device') {
     document.getElementById('dynamicFormContainer').innerHTML = `
         <h1>Введите данные:</h1>
         <label for="tuya_id">TuyaID:</label>
-        <input type="text" id="tuya_id" name="tuya_id" required><br>
+        <input type="text" id="tuya_id" name="tuya_id"><br>
 
         <label for="device_name">Name:</label>
         <input type="text" id="device_name" name="device_name"><br>
 
         <label for="home_id">HomeID:</label>
-        <select id="home_id" name="home_id" required></select><br>
+        <select id="home_id" name="home_id"></select><br>
     `;
 
     const homeIdSelect = document.getElementById('home_id');
