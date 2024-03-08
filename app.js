@@ -89,10 +89,9 @@ else if (formType === 'create' && obj === 'device') {
 
     const homeIdSelect = document.getElementById('home_id');
 
-    // Разделение значений в массиве homes на id и name
     const homeOptions = homes.map(home => {
         const [id, name] = home.split(':');
-        return { id, name };
+        return { id: id, name: name };
     });
 
     // Очистка списка опций перед добавлением новых
