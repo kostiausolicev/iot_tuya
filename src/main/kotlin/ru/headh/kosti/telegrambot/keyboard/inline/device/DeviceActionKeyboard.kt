@@ -10,7 +10,19 @@ class DeviceActionKeyboard {
     private final fun buttonRename(device: Int) = InlineKeyboardButton()
         .also {
             it.text = "Переименовать"
-            it.callbackData = "$UPDATE_DEVICE:${device}"
+            it.callbackData = "$RENAME_DEVICE:${device}"
+        }
+
+    private final fun buttonNewHome(device: Int) = InlineKeyboardButton()
+        .also {
+            it.text = "Поменять дом"
+            it.callbackData = "$CHANGE_DEVICE_HOME:${device}"
+        }
+
+    private final fun buttonNewRoom(device: Int) = InlineKeyboardButton()
+        .also {
+            it.text = "Поменять комнату"
+            it.callbackData = "$CHANGE_DEVICE_ROOM:${device}"
         }
 
     private final fun buttonBack() = InlineKeyboardButton()
@@ -33,7 +45,8 @@ class DeviceActionKeyboard {
 
     private fun buttons(home: Int) =
         listOf(
-            listOf(buttonRename(home), buttonNewState(home)),
+            listOf(buttonRename(home), buttonNewRoom(home), buttonNewHome(home)),
+            listOf(buttonNewState(home)),
             listOf(buttonDelete(home)),
             listOf(buttonBack())
         )

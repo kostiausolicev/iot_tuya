@@ -20,13 +20,10 @@ class CreateDeviceKeyboard(
     private final fun createDevice(telegramId: String) = KeyboardButton()
         .also { kb ->
             val token = redisRepository.findByIdOrNull(telegramId)!!.accessToken
-            val homes = homeServiceClient.getHomeList("Bearer $token")
-                .map {
-                    "\"${it.name}\""
-                }.toString()
-            val url = "$webAppUrl/?formType=create&obj=device&homes=${
-                homes.replace("[", "%5B").replace("]", "%5D")
-            }"
+            val homes = homeServiceClient.getHomeList("Bearer $token").map {
+                "\"${it.name}\""
+            }.let {java.net.URLEncoder.encode(it.toString(), "UTF-8")}
+            val url = "$webAppUrl/?formType=create&obj=device&homes=${homes}"
             kb.text = "Новое устройство"
             kb.webApp = WebAppInfo(url)
         }

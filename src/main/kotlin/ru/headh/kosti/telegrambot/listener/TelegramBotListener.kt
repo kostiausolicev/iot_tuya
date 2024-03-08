@@ -75,7 +75,7 @@ class TelegramBotListener(
                 GET_DEVICE_LIST -> ActionType.GET_DEVICE_LIST
                 CHANGE_DEVICE_STATE -> ActionType.CHANGE_DEVICE_STATE
                 DELETE_DEVICE -> ActionType.DELETE_DEVICE
-                UPDATE_DEVICE -> ActionType.UPDATE_DEVICE
+                RENAME_DEVICE -> ActionType.UPDATE_DEVICE
                 else -> null
             }
         }
