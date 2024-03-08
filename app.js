@@ -89,12 +89,21 @@ else if (formType === 'create' && obj === 'device') {
 
     const homeIdSelect = document.getElementById('home_id');
 
-    // Заполняем выпадающий список вариантами из массива homes
-    homes.forEach(home => {
+    // Разделение значений в массиве homes на id и name
+    const homeOptions = homes.map(home => {
+        const [id, name] = home.split(':');
+        return { id, name };
+    });
+
+    // Очистка списка опций перед добавлением новых
+    homeIdSelect.innerHTML = '';
+
+    // Заполнение выпадающего списка вариантами из массива homeOptions
+    homeOptions.forEach(home => {
         const option = document.createElement('option');
-        option.value = home;  // Значение опции
-        option.text = home;   // Текст опции
-        homeIdSelect.appendChild(option); // Добавляем опцию в список
+        option.value = home.id;
+        option.textContent = home.name;
+        homeIdSelect.appendChild(option);
     });
 }
 
@@ -174,7 +183,7 @@ Telegram.WebApp.onEvent('mainButtonClicked', function(){
         const home_id = document.getElementById('home_id').value;
         const formData = {
             tuya_id: tuya_id,
-            name: name != null ? name : null,
+            name: name,
             home_id: home_id,
             room_id: null,
         };
