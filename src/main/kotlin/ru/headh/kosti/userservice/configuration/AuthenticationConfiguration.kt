@@ -17,7 +17,7 @@ class AuthenticationConfiguration {
             .and()
             .build()
 
-    @Bean
+    @Bean(name = ["bCryptPasswordEncoder"])
     fun passwordEncoder() =
         BCryptPasswordEncoder()
 }

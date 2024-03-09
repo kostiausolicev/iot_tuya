@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.EnableScheduling
 
 @Configuration
 @EnableScheduling
-@EnableJpaRepositories("ru.headh.kosti.userservice.repository")
-@ComponentScan("ru.headh.kosti.userservice")
+@EnableJpaRepositories(basePackages = ["ru.headh.kosti.userservice.repository"])
+@ComponentScan(basePackages = ["ru.headh.kosti.userservice"])
 class ApplicationConfiguration {
 }

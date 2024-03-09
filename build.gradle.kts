@@ -42,7 +42,7 @@ dependencies {
 	testImplementation("org.testcontainers:postgresql:1.16.3")
 	testImplementation("org.testcontainers:junit-jupiter:1.16.3")
 	testImplementation("org.mockito:mockito-core")
-	testImplementation("org.springframework.boot:spring-boot-starter-test") {
+	testImplementation("org.springframework.boot:spring-boot-starter-test:2.7.17") {
 		exclude(group = "org.mockito")
 		exclude(group = "org.mockito:mockito-core")
 	}
