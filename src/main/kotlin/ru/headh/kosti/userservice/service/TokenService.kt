@@ -19,7 +19,7 @@ class TokenService(
     private val ttl: Long,
     @Value("\${jwt.secret}")
     private val secret: String,
-    private val tokenRepository: TokenRepository
+    private val tokenRepository: TokenRepository,
 ) {
     fun refresh(tokenRefreshRequest: TokenRefreshRequest): SuccessAuthDto {
         val refreshToken: UUID = UUID.fromString(tokenRefreshRequest.refreshToken)
@@ -48,8 +48,7 @@ class TokenService(
         )
     }
 
-    fun deleteByUser(user: Int) =
-        tokenRepository.findByUser(user)
-            ?.let { tokenRepository.delete(it) }
-            ?: throw Exception()
+    fun deleteAllByUser(user: Int) =
+        tokenRepository.findAllByUser(user)
+            .map { tokenRepository.delete(it) }
 }

@@ -54,7 +54,7 @@ class UserService(
     }
 
     fun signout(user: Int) =
-        tokenService.deleteByUser(user)
+        tokenService.deleteAllByUser(user)
 
     private fun matchPassword(rawPass: String, encodePass: String): Boolean =
         passwordEncoder.matches(rawPass, encodePass)

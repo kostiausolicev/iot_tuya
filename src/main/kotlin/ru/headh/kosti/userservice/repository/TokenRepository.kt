@@ -9,5 +9,6 @@ import java.util.*
 interface TokenRepository : JpaRepository<TokenEntity, UUID> {
     fun findByRefreshToken(refreshToken: UUID): TokenEntity?
     fun findByUser(user: Int): TokenEntity?
+    fun findAllByUser(user: Int): List<TokenEntity>
 
 }
