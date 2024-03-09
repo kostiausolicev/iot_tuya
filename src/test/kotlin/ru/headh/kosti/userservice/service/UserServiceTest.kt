@@ -1,11 +1,8 @@
 package ru.headh.kosti.userservice.service
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration
@@ -21,8 +18,10 @@ import ru.headh.kosti.userservice.configuration.ApplicationConfiguration
 import ru.headh.kosti.userservice.configuration.AuthenticationConfiguration
 import ru.headh.kosti.userservice.container.PostgresTestContainer
 import ru.headh.kosti.userservice.container.PostgresTestContainer.Companion.postgresqlContainer
+import ru.headh.kosti.userservice.dto.request.UserAuthRequest
 import ru.headh.kosti.userservice.dto.request.UserRegisterRequest
 import ru.headh.kosti.userservice.entity.UserEntity
+import ru.headh.kosti.userservice.exception.UserException
 import ru.headh.kosti.userservice.repository.UserRepository
 
 
@@ -46,10 +45,13 @@ class UserServiceTest {
     @Autowired
     lateinit var bcryptEncoder: PasswordEncoder
 
-    private val mapper = jacksonObjectMapper()
-
     @Nested
     inner class RegisterUserTest {
+        @BeforeEach
+        fun clearDB() {
+            userRepository.deleteAll()
+        }
+
         @Test
         fun postgresRun() {
             assertThat(postgresqlContainer.isRunning).isTrue()
@@ -75,6 +77,31 @@ class UserServiceTest {
                 { assertEquals(expected.username, actual?.username) },
                 { assertThat(bcryptEncoder.matches("password", actual?.password)).isTrue() }
             )
+        }
+
+        @Test
+        fun `user exist`() {
+            UserEntity(
+                name = "name",
+                username = "username",
+                password = bcryptEncoder.encode("password")
+            ).also { userRepository.save(it) }
+
+            assertThrows<UserException> {
+                UserRegisterRequest(
+                    name = "name",
+                    username = "username",
+                    password = "password",
+                    confirmPassword = "password"
+                ).also { userService.register(it) }
+            }
+        }
+
+        @Test
+        fun `user not found`() {
+            assertThrows<UserException> {
+                userService.auth(UserAuthRequest(username = "username", password = "password"))
+            }
         }
     }
 }
