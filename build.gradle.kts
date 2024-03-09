@@ -38,8 +38,14 @@ dependencies {
 	implementation("org.liquibase:liquibase-core:4.24.0")
 	runtimeOnly("org.postgresql:postgresql")
 	// Test
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testImplementation("org.springframework.security:spring-security-test")
+	testImplementation("com.ninja-squad:springmockk:3.1.1")
+	testImplementation("org.testcontainers:postgresql:1.16.3")
+	testImplementation("org.testcontainers:junit-jupiter:1.16.3")
+	testImplementation("org.mockito:mockito-core")
+	testImplementation("org.springframework.boot:spring-boot-starter-test") {
+		exclude(group = "org.mockito")
+		exclude(group = "org.mockito:mockito-core")
+	}
 }
 
 tasks.withType<KotlinCompile> {
