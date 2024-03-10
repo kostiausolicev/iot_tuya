@@ -1,10 +1,13 @@
 package ru.headh.kosti.userservice.service
 
+import com.auth0.jwt.JWT
+import com.auth0.jwt.algorithms.Algorithm
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.context.SpringBootTest
@@ -36,6 +39,9 @@ import ru.headh.kosti.userservice.repository.UserRepository
     initializers = [PostgresTestContainer.Initializer::class]
 )
 class UserServiceTest {
+    @Value("\${jwt.secret}")
+    private lateinit var secret: String
+
     @Autowired
     lateinit var userService: UserService
 
@@ -43,15 +49,18 @@ class UserServiceTest {
     lateinit var userRepository: UserRepository
 
     @Autowired
+    lateinit var tokenService: TokenService
+
+    @Autowired
     lateinit var bcryptEncoder: PasswordEncoder
+
+    @BeforeEach
+    fun clearDB() {
+        userRepository.deleteAll()
+    }
 
     @Nested
     inner class RegisterUserTest {
-        @BeforeEach
-        fun clearDB() {
-            userRepository.deleteAll()
-        }
-
         @Test
         fun postgresRun() {
             assertThat(postgresqlContainer.isRunning).isTrue()
@@ -59,14 +68,15 @@ class UserServiceTest {
 
         @Test
         fun success() {
-            UserRegisterRequest(
+            val token = UserRegisterRequest(
                 name = "name",
                 username = "username",
                 password = "password",
                 confirmPassword = "password"
-            ).also { userService.register(it) }
+            ).let { userService.register(it) }
+            val id = tokenService.getUserId(token.accessToken)
             val expected = UserEntity(
-                id = 1,
+                id = id,
                 name = "name",
                 username = "username",
                 password = bcryptEncoder.encode("password")
@@ -96,6 +106,27 @@ class UserServiceTest {
                 ).also { userService.register(it) }
             }
         }
+    }
+
+    @Nested
+    inner class AuthUserTest {
+        @Test
+        fun success() {
+            val expectedId = UserEntity(
+                name = "name",
+                username = "username",
+                password = bcryptEncoder.encode("password")
+            ).let { userRepository.save(it) }.id
+
+            val actualId = UserAuthRequest(
+                username = "username",
+                password = "password"
+            ).let {
+                val access = userService.auth(it).accessToken
+                tokenService.getUserId(access)
+            }
+            assertEquals(expectedId, actualId)
+        }
 
         @Test
         fun `user not found`() {
@@ -104,4 +135,10 @@ class UserServiceTest {
             }
         }
     }
+
+    private fun TokenService.getUserId(token: String): Int =
+        JWT.require(Algorithm.HMAC256(secret))
+            .build()
+            .verify(token)
+            .getClaim("id").asInt()
 }
