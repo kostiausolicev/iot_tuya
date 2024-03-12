@@ -5,4 +5,6 @@ import org.springframework.stereotype.Repository
 import ru.headh.kosti.homeservice.entity.RoomEntity
 
 @Repository
-interface RoomRepository : JpaRepository<RoomEntity, Int>
+interface RoomRepository : JpaRepository<RoomEntity, Int> {
+    fun findAllByHomeId(homeId: Int): List<RoomEntity>
+}

@@ -58,4 +58,8 @@ class RoomService(
             name = name ?: this.name,
             home = home
         )
+
+    fun getRooms(homeId: Int): List<RoomDto> =
+        roomRepository.findAllByHomeId(homeId)
+            .map { it.toDto() }
 }

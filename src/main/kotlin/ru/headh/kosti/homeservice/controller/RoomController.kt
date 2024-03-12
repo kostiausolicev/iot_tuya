@@ -23,4 +23,8 @@ class RoomController(val roomService: RoomService) {
     @DeleteMapping("/{roomId}")
     fun deleteRoom(@PathVariable roomId: Int, @RequestParam ownerId: Int) =
         roomService.delete(roomId, ownerId)
+
+    @GetMapping("/rooms/{homeId}")
+    fun getRooms(@PathVariable homeId: Int) =
+        roomService.getRooms(homeId)
 }
