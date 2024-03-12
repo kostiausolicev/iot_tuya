@@ -8,22 +8,24 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow
 import org.telegram.telegrambots.meta.api.objects.webapp.WebAppInfo
 import ru.headh.kosti.telegrambot.client.HomeServiceClient
+import ru.headh.kosti.telegrambot.client.RoomServiceClient
 import ru.headh.kosti.telegrambot.repository.RedisRepository
 
 @Component
-class CreateDeviceKeyboard(
+class ChangeDeviceRoomKeyboard(
     @Value("\${telegram-bot.web-app.url}")
     private val webAppUrl: String,
-    private val homeServiceClient: HomeServiceClient,
+    private val roomClient: RoomServiceClient,
     private val redisRepository: RedisRepository,
 ) {
     private final fun createDevice(telegramId: String) = KeyboardButton()
         .also { kb ->
             val token = redisRepository.findByIdOrNull(telegramId)!!.accessToken
-            val homes = homeServiceClient.getHomeList("Bearer $token").map {
-                "\"${it.id}:${it.name}\""
-            }.let {java.net.URLEncoder.encode(it.toString(), "UTF-8")}
-            val url = "$webAppUrl/?formType=create&obj=device&homes=${homes}"
+//            val rooms = roomClient.getRoomsList("Bearer $token", homeId).map {
+//                "\"${it.id}:${it.name}\""
+//            }.let {java.net.URLEncoder.encode(it.toString(), "UTF-8")}
+            val rooms = emptyList<String>()
+            val url = "$webAppUrl/?formType=update&obj=device_room&rooms=${rooms}"
             kb.text = "Новое устройство"
             kb.webApp = WebAppInfo(url)
         }

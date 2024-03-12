@@ -10,7 +10,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
-import ru.headh.kosti.apigateway.client.model.TokenRefreshRequestGen
+import ru.headh.kosti.apigateway.client.model.TokenRefreshRequestGenGen
 import ru.headh.kosti.telegrambot.client.UserServiceClient
 import ru.headh.kosti.telegrambot.dto.ActionData
 import ru.headh.kosti.telegrambot.entity.UserToken
@@ -18,7 +18,6 @@ import ru.headh.kosti.telegrambot.keyboard.outline.AuthKeyboard
 import ru.headh.kosti.telegrambot.repository.RedisRepository
 import ru.headh.kosti.telegrambot.sender.TelegramSender
 import ru.headh.kosti.telegrambot.util.MAIN_MENU
-import java.lang.NullPointerException
 
 @Aspect
 @Component
@@ -73,7 +72,7 @@ class ErrorHandlerAdvice(
                 "401" -> try {
                     val tokens = redisRepository.findByIdOrNull(data.chatId)
                         ?: throw Exception()
-                    userServiceClient.refresh(TokenRefreshRequestGen(tokens.refreshToken))
+                    userServiceClient.refresh(TokenRefreshRequestGenGen(tokens.refreshToken))
                         .let { UserToken(data.chatId, it.accessToken, it.refreshToken) }
                         .let { redisRepository.save(it) }
                     pjp.proceed()

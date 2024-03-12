@@ -230,7 +230,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/SuccessAuthDto'
+                type: object
   /users/refresh:
     post:
       tags:
@@ -240,7 +240,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TokenRefreshRequest'
+              $ref: '#/components/schemas/TokenRefreshRequestGen'
         required: true
       responses:
         "200":
@@ -248,7 +248,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/SuccessAuthDto'
+                $ref: '#/components/schemas/SuccessAuthDtoGen'
   /users/auth:
     post:
       tags:
@@ -266,7 +266,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/SuccessAuthDto'
+                type: object
   /rooms:
     post:
       tags:
@@ -390,6 +390,27 @@ paths:
       responses:
         "200":
           description: OK
+  /rooms/rooms/{homeId}:
+    get:
+      tags:
+      - room-controller
+      operationId: getRooms
+      parameters:
+      - name: homeId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoomDtoGen'
   /homes/:
     get:
       tags:
@@ -460,7 +481,6 @@ components:
       required:
       - id
       - name
-      - ownerId
       type: object
       properties:
         id:
@@ -468,9 +488,6 @@ components:
           format: int32
         name:
           type: string
-        ownerId:
-          type: integer
-          format: int32
         address:
           type: string
         rooms:
@@ -540,7 +557,14 @@ components:
           type: string
         confirmPassword:
           type: string
-    SuccessAuthDto:
+    TokenRefreshRequestGen:
+      required:
+      - refreshToken
+      type: object
+      properties:
+        refreshToken:
+          type: string
+    SuccessAuthDtoGen:
       required:
       - accessToken
       - refreshToken
@@ -554,13 +578,6 @@ components:
         ttl:
           type: integer
           format: int64
-    TokenRefreshRequest:
-      required:
-      - refreshToken
-      type: object
-      properties:
-        refreshToken:
-          type: string
     UserAuthRequestGen:
       required:
       - password
@@ -600,7 +617,6 @@ components:
       required:
       - id
       - name
-      - ownerId
       type: object
       properties:
         id:
@@ -608,9 +624,6 @@ components:
           format: int32
         name:
           type: string
-        ownerId:
-          type: integer
-          format: int32
         address:
           type: string
     SimpleDeviceDtoGen:
