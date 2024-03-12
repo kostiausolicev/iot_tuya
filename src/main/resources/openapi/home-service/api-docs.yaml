@@ -208,6 +208,52 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/HomeDto'
+  /api/rooms/rooms/{homeId}:
+    get:
+      tags:
+      - room-controller
+      operationId: getRooms
+      parameters:
+      - name: homeId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoomDto'
+  /api/homes/check/{homeId}:
+    get:
+      tags:
+      - home-controller
+      operationId: checkOwner
+      parameters:
+      - name: homeId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: ownerId
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: boolean
 components:
   schemas:
     RoomRequest:
@@ -244,7 +290,6 @@ components:
       required:
       - id
       - name
-      - ownerId
       type: object
       properties:
         id:
@@ -254,9 +299,6 @@ components:
           type: string
         address:
           type: string
-        ownerId:
-          type: integer
-          format: int32
         rooms:
           type: array
           items:
@@ -265,7 +307,6 @@ components:
       required:
       - id
       - name
-      - ownerId
       type: object
       properties:
         id:
@@ -275,6 +316,3 @@ components:
           type: string
         address:
           type: string
-        ownerId:
-          type: integer
-          format: int32

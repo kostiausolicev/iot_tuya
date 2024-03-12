@@ -19,4 +19,7 @@ class RoomService(
 
     fun delete(roomId: Int) =
         roomClient.deleteRoom(roomId, currentUser.userId)
+
+    fun getRooms(homeId: Int) =
+        roomClient.getRooms(homeId)
 }
