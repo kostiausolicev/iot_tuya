@@ -30,6 +30,6 @@ class RoomController(
         roomService.delete(roomId)
 
     @GetMapping("/rooms/{homeId}")
-    fun getRooms(@PathVariable homeId: Int) =
+    fun getRooms(@RequestHeader("Authorization") token: String, @PathVariable homeId: Int) =
         roomService.getRooms(homeId)
 }

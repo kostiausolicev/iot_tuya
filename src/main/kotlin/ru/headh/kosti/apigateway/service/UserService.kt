@@ -13,12 +13,12 @@ import ru.headh.kosti.apigateway.dto.UserOnRequest
 class UserService(
     private val tokenClient: TokenClient,
     private val userServiceClient: UserServiceClient,
-    private val currentUser: UserOnRequest
+    private val currentUser: UserOnRequest,
 ) {
-    fun register(registerRequest: UserRegisterRequestGen): Any =
+    fun register(registerRequest: UserRegisterRequestGen): SuccessAuthDtoGen =
         userServiceClient.register(registerRequest)
 
-    fun auth(authRequest: UserAuthRequestGen): Any =
+    fun auth(authRequest: UserAuthRequestGen): SuccessAuthDtoGen =
         userServiceClient.auth(authRequest)
 
     fun delete() =
