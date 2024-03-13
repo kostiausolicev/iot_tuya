@@ -13,9 +13,9 @@ class ChangeDeviceStateKeyboard(
     private val webAppUrl: String,
 ) {
     private final fun changeDeviceButton(id: Int) = KeyboardButton()
-        .also {
-            it.text = "Изменить состояние"
-            it.webApp = WebAppInfo("$webAppUrl/?formType=send_command&id=$id")
+        .apply {
+            text = "Изменить состояние"
+            webApp = WebAppInfo("$webAppUrl/?formType=send_command&id=$id")
         }
     final fun buttons(id: Int) = listOf(KeyboardRow(listOf(changeDeviceButton(id))))
 

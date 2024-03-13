@@ -8,39 +8,39 @@ import ru.headh.kosti.telegrambot.util.*
 @Component
 class DeviceActionKeyboard {
     private final fun buttonRename(device: Int) = InlineKeyboardButton()
-        .also {
-            it.text = "Переименовать"
-            it.callbackData = "$RENAME_DEVICE:${device}"
+        .apply {
+            text = "Переименовать"
+            callbackData = "$RENAME_DEVICE:${device}"
         }
 
     private final fun buttonNewHome(device: Int) = InlineKeyboardButton()
-        .also {
-            it.text = "Поменять дом"
-            it.callbackData = "$CHANGE_DEVICE_HOME:${device}"
+        .apply {
+            text = "Поменять дом"
+            callbackData = "$CHANGE_DEVICE_HOME:${device}"
         }
 
     private final fun buttonNewRoom(device: Int) = InlineKeyboardButton()
-        .also {
-            it.text = "Поменять комнату"
-            it.callbackData = "$CHANGE_DEVICE_ROOM:${device}"
+        .apply {
+            text = "Поменять комнату"
+            callbackData = "$CHANGE_DEVICE_ROOM:${device}"
         }
 
     private final fun buttonBack() = InlineKeyboardButton()
-        .also {
-            it.text = "Назад"
-            it.callbackData = GET_DEVICE_LIST
+        .apply {
+            text = "Назад"
+            callbackData = GET_DEVICE_LIST
         }
 
     private final fun buttonDelete(device: Int) = InlineKeyboardButton()
-        .also {
-            it.text = "Удалить"
-            it.callbackData = "$DELETE_DEVICE:${device}"
+        .apply {
+            text = "Удалить"
+            callbackData = "$DELETE_DEVICE:${device}"
         }
 
     private final fun buttonNewState(device: Int) = InlineKeyboardButton()
-        .also {
-            it.text = "Изменить состояние"
-            it.callbackData = "$CHANGE_DEVICE_STATE:${device}"
+        .apply {
+            text = "Изменить состояние"
+            callbackData = "$CHANGE_DEVICE_STATE:${device}"
         }
 
     private fun buttons(home: Int) =

@@ -11,19 +11,19 @@ import ru.headh.kosti.telegrambot.util.SIGN_OUT
 @Component
 class ProfileKeyboard {
     private final val buttonDeleteUser = InlineKeyboardButton()
-        .also {
-            it.text = "Удалить аккаунт"
-            it.callbackData = DELETE_USER
+        .apply {
+            text = "Удалить аккаунт"
+            callbackData = DELETE_USER
         }
     private final val buttonBack = InlineKeyboardButton()
-        .also {
-            it.text = "Назад"
-            it.callbackData = MAIN_MENU
+        .apply {
+            text = "Назад"
+            callbackData = MAIN_MENU
         }
     private final val buttonSignOut = InlineKeyboardButton()
-        .also {
-            it.text = "Выйти из аккаунта"
-            it.callbackData = SIGN_OUT
+        .apply {
+            text = "Выйти из аккаунта"
+            callbackData = SIGN_OUT
         }
     private val buttons = listOf(listOf(buttonDeleteUser, buttonSignOut), listOf(buttonBack))
     val keyboard = InlineKeyboardMarkup(buttons)

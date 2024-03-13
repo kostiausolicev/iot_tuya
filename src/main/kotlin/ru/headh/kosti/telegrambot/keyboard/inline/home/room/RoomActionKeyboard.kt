@@ -9,20 +9,20 @@ import ru.headh.kosti.telegrambot.util.UPDATE_ROOM
 @Component
 class RoomActionKeyboard {
     private final fun buttonCreate(room: Int) = InlineKeyboardButton()
-        .also {
-            it.text = "Изменить"
-            it.callbackData = "$UPDATE_ROOM:${room}"
+        .apply {
+            text = "Изменить"
+            callbackData = "$UPDATE_ROOM:${room}"
         }
 
     private final fun buttonBack(room: Int) = InlineKeyboardButton()
-        .also {
-            it.text = "Назад"
-            it.callbackData = GET_ROOM_LIST
+        .apply {
+            text = "Назад"
+            callbackData = GET_ROOM_LIST
         }
 
     private final fun buttonDelete(room: Int) = InlineKeyboardButton()
-        .also {
-            it.text = "Удалить"
-            it.callbackData = "$DELETE_HOME:${room}"
+        .apply {
+            text = "Удалить"
+            callbackData = "$DELETE_HOME:${room}"
         }
 }

@@ -13,9 +13,9 @@ class CreateRoomKeyboard(
     private val webAppUrl: String,
 ) {
     private final val createRoom = KeyboardButton()
-        .also {
-            it.text = "Новая комната"
-            it.webApp = WebAppInfo("$webAppUrl/?formType=create&obj=room")
+        .apply {
+            text = "Новая комната"
+            webApp = WebAppInfo("$webAppUrl/?formType=create&obj=room")
         }
     final val buttons = listOf(KeyboardRow(listOf(createRoom)))
 

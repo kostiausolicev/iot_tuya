@@ -8,19 +8,19 @@ import ru.headh.kosti.telegrambot.util.*
 @Component
 class MainMenuKeyboard {
     private final val buttonHome = InlineKeyboardButton()
-        .also {
-            it.text = "Дома"
-            it.callbackData = HOME_MENU
+        .apply {
+            text = "Дома"
+            callbackData = HOME_MENU
         }
     private final val buttonDevice = InlineKeyboardButton()
-        .also {
-            it.text = "Устройства"
-            it.callbackData = DEVICE_MENU
+        .apply {
+            text = "Устройства"
+            callbackData = DEVICE_MENU
         }
     private final val buttonProfile = InlineKeyboardButton()
-        .also {
-            it.text = "Мой аккаунт"
-            it.callbackData = PROFILE
+        .apply {
+            text = "Мой аккаунт"
+            callbackData = PROFILE
         }
     val keyboard = InlineKeyboardMarkup(
         listOf(

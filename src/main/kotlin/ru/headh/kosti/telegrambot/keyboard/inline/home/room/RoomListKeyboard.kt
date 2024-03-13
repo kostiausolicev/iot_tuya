@@ -11,9 +11,9 @@ import ru.headh.kosti.telegrambot.util.GET_ROOM
 @Component
 class RoomListKeyboard {
     private final fun buttonBack(homeId: Int) = InlineKeyboardButton()
-        .also {
-            it.text = "Назад"
-            it.callbackData = "$GET_HOME:$homeId"
+        .apply {
+            text = "Назад"
+            callbackData = "$GET_HOME:$homeId"
         }
 
     private final fun rooms(homesRoom: List<RoomDtoGenGen>): List<InlineKeyboardButton> =

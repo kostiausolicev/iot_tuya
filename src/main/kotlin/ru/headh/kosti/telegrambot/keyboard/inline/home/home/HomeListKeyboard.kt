@@ -6,13 +6,20 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import ru.headh.kosti.apigateway.client.model.HomeSimpleDtoGenGen
 import ru.headh.kosti.telegrambot.util.GET_HOME
 import ru.headh.kosti.telegrambot.util.HOME_MENU
+import ru.headh.kosti.telegrambot.util.SET_DEVICE_HOME
 
 @Component
 class HomeListKeyboard {
+    private final val buttonHome = InlineKeyboardButton()
+        .apply {
+            text = "Назад"
+            callbackData = HOME_MENU
+        }
+
     private final val buttonBack = InlineKeyboardButton()
-        .also {
-            it.text = "Назад"
-            it.callbackData = HOME_MENU
+        .apply {
+            text = "Назад"
+            callbackData = HOME_MENU
         }
 
     private final fun homes(userHomes: List<HomeSimpleDtoGenGen>): List<InlineKeyboardButton> =
@@ -23,8 +30,25 @@ class HomeListKeyboard {
                 .build()
         }
 
+    private final fun homesForDevice(userHomes: List<HomeSimpleDtoGenGen>): List<InlineKeyboardButton> =
+        userHomes.map {
+            InlineKeyboardButton.builder()
+                .text(it.name)
+                .callbackData("$SET_DEVICE_HOME:${it.id}")
+                .build()
+        }
+
     fun keyboard(userHomes: List<HomeSimpleDtoGenGen>): InlineKeyboardMarkup {
-        val buttons = mutableListOf(listOf(buttonBack))
+        val buttons = mutableListOf(listOf(this.buttonHome))
+        homes(userHomes).map {
+            buttons.add(listOf(it))
+            it
+        }
+        return InlineKeyboardMarkup(buttons)
+    }
+
+    fun keyboardForDevice(userHomes: List<HomeSimpleDtoGenGen>): InlineKeyboardMarkup {
+        val buttons = mutableListOf(listOf(this.buttonBack))
         homes(userHomes).map {
             buttons.add(listOf(it))
             it
