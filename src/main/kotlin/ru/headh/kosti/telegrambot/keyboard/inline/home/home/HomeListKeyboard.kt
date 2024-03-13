@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
 import ru.headh.kosti.apigateway.client.model.HomeSimpleDtoGenGen
+import ru.headh.kosti.telegrambot.util.DEVICE_MENU
 import ru.headh.kosti.telegrambot.util.GET_HOME
 import ru.headh.kosti.telegrambot.util.HOME_MENU
 import ru.headh.kosti.telegrambot.util.SET_DEVICE_HOME
@@ -19,7 +20,7 @@ class HomeListKeyboard {
     private final val buttonBack = InlineKeyboardButton()
         .apply {
             text = "Назад"
-            callbackData = HOME_MENU
+            callbackData = DEVICE_MENU
         }
 
     private final fun homes(userHomes: List<HomeSimpleDtoGenGen>): List<InlineKeyboardButton> =
@@ -49,7 +50,7 @@ class HomeListKeyboard {
 
     fun keyboardForDevice(userHomes: List<HomeSimpleDtoGenGen>): InlineKeyboardMarkup {
         val buttons = mutableListOf(listOf(this.buttonBack))
-        homes(userHomes).map {
+        homesForDevice(userHomes).map {
             buttons.add(listOf(it))
             it
         }
