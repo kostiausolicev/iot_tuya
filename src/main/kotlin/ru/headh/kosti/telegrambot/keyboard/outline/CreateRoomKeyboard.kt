@@ -12,15 +12,15 @@ class CreateRoomKeyboard(
     @Value("\${telegram-bot.web-app.url}")
     private val webAppUrl: String,
 ) {
-    private final val createRoom = KeyboardButton()
+    private final fun createRoom(id: Int) = KeyboardButton()
         .apply {
             text = "Новая комната"
-            webApp = WebAppInfo("$webAppUrl/?formType=create&obj=room")
+            webApp = WebAppInfo("$webAppUrl/?formType=create&obj=room&id=$id")
         }
-    final val buttons = listOf(KeyboardRow(listOf(createRoom)))
+    final fun buttons(id: Int) = listOf(KeyboardRow(listOf(createRoom(id))))
 
-    val keyboard: ReplyKeyboardMarkup = ReplyKeyboardMarkup.builder()
-        .keyboard(buttons)
+    fun keyboard(id: Int): ReplyKeyboardMarkup = ReplyKeyboardMarkup.builder()
+        .keyboard(buttons(id))
         .resizeKeyboard(true)
         .oneTimeKeyboard(true)
         .build()

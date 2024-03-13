@@ -19,6 +19,7 @@ class CreateRoomHandler(
 
     @CheckAndUpdateToken
     override fun handle(data: CreateRoomActionData) {
+        val homeId = data.message.split(":")[1].toIntOrNull() ?: -1
         telegramSender.deleteMessage(
             chatId = data.chatId,
             messageId = data.messageId
@@ -26,7 +27,7 @@ class CreateRoomHandler(
         telegramSender.sendMessage(
             chatId = data.chatId,
             text = "Нажмите на кнопку для создания комнаты",
-            replyMarkup = createRoomKeyboard.keyboard
+            replyMarkup = createRoomKeyboard.keyboard(homeId)
         )
     }
 }

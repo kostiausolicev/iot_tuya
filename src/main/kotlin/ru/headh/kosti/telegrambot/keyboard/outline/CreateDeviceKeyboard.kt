@@ -14,16 +14,10 @@ import ru.headh.kosti.telegrambot.repository.TokenRepository
 class CreateDeviceKeyboard(
     @Value("\${telegram-bot.web-app.url}")
     private val webAppUrl: String,
-    private val homeServiceClient: HomeServiceClient,
-    private val tokenRepository: TokenRepository,
 ) {
     private final fun createDevice(telegramId: String) = KeyboardButton()
         .also { kb ->
-            val token = tokenRepository.findByIdOrNull(telegramId)!!.accessToken
-            val homes = homeServiceClient.getHomeList("Bearer $token").map {
-                "\"${it.id}:${it.name}\""
-            }.let {java.net.URLEncoder.encode(it.toString(), "UTF-8")}
-            val url = "$webAppUrl/?formType=create&obj=device&homes=${homes}"
+            val url = "$webAppUrl/?formType=create&obj=device"
             kb.text = "Новое устройство"
             kb.webApp = WebAppInfo(url)
         }

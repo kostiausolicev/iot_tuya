@@ -46,7 +46,7 @@ class WasCreatedRoomHandler(
         ).also { telegramSender.deleteMessage(chatId = data.chatId, messageId = it.messageId) }
         telegramSender.sendMessage(
             chatId = data.chatId,
-            text = "Вы создали новый дом!",
+            text = "Вы создали новую комнату!",
             inlineReplyMarkup = InlineKeyboardMarkup(
                 listOf(
                     listOf(
