@@ -7,10 +7,9 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import ru.headh.kosti.telegrambot.aspect.CheckAndUpdateToken
 import ru.headh.kosti.telegrambot.client.DeviceServiceClient
 import ru.headh.kosti.telegrambot.dto.device.DeleteDeviceActionData
-import ru.headh.kosti.telegrambot.dto.home.home.DeleteHomeActionData
 import ru.headh.kosti.telegrambot.enumeration.ActionType
 import ru.headh.kosti.telegrambot.handler.ActionHandler
-import ru.headh.kosti.telegrambot.repository.RedisRepository
+import ru.headh.kosti.telegrambot.repository.TokenRepository
 import ru.headh.kosti.telegrambot.sender.TelegramSender
 import ru.headh.kosti.telegrambot.util.GET_DEVICE_LIST
 
@@ -18,14 +17,14 @@ import ru.headh.kosti.telegrambot.util.GET_DEVICE_LIST
 class DeleteDeviceHandler(
     private val telegramSender: TelegramSender,
     private val deviceServiceClient: DeviceServiceClient,
-    private val redisRepository: RedisRepository
+    private val tokenRepository: TokenRepository
 ) : ActionHandler<DeleteDeviceActionData> {
     override val type: ActionType = ActionType.DELETE_DEVICE
 
     @CheckAndUpdateToken
     override fun handle(data: DeleteDeviceActionData) {
         val deviceId = data.message.split(":")[1].toInt()
-        redisRepository.findByIdOrNull(data.chatId)
+        tokenRepository.findByIdOrNull(data.chatId)
             ?.let { deviceServiceClient.delete1("Bearer ${it.accessToken}", deviceId) }
         telegramSender.editMessage(
             chatId = data.chatId,

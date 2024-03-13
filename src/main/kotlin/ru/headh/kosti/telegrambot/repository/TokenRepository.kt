@@ -5,5 +5,4 @@ import org.springframework.stereotype.Repository
 import ru.headh.kosti.telegrambot.entity.UserToken
 
 @Repository
-interface RedisRepository: CrudRepository<UserToken, String> {
-}
+interface TokenRepository: CrudRepository<UserToken, String>

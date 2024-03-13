@@ -9,13 +9,13 @@ import ru.headh.kosti.telegrambot.dto.device.GetDeviceActionData
 import ru.headh.kosti.telegrambot.enumeration.ActionType
 import ru.headh.kosti.telegrambot.handler.ActionHandler
 import ru.headh.kosti.telegrambot.keyboard.inline.device.DeviceActionKeyboard
-import ru.headh.kosti.telegrambot.repository.RedisRepository
+import ru.headh.kosti.telegrambot.repository.TokenRepository
 import ru.headh.kosti.telegrambot.sender.TelegramSender
 import ru.headh.kosti.telegrambot.util.commandDict
 
 @Component
 class GetDeviceHandler(
-    private val redisRepository: RedisRepository,
+    private val tokenRepository: TokenRepository,
     private val deviceServiceClient: DeviceServiceClient,
     private val keyboard: DeviceActionKeyboard,
     private val homeServiceClient: HomeServiceClient,
@@ -26,7 +26,7 @@ class GetDeviceHandler(
     @CheckAndUpdateToken
     override fun handle(data: GetDeviceActionData) {
         val deviceId = data.message.split(":")[1].toInt()
-        val token = redisRepository.findByIdOrNull(data.chatId)?.accessToken ?: "empty"
+        val token = tokenRepository.findByIdOrNull(data.chatId)?.accessToken ?: "empty"
         val device = deviceServiceClient.getInfo("Bearer $token", deviceId)
         val capabilitiesList = device.capabilities
             ?.map { "${commandDict[it.code]}: " +

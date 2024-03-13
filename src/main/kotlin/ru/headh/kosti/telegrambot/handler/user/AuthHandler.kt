@@ -13,14 +13,14 @@ import ru.headh.kosti.telegrambot.entity.UserToken
 import ru.headh.kosti.telegrambot.enumeration.ActionType
 import ru.headh.kosti.telegrambot.handler.ActionHandler
 import ru.headh.kosti.telegrambot.keyboard.inline.MainMenuKeyboard
-import ru.headh.kosti.telegrambot.repository.RedisRepository
+import ru.headh.kosti.telegrambot.repository.TokenRepository
 import ru.headh.kosti.telegrambot.sender.TelegramSender
 
 @Component
 class AuthHandler(
     private val mainMenuKeyboard: MainMenuKeyboard,
     private val userClient: UserServiceClient,
-    private val redisRepository: RedisRepository,
+    private val tokenRepository: TokenRepository,
     private val telegramSender: TelegramSender
 ) : ActionHandler<AuthActionData> {
     private val mapper = jacksonObjectMapper()
@@ -31,7 +31,7 @@ class AuthHandler(
         val authData: UserAuthRequestGenGen = mapper.readValue(data.message)
         val token = userClient.auth(authData) as SuccessAuthDtoGen
 
-        redisRepository.save(UserToken(data.chatId, token.accessToken, token.refreshToken))
+        tokenRepository.save(UserToken(data.chatId, token.accessToken, token.refreshToken))
 
         telegramSender.sendMessage(
             data.chatId,

@@ -13,7 +13,7 @@ import ru.headh.kosti.telegrambot.client.HomeServiceClient
 import ru.headh.kosti.telegrambot.dto.home.home.WasCreatedHomeActionData
 import ru.headh.kosti.telegrambot.enumeration.ActionType
 import ru.headh.kosti.telegrambot.handler.ActionHandler
-import ru.headh.kosti.telegrambot.repository.RedisRepository
+import ru.headh.kosti.telegrambot.repository.TokenRepository
 import ru.headh.kosti.telegrambot.sender.TelegramSender
 import ru.headh.kosti.telegrambot.util.MAIN_MENU
 
@@ -21,7 +21,7 @@ import ru.headh.kosti.telegrambot.util.MAIN_MENU
 class WasCreatedHomeHandler(
     private val telegramSender: TelegramSender,
     private val homeServiceClient: HomeServiceClient,
-    private val redisRepository: RedisRepository
+    private val tokenRepository: TokenRepository
 ) : ActionHandler<WasCreatedHomeActionData> {
     override val type: ActionType = ActionType.WAS_CREATED_HOME
 
@@ -30,7 +30,7 @@ class WasCreatedHomeHandler(
     @CheckAndUpdateToken
     override fun handle(data: WasCreatedHomeActionData) {
         val home: Map<String, Any> = mapper.readValue(data.message)
-        val tokens = redisRepository.findByIdOrNull(data.chatId)!!
+        val tokens = tokenRepository.findByIdOrNull(data.chatId)!!
         homeServiceClient.createHome("Bearer ${tokens.accessToken}", home.let {
             HomeRequestGenGen(
                 name = it["name"].toString(),

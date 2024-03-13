@@ -13,7 +13,7 @@ import ru.headh.kosti.telegrambot.aspect.CheckAndUpdateToken
 import ru.headh.kosti.telegrambot.client.DeviceServiceClient
 import ru.headh.kosti.telegrambot.enumeration.ActionType
 import ru.headh.kosti.telegrambot.handler.ActionHandler
-import ru.headh.kosti.telegrambot.repository.RedisRepository
+import ru.headh.kosti.telegrambot.repository.TokenRepository
 import ru.headh.kosti.telegrambot.sender.TelegramSender
 import ru.headh.kosti.telegrambot.util.MAIN_MENU
 import ru.headh.kosti.apigateway.client.model.DeviceDtoCapabilitiesInnerGenGen.Code.*
@@ -23,7 +23,7 @@ import ru.headh.kosti.telegrambot.dto.device.WasChangedDeviceStateActionData
 class WasChangedDeviceStateHandler(
     private val telegramSender: TelegramSender,
     private val deviceServiceClient: DeviceServiceClient,
-    private val redisRepository: RedisRepository
+    private val tokenRepository: TokenRepository
 ) : ActionHandler<WasChangedDeviceStateActionData> {
     override val type: ActionType = ActionType.WAS_CHANGED_DEVICE_STATE
 
@@ -34,7 +34,7 @@ class WasChangedDeviceStateHandler(
         val raw: Map<String, Any> = mapper.readValue(data.message)
         val deviceId = raw["deviceId"].toString().toInt()
         val commands: List<Map<String, Any>> = raw["commands"] as List<Map<String, Any>>
-        val tokens = redisRepository.findByIdOrNull(data.chatId)!!
+        val tokens = tokenRepository.findByIdOrNull(data.chatId)!!
         deviceServiceClient.sendCommand(
             authorization = "Bearer ${tokens.accessToken}",
             deviceId = deviceId,

@@ -13,7 +13,7 @@ import ru.headh.kosti.telegrambot.client.RoomServiceClient
 import ru.headh.kosti.telegrambot.dto.home.room.WasCreatedRoomActionData
 import ru.headh.kosti.telegrambot.enumeration.ActionType
 import ru.headh.kosti.telegrambot.handler.ActionHandler
-import ru.headh.kosti.telegrambot.repository.RedisRepository
+import ru.headh.kosti.telegrambot.repository.TokenRepository
 import ru.headh.kosti.telegrambot.sender.TelegramSender
 import ru.headh.kosti.telegrambot.util.MAIN_MENU
 
@@ -21,7 +21,7 @@ import ru.headh.kosti.telegrambot.util.MAIN_MENU
 class WasCreatedRoomHandler(
     private val telegramSender: TelegramSender,
     private val roomServiceClient: RoomServiceClient,
-    private val redisRepository: RedisRepository
+    private val tokenRepository: TokenRepository
 ) : ActionHandler<WasCreatedRoomActionData> {
     override val type: ActionType = ActionType.WAS_CREATED_ROOM
 
@@ -30,7 +30,7 @@ class WasCreatedRoomHandler(
     @CheckAndUpdateToken
     override fun handle(data: WasCreatedRoomActionData) {
         val room: Map<String, Any> = mapper.readValue(data.message)
-        val tokens = redisRepository.findByIdOrNull(data.chatId)!!
+        val tokens = tokenRepository.findByIdOrNull(data.chatId)!!
         roomServiceClient.createRoom(
             authorization = "Bearer ${tokens.accessToken}",
             homeId = room["home_id"].toString().toInt(),

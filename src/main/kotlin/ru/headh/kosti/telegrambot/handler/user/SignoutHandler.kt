@@ -8,22 +8,22 @@ import ru.headh.kosti.telegrambot.dto.user.SignoutActionData
 import ru.headh.kosti.telegrambot.enumeration.ActionType
 import ru.headh.kosti.telegrambot.handler.ActionHandler
 import ru.headh.kosti.telegrambot.keyboard.outline.AuthKeyboard
-import ru.headh.kosti.telegrambot.repository.RedisRepository
+import ru.headh.kosti.telegrambot.repository.TokenRepository
 import ru.headh.kosti.telegrambot.sender.TelegramSender
 
 @Component
 class SignoutHandler(
     private val telegramSender: TelegramSender,
     private val userServiceClient: UserServiceClient,
-    private val redisRepository: RedisRepository,
+    private val tokenRepository: TokenRepository,
     private val authKeyboard: AuthKeyboard
 ) : ActionHandler<SignoutActionData> {
     override val type: ActionType = ActionType.SING_OUT
 
     @CheckAndUpdateToken
     override fun handle(data: SignoutActionData) {
-        redisRepository.findByIdOrNull(data.chatId)
-            .also { redisRepository.delete(it!!) }
+        tokenRepository.findByIdOrNull(data.chatId)
+            .also { tokenRepository.delete(it!!) }
             .also { userServiceClient.signout("Bearer ${it!!.accessToken}") }
 
 

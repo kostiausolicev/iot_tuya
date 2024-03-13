@@ -15,7 +15,7 @@ import ru.headh.kosti.telegrambot.client.UserServiceClient
 import ru.headh.kosti.telegrambot.dto.ActionData
 import ru.headh.kosti.telegrambot.entity.UserToken
 import ru.headh.kosti.telegrambot.keyboard.outline.AuthKeyboard
-import ru.headh.kosti.telegrambot.repository.RedisRepository
+import ru.headh.kosti.telegrambot.repository.TokenRepository
 import ru.headh.kosti.telegrambot.sender.TelegramSender
 import ru.headh.kosti.telegrambot.util.MAIN_MENU
 
@@ -24,7 +24,7 @@ import ru.headh.kosti.telegrambot.util.MAIN_MENU
 class ErrorHandlerAdvice(
     private val telegramSender: TelegramSender,
     private val authKeyboard: AuthKeyboard,
-    private val redisRepository: RedisRepository,
+    private val tokenRepository: TokenRepository,
     private val userServiceClient: UserServiceClient,
 ) {
     private val mapper = jacksonObjectMapper()
@@ -34,8 +34,8 @@ class ErrorHandlerAdvice(
     }
 
     private fun errorHandler(data: ActionData, ex: Exception) {
-        redisRepository.findByIdOrNull(data.chatId)
-            ?.let { redisRepository.delete(it) }
+        tokenRepository.findByIdOrNull(data.chatId)
+            ?.let { tokenRepository.delete(it) }
         println(ex.toString())
         telegramSender.deleteMessage(data.chatId, data.messageId)
         telegramSender.sendMessage(
@@ -70,11 +70,11 @@ class ErrorHandlerAdvice(
                 ?: "500"
             when (code) {
                 "401" -> try {
-                    val tokens = redisRepository.findByIdOrNull(data.chatId)
+                    val tokens = tokenRepository.findByIdOrNull(data.chatId)
                         ?: throw Exception()
                     userServiceClient.refresh(TokenRefreshRequestGenGen(tokens.refreshToken))
                         .let { UserToken(data.chatId, it.accessToken, it.refreshToken) }
-                        .let { redisRepository.save(it) }
+                        .let { tokenRepository.save(it) }
                     pjp.proceed()
                 } catch (ex2: Exception) {
                     errorHandler(data, ex2)

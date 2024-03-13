@@ -1,18 +1,16 @@
 package ru.headh.kosti.telegrambot.handler.home.room
 
-import org.springframework.data.repository.findByIdOrNull
 import ru.headh.kosti.telegrambot.aspect.CheckAndUpdateToken
-import ru.headh.kosti.telegrambot.client.HomeServiceClient
 import ru.headh.kosti.telegrambot.client.RoomServiceClient
 import ru.headh.kosti.telegrambot.dto.home.room.GetRoomActionData
 import ru.headh.kosti.telegrambot.enumeration.ActionType
 import ru.headh.kosti.telegrambot.handler.ActionHandler
 import ru.headh.kosti.telegrambot.keyboard.inline.home.room.RoomListKeyboard
-import ru.headh.kosti.telegrambot.repository.RedisRepository
+import ru.headh.kosti.telegrambot.repository.TokenRepository
 import ru.headh.kosti.telegrambot.sender.TelegramSender
 
 class GetRoomHandler(
-    private val redisRepository: RedisRepository,
+    private val tokenRepository: TokenRepository,
     private val roomServiceClient: RoomServiceClient,
     private val keyboard: RoomListKeyboard,
     private val telegramSender: TelegramSender

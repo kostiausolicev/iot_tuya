@@ -13,7 +13,7 @@ import ru.headh.kosti.telegrambot.client.DeviceServiceClient
 import ru.headh.kosti.telegrambot.dto.device.WasCreatedDeviceActionData
 import ru.headh.kosti.telegrambot.enumeration.ActionType
 import ru.headh.kosti.telegrambot.handler.ActionHandler
-import ru.headh.kosti.telegrambot.repository.RedisRepository
+import ru.headh.kosti.telegrambot.repository.TokenRepository
 import ru.headh.kosti.telegrambot.sender.TelegramSender
 import ru.headh.kosti.telegrambot.util.MAIN_MENU
 
@@ -21,7 +21,7 @@ import ru.headh.kosti.telegrambot.util.MAIN_MENU
 class WasCreatedDeviceHandler(
     private val telegramSender: TelegramSender,
     private val deviceServiceClient: DeviceServiceClient,
-    private val redisRepository: RedisRepository
+    private val tokenRepository: TokenRepository
 ) : ActionHandler<WasCreatedDeviceActionData> {
     override val type: ActionType = ActionType.WAS_CREATED_DEVICE
 
@@ -30,7 +30,7 @@ class WasCreatedDeviceHandler(
     @CheckAndUpdateToken
     override fun handle(data: WasCreatedDeviceActionData) {
         val device: Map<String, Any> = mapper.readValue(data.message)
-        val tokens = redisRepository.findByIdOrNull(data.chatId)!!
+        val tokens = tokenRepository.findByIdOrNull(data.chatId)!!
         deviceServiceClient.create("Bearer ${tokens.accessToken}", device.let {
             CreateDeviceRequestGenGen(
                 tuyaId = it["tuya_id"].toString(),

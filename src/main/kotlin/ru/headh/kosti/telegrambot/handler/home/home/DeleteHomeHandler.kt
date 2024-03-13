@@ -9,7 +9,7 @@ import ru.headh.kosti.telegrambot.client.HomeServiceClient
 import ru.headh.kosti.telegrambot.dto.home.home.DeleteHomeActionData
 import ru.headh.kosti.telegrambot.enumeration.ActionType
 import ru.headh.kosti.telegrambot.handler.ActionHandler
-import ru.headh.kosti.telegrambot.repository.RedisRepository
+import ru.headh.kosti.telegrambot.repository.TokenRepository
 import ru.headh.kosti.telegrambot.sender.TelegramSender
 import ru.headh.kosti.telegrambot.util.GET_HOME_LIST
 
@@ -17,14 +17,14 @@ import ru.headh.kosti.telegrambot.util.GET_HOME_LIST
 class DeleteHomeHandler(
     private val telegramSender: TelegramSender,
     private val homeServiceClient: HomeServiceClient,
-    private val redisRepository: RedisRepository
+    private val tokenRepository: TokenRepository
 ) : ActionHandler<DeleteHomeActionData> {
     override val type: ActionType = ActionType.DELETE_HOME
 
     @CheckAndUpdateToken
     override fun handle(data: DeleteHomeActionData) {
         val homeId = data.message.split(":")[1].toInt()
-        redisRepository.findByIdOrNull(data.chatId)
+        tokenRepository.findByIdOrNull(data.chatId)
             ?.let { homeServiceClient.deleteHome("Bearer ${it.accessToken}", homeId) }
         telegramSender.editMessage(
             chatId = data.chatId,

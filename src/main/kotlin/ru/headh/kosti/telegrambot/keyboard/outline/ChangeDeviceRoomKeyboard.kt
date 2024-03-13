@@ -7,20 +7,19 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow
 import org.telegram.telegrambots.meta.api.objects.webapp.WebAppInfo
-import ru.headh.kosti.telegrambot.client.HomeServiceClient
 import ru.headh.kosti.telegrambot.client.RoomServiceClient
-import ru.headh.kosti.telegrambot.repository.RedisRepository
+import ru.headh.kosti.telegrambot.repository.TokenRepository
 
 @Component
 class ChangeDeviceRoomKeyboard(
     @Value("\${telegram-bot.web-app.url}")
     private val webAppUrl: String,
     private val roomClient: RoomServiceClient,
-    private val redisRepository: RedisRepository,
+    private val tokenRepository: TokenRepository,
 ) {
     private final fun createDevice(telegramId: String) = KeyboardButton()
         .also { kb ->
-            val token = redisRepository.findByIdOrNull(telegramId)!!.accessToken
+            val token = tokenRepository.findByIdOrNull(telegramId)!!.accessToken
 //            val rooms = roomClient.getRoomsList("Bearer $token", homeId).map {
 //                "\"${it.id}:${it.name}\""
 //            }.let {java.net.URLEncoder.encode(it.toString(), "UTF-8")}

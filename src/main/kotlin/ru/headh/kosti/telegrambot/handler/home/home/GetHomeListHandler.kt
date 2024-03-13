@@ -8,12 +8,12 @@ import ru.headh.kosti.telegrambot.dto.home.home.GetHomeListActionData
 import ru.headh.kosti.telegrambot.enumeration.ActionType
 import ru.headh.kosti.telegrambot.handler.ActionHandler
 import ru.headh.kosti.telegrambot.keyboard.inline.home.home.HomeListKeyboard
-import ru.headh.kosti.telegrambot.repository.RedisRepository
+import ru.headh.kosti.telegrambot.repository.TokenRepository
 import ru.headh.kosti.telegrambot.sender.TelegramSender
 
 @Component
 class GetHomeListHandler(
-    private val redisRepository: RedisRepository,
+    private val tokenRepository: TokenRepository,
     private val homeServiceClient: HomeServiceClient,
     private val keyboard: HomeListKeyboard,
     private val telegramSender: TelegramSender
@@ -22,7 +22,7 @@ class GetHomeListHandler(
 
     @CheckAndUpdateToken
     override fun handle(data: GetHomeListActionData) {
-        val homes = redisRepository.findByIdOrNull(data.chatId)
+        val homes = tokenRepository.findByIdOrNull(data.chatId)
             ?.let {
                 homeServiceClient.getHomeList("Bearer ${it.accessToken}")
             }
