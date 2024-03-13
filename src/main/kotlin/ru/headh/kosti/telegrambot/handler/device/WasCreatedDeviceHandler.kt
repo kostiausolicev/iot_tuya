@@ -33,6 +33,7 @@ class WasCreatedDeviceHandler(
     override fun handle(data: WasCreatedDeviceActionData) {
         val device: Map<String, Any> = mapper.readValue(data.message)
         val currentDevice = currentDeviceRepository.findByIdOrNull(data.chatId)
+            ?.also { currentDeviceRepository.delete(it)}
         val tokens = tokenRepository.findByIdOrNull(data.chatId)!!
         deviceServiceClient.create("Bearer ${tokens.accessToken}", device.let {
             CreateDeviceRequestGenGen(
