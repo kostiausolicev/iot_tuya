@@ -4,7 +4,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove
-import ru.headh.kosti.apigateway.client.model.SuccessAuthDtoGen
+import ru.headh.kosti.apigateway.client.model.SuccessAuthDtoGenGen
 import ru.headh.kosti.apigateway.client.model.UserAuthRequestGenGen
 import ru.headh.kosti.telegrambot.aspect.AuthAndRegisterPointcut
 import ru.headh.kosti.telegrambot.client.UserServiceClient
@@ -29,7 +29,7 @@ class AuthHandler(
     @AuthAndRegisterPointcut
     override fun handle(data: AuthActionData) {
         val authData: UserAuthRequestGenGen = mapper.readValue(data.message)
-        val token = userClient.auth(authData) as SuccessAuthDtoGen
+        val token = userClient.auth(authData)
 
         tokenRepository.save(UserToken(data.chatId, token.accessToken, token.refreshToken))
 

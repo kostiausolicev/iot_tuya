@@ -230,7 +230,7 @@ paths:
           content:
             '*/*':
               schema:
-                type: object
+                $ref: '#/components/schemas/SuccessAuthDtoGen'
   /users/refresh:
     post:
       tags:
@@ -266,7 +266,7 @@ paths:
           content:
             '*/*':
               schema:
-                type: object
+                $ref: '#/components/schemas/SuccessAuthDtoGen'
   /rooms:
     post:
       tags:
@@ -557,13 +557,6 @@ components:
           type: string
         confirmPassword:
           type: string
-    TokenRefreshRequestGen:
-      required:
-      - refreshToken
-      type: object
-      properties:
-        refreshToken:
-          type: string
     SuccessAuthDtoGen:
       required:
       - accessToken
@@ -578,6 +571,13 @@ components:
         ttl:
           type: integer
           format: int64
+    TokenRefreshRequestGen:
+      required:
+      - refreshToken
+      type: object
+      properties:
+        refreshToken:
+          type: string
     UserAuthRequestGen:
       required:
       - password

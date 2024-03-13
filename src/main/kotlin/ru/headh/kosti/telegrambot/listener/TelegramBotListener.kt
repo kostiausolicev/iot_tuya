@@ -71,6 +71,8 @@ class TelegramBotListener(
                 "Новое устройство" -> ActionType.WAS_CREATED_DEVICE
                 "Изменить состояние" -> ActionType.WAS_CHANGED_DEVICE_STATE
                 CREATE_DEVICE -> ActionType.CREATE_DEVICE
+                SET_DEVICE_HOME -> ActionType.SET_DEVICE_HOME
+                SET_DEVICE_ROOM -> ActionType.SET_DEVICE_ROOM
                 GET_DEVICE -> ActionType.GET_DEVICE
                 GET_DEVICE_LIST -> ActionType.GET_DEVICE_LIST
                 CHANGE_DEVICE_STATE -> ActionType.CHANGE_DEVICE_STATE
@@ -212,6 +214,12 @@ class TelegramBotListener(
             )
 
             ActionType.CREATE_DEVICE -> CreateDeviceActionData(
+                chatId = message.chatId.toString(),
+                messageId = message.messageId,
+                message = callbackQuery.data
+            )
+
+            ActionType.SET_DEVICE_HOME -> SetDeviceHomeActionData(
                 chatId = message.chatId.toString(),
                 messageId = message.messageId,
                 message = callbackQuery.data

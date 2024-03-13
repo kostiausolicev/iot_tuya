@@ -10,7 +10,7 @@ class DeviceKeyboard {
     private final val buttonCreate = InlineKeyboardButton()
         .apply {
             text = "Новое устройство"
-            callbackData = CREATE_DEVICE
+            callbackData = SET_DEVICE_HOME
         }
     private final val buttonBack = InlineKeyboardButton()
         .apply {
