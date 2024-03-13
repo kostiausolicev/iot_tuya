@@ -4,7 +4,6 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import ru.headh.kosti.telegrambot.aspect.CheckAndUpdateToken
 import ru.headh.kosti.telegrambot.client.HomeServiceClient
-import ru.headh.kosti.telegrambot.dto.device.GetDeviceListActionData
 import ru.headh.kosti.telegrambot.dto.device.SetDeviceHomeActionData
 import ru.headh.kosti.telegrambot.enumeration.ActionType
 import ru.headh.kosti.telegrambot.handler.ActionHandler
@@ -31,7 +30,7 @@ class SetDeviceHomeHandler(
         telegramSender.editMessage(
             chatId = data.chatId,
             messageId = data.messageId,
-            text = "Выберите устройство",
+            text = "Выберите дом, где будет располагаться устройство",
             inlineReplyMarkup = keyboard.keyboardForDevice(homes)
         )
     }

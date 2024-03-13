@@ -58,16 +58,26 @@ class ErrorHandlerAdvice(
         try {
             handleRedisError(pjp, data)
         } catch (ex1: Exception) {
-            val exceptionMap: Map<String, String> = ex1.message
-                ?.also { println(it) }
-                ?.let { it.substring(7, it.length - 1) }
-                ?.also { println(it) }
-                ?.let { mapper.readValue(it) }
-                ?: emptyMap()
-            val code: String = ex1.message
-                ?.substring(0, 3)
-                ?.let { mapper.readValue(it) }
-                ?: "500"
+            val exceptionMap: Map<String, String> = try {
+                ex1.message
+                    ?.let { it.substring(7, it.length - 1) }
+                    ?.let { mapper.readValue(it) }
+                    ?: emptyMap()
+            } catch (ex2: Exception) {
+                mapOf(
+                    "message" to (ex1.message ?: " "),
+                    "code" to "500"
+                )
+            }
+            val code: String = try {
+                ex1.message
+                    ?.substring(0, 3)
+                    ?.let { mapper.readValue(it) }
+                    ?: "500"
+            } catch (ex2: Exception) {
+                "500"
+            }
+            println(exceptionMap["message"])
             when (code) {
                 "401" -> try {
                     val tokens = tokenRepository.findByIdOrNull(data.chatId)

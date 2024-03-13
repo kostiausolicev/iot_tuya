@@ -7,7 +7,7 @@ import ru.headh.kosti.apigateway.client.model.HomeSimpleDtoGenGen
 import ru.headh.kosti.telegrambot.util.DEVICE_MENU
 import ru.headh.kosti.telegrambot.util.GET_HOME
 import ru.headh.kosti.telegrambot.util.HOME_MENU
-import ru.headh.kosti.telegrambot.util.SET_DEVICE_HOME
+import ru.headh.kosti.telegrambot.util.SET_DEVICE_ROOM
 
 @Component
 class HomeListKeyboard {
@@ -35,7 +35,7 @@ class HomeListKeyboard {
         userHomes.map {
             InlineKeyboardButton.builder()
                 .text(it.name)
-                .callbackData("$SET_DEVICE_HOME:${it.id}")
+                .callbackData("$SET_DEVICE_ROOM:${it.id}")
                 .build()
         }
 

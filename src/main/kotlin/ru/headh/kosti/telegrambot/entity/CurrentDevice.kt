@@ -7,5 +7,5 @@ import java.io.Serializable
 class CurrentDevice(
     val id: String,
     val homeId: Int,
-    val roomId: Int
+    val roomId: Int? = null
 ) : Serializable

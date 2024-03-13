@@ -33,14 +33,14 @@ class RoomListKeyboard {
         homesRoom.map {
             InlineKeyboardButton.builder()
                 .text(it.name)
-                .callbackData("$SET_DEVICE_ROOM:${it.id}")
+                .callbackData("$CREATE_DEVICE:${it.id}")
                 .build()
         }
 
     private final fun noRoomsButton() = InlineKeyboardButton()
         .apply {
             text = "Без комнаты"
-            callbackData = "$SET_DEVICE_ROOM:-1"
+            callbackData = "$CREATE_DEVICE:-1"
         }
 
     fun keyboard(home: HomeDtoGenGen): InlineKeyboardMarkup {

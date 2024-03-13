@@ -13,6 +13,7 @@ import ru.headh.kosti.telegrambot.client.DeviceServiceClient
 import ru.headh.kosti.telegrambot.dto.device.WasCreatedDeviceActionData
 import ru.headh.kosti.telegrambot.enumeration.ActionType
 import ru.headh.kosti.telegrambot.handler.ActionHandler
+import ru.headh.kosti.telegrambot.repository.CurrentDeviceRepository
 import ru.headh.kosti.telegrambot.repository.TokenRepository
 import ru.headh.kosti.telegrambot.sender.TelegramSender
 import ru.headh.kosti.telegrambot.util.MAIN_MENU
@@ -20,6 +21,7 @@ import ru.headh.kosti.telegrambot.util.MAIN_MENU
 @Component
 class WasCreatedDeviceHandler(
     private val telegramSender: TelegramSender,
+    private val currentDeviceRepository: CurrentDeviceRepository,
     private val deviceServiceClient: DeviceServiceClient,
     private val tokenRepository: TokenRepository
 ) : ActionHandler<WasCreatedDeviceActionData> {
@@ -30,13 +32,14 @@ class WasCreatedDeviceHandler(
     @CheckAndUpdateToken
     override fun handle(data: WasCreatedDeviceActionData) {
         val device: Map<String, Any> = mapper.readValue(data.message)
+        val currentDevice = currentDeviceRepository.findByIdOrNull(data.chatId)
         val tokens = tokenRepository.findByIdOrNull(data.chatId)!!
         deviceServiceClient.create("Bearer ${tokens.accessToken}", device.let {
             CreateDeviceRequestGenGen(
                 tuyaId = it["tuya_id"].toString(),
                 name = if (it["name"].toString() == "") null else it["name"].toString(),
-                homeId = it["home_id"].toString().toIntOrNull() ?: -1,
-                roomId = it["room_id"].toString().toIntOrNull()
+                homeId = currentDevice?.homeId ?: -1,
+                roomId = currentDevice?.roomId
             )
         })
         telegramSender.sendMessage(

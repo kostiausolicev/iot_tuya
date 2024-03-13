@@ -225,6 +225,12 @@ class TelegramBotListener(
                 message = callbackQuery.data
             )
 
+            ActionType.SET_DEVICE_ROOM -> SetDeviceRoomActionData(
+                chatId = message.chatId.toString(),
+                messageId = message.messageId,
+                message = callbackQuery.data
+            )
+
             ActionType.WAS_CREATED_DEVICE -> WasCreatedDeviceActionData(
                 chatId = message.chatId.toString(),
                 messageId = message.messageId,

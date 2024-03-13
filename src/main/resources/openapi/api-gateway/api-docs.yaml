@@ -396,6 +396,11 @@ paths:
       - room-controller
       operationId: getRooms
       parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
       - name: homeId
         in: path
         required: true
