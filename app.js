@@ -67,9 +67,6 @@ else if (formType === 'create' && obj === 'room') {
             <h1>Введите данные:</h1>
             <label for="room_name">Name:</label>
             <input type="text" id="room_name" name="room_name" required><br>
-            
-            <label for="room_home_id">HomeID:</label>
-            <input type="text" id="room_home_id" name="room_home_id" required><br>
     `;
 }
 else if (formType === 'create' && obj === 'device') {
@@ -146,9 +143,8 @@ Telegram.WebApp.onEvent('mainButtonClicked', function(){
     }
     else if (formType === 'create' && obj === 'room') {
         const name = document.getElementById('room_name').value;
-        const home_id = document.getElementById('room_home_id').value;
         const formData = {
-            home_id: home_id,
+            home_id: id,
             name: name
         };
         formDataJSON = JSON.stringify(formData);
