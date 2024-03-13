@@ -25,8 +25,6 @@ function getParameterByName(name, url) {
 let formType = getParameterByName('formType');
 let obj = getParameterByName('obj');
 let id = parseInt(getParameterByName('id'));
-let homes = getParameterByName('homes');
-
 
 if (formType === 'auth') {
     document.getElementById('dynamicFormContainer').innerHTML = `
@@ -82,28 +80,7 @@ else if (formType === 'create' && obj === 'device') {
 
         <label for="device_name">Name:</label>
         <input type="text" id="device_name" name="device_name"><br>
-
-        <label for="home_id">HomeID:</label>
-        <select id="home_id" name="home_id"></select><br>
     `;
-
-    const homeIdSelect = document.getElementById('home_id');
-
-    const homeOptions = homes.map(home => {
-        const [id, name] = home.split(':');
-        return { id: id, name: name };
-    });
-
-    // Очистка списка опций перед добавлением новых
-    homeIdSelect.innerHTML = '';
-
-    // Заполнение выпадающего списка вариантами из массива homeOptions
-    homeOptions.forEach(home => {
-        const option = document.createElement('option');
-        option.value = home.id;
-        option.textContent = home.name;
-        homeIdSelect.appendChild(option);
-    });
 }
 
 else if (formType === 'send_command') {
@@ -179,12 +156,9 @@ Telegram.WebApp.onEvent('mainButtonClicked', function(){
     else if (formType === 'create' && obj === 'device') {
         const name = document.getElementById('device_name').value;
         const tuya_id = document.getElementById('tuya_id').value;
-        const home_id = document.getElementById('home_id').value;
         const formData = {
             tuya_id: tuya_id,
             name: name,
-            home_id: home_id,
-            room_id: null,
         };
         formDataJSON = JSON.stringify(formData);
     }
