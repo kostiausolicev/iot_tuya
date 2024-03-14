@@ -3,7 +3,6 @@ package ru.headh.kosti.telegrambot.handler.user
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.springframework.stereotype.Component
-import ru.headh.kosti.apigateway.client.model.SuccessAuthDtoGen
 import ru.headh.kosti.apigateway.client.model.UserRegisterRequestGenGen
 import ru.headh.kosti.telegrambot.aspect.AuthAndRegisterPointcut
 import ru.headh.kosti.telegrambot.client.UserServiceClient
@@ -28,7 +27,7 @@ class RegisterHandler(
     @AuthAndRegisterPointcut
     override fun handle(data: RegisterActionData) {
         val registerData: UserRegisterRequestGenGen = mapper.readValue(data.message)
-        val token = userClient.register(registerData) as SuccessAuthDtoGen
+        val token = userClient.register(registerData)
 
         tokenRepository.save(UserToken(data.chatId, token.accessToken, token.refreshToken))
 
