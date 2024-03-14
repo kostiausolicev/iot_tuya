@@ -86,15 +86,15 @@ else if (formType === 'send_command') {
                         
             <label for="switch_led">SWITCH_LED:</label>
             <input type="checkbox" id="switch_led_check" name="switch_led_check">
-            <input type="text" id="switch_led" name="switch_led"><br>
+            <input type="text" placeholder="true or false" id="switch_led" name="switch_led"><br>
             
             <input type="checkbox" id="temperature_check" name="temperature_check">
             <label for="temperature">TEMPERATURE:</label>
-            <input type="text" id="temperature" name="temperature"><br>
+            <input type="text" placeholder="0-1000" id="temperature" name="temperature"><br>
             
             <input type="checkbox" id="brightness_check" name="brightness_check">
             <label for="brightness">BRIGHTNESS:</label>
-            <input type="text" id="brightness" name="brightness"><br>
+            <input type="text" placeholder="0-500" id="brightness" name="brightness"><br>
             
             <input type="checkbox" id="color_check" name="color_check">
             <label for="color">COLOR:</label>
