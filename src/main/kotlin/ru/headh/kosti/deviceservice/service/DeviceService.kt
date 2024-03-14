@@ -105,9 +105,9 @@ class DeviceService(
         }
 
     fun getDeviceList(ownerId: Int): List<SimpleDeviceDto> =
-        deviceRepository.findAll().map {
-            checkOwner(it.homeId, ownerId)
-            it.toSimpleDto()
+        deviceRepository.findAll().mapNotNull {
+            if (checkOwner(it.homeId, ownerId)) it.toSimpleDto()
+            else null
         }
 
     fun updateDevice(deviceId: Int, updateDeviceRequest: UpdateDeviceRequest, ownerId: Int): DeviceDto {
