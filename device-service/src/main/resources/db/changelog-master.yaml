@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - include:
+      id: 1
+      file: db/changelog/create-table.sql

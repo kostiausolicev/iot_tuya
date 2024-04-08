@@ -1,0 +1,318 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:8082
+  description: Generated server url
+paths:
+  /api/rooms/{roomId}:
+    put:
+      tags:
+      - room-controller
+      operationId: updateRoom
+      parameters:
+      - name: roomId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: ownerId
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoomRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RoomDto'
+    delete:
+      tags:
+      - room-controller
+      operationId: deleteRoom
+      parameters:
+      - name: roomId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: ownerId
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+  /api/homes/{homeId}:
+    get:
+      tags:
+      - home-controller
+      operationId: getHome
+      parameters:
+      - name: homeId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: ownerId
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HomeDto'
+    put:
+      tags:
+      - home-controller
+      operationId: updateHome
+      parameters:
+      - name: homeId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: ownerId
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HomeRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HomeDto'
+    delete:
+      tags:
+      - home-controller
+      operationId: deleteHome
+      parameters:
+      - name: homeId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: ownerId
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+  /api/rooms:
+    post:
+      tags:
+      - room-controller
+      operationId: createRoom
+      parameters:
+      - name: homeId
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: ownerId
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoomRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RoomDto'
+  /api/homes:
+    get:
+      tags:
+      - home-controller
+      operationId: getHomeList
+      parameters:
+      - name: ownerId
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HomeSimpleDto'
+    post:
+      tags:
+      - home-controller
+      operationId: createHome
+      parameters:
+      - name: ownerId
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HomeRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HomeDto'
+  /api/rooms/rooms/{homeId}:
+    get:
+      tags:
+      - room-controller
+      operationId: getRooms
+      parameters:
+      - name: homeId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoomDto'
+  /api/homes/check/{homeId}:
+    get:
+      tags:
+      - home-controller
+      operationId: checkOwner
+      parameters:
+      - name: homeId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: ownerId
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: boolean
+components:
+  schemas:
+    RoomRequest:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+    RoomDto:
+      required:
+      - homeId
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        homeId:
+          type: integer
+          format: int32
+    HomeRequest:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+        address:
+          type: string
+    HomeDto:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        address:
+          type: string
+        rooms:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoomDto'
+    HomeSimpleDto:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        address:
+          type: string

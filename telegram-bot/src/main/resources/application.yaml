@@ -1,0 +1,16 @@
+server:
+  port: 8070
+
+spring:
+  redis:
+    host: localhost
+    port: 6739
+
+telegram-bot:
+  web-app:
+    url: https://kostiausolicev.github.io/
+  listener:
+    enabled: true
+  config:
+    name: test1_spring_bot
+    token: 5628183243:AAHQBbXtbFkvyqvJ1VKbg12bICp5_ApDkPs

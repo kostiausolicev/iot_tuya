@@ -1,0 +1,141 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+paths:
+  /api/users/signout:
+    post:
+      tags:
+      - user-controller
+      operationId: signout
+      parameters:
+      - name: user
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+  /api/users/register:
+    post:
+      tags:
+      - user-controller
+      operationId: register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegisterRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SuccessAuthDto'
+  /api/users/auth:
+    post:
+      tags:
+      - user-controller
+      operationId: auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserAuthRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SuccessAuthDto'
+  /api/tokens/refresh:
+    post:
+      tags:
+      - token-controller
+      operationId: refresh
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SuccessAuthDto'
+  /api/users/delete/{userId}:
+    delete:
+      tags:
+      - user-controller
+      operationId: delete
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+components:
+  schemas:
+    UserRegisterRequest:
+      required:
+      - confirmPassword
+      - name
+      - password
+      - username
+      type: object
+      properties:
+        name:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+        confirmPassword:
+          type: string
+    SuccessAuthDto:
+      required:
+      - accessToken
+      - refreshToken
+      - ttl
+      type: object
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+        ttl:
+          type: integer
+          format: int64
+    UserAuthRequest:
+      required:
+      - password
+      - username
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    TokenRefreshRequest:
+      required:
+      - refreshToken
+      type: object
+      properties:
+        refreshToken:
+          type: string

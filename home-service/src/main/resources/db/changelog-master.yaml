@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      id: 1
+      file: db/changelog/create-table.sql
+  - include:
+      id: 2
+      file: db/changelog/create_outbox_table.sql

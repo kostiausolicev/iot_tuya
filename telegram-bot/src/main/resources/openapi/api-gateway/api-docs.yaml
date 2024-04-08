@@ -1,0 +1,649 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:8079
+  description: Generated server url
+paths:
+  /rooms/{roomId}:
+    put:
+      tags:
+      - room-controller
+      operationId: updateRoom
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: roomId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoomRequestGen'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RoomDtoGen'
+    delete:
+      tags:
+      - room-controller
+      operationId: deleteRoom
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: roomId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+  /homes/{homeId}:
+    get:
+      tags:
+      - home-controller
+      operationId: getHome
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: homeId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HomeDtoGen'
+    put:
+      tags:
+      - home-controller
+      operationId: updateHome
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: homeId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HomeRequestGen'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HomeDtoGen'
+    delete:
+      tags:
+      - home-controller
+      operationId: deleteHome
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: homeId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+  /devices/{deviceId}:
+    get:
+      tags:
+      - device-controller
+      operationId: getInfo
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DeviceDtoGen'
+    put:
+      tags:
+      - device-controller
+      operationId: update
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDeviceRequestGen'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DeviceDtoGen'
+    delete:
+      tags:
+      - device-controller
+      operationId: delete_1
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+  /users/signout:
+    post:
+      tags:
+      - user-controller
+      operationId: signout
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+  /users/register:
+    post:
+      tags:
+      - user-controller
+      operationId: register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegisterRequestGen'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SuccessAuthDtoGen'
+  /users/refresh:
+    post:
+      tags:
+      - user-controller
+      operationId: refresh
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequestGen'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SuccessAuthDtoGen'
+  /users/auth:
+    post:
+      tags:
+      - user-controller
+      operationId: auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserAuthRequestGen'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SuccessAuthDtoGen'
+  /rooms:
+    post:
+      tags:
+      - room-controller
+      operationId: createRoom
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: homeId
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoomRequestGen'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RoomDtoGen'
+  /homes:
+    post:
+      tags:
+      - home-controller
+      operationId: createHome
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HomeRequestGen'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HomeDtoGen'
+  /devices:
+    get:
+      tags:
+      - device-controller
+      operationId: getDeviceList
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SimpleDeviceDtoGen'
+    post:
+      tags:
+      - device-controller
+      operationId: create
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDeviceRequestGen'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DeviceDtoGen'
+  /devices/{deviceId}/control:
+    post:
+      tags:
+      - device-controller
+      operationId: sendCommand
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendCommandRequestGen'
+        required: true
+      responses:
+        "200":
+          description: OK
+  /rooms/rooms/{homeId}:
+    get:
+      tags:
+      - room-controller
+      operationId: getRooms
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: homeId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoomDtoGen'
+  /homes/:
+    get:
+      tags:
+      - home-controller
+      operationId: getHomeList
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HomeSimpleDtoGen'
+  /users/delete:
+    delete:
+      tags:
+      - user-controller
+      operationId: delete
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+components:
+  schemas:
+    RoomRequestGen:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+    RoomDtoGen:
+      required:
+      - homeId
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+        homeId:
+          type: integer
+          format: int32
+        id:
+          type: integer
+          format: int32
+    HomeRequestGen:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+        address:
+          type: string
+    HomeDtoGen:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        address:
+          type: string
+        rooms:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoomDtoGen'
+    UpdateDeviceRequestGen:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+    DeviceDtoCapabilitiesInnerGen:
+      required:
+      - code
+      - value
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - SWITCH_LED
+          - TEMPERATURE
+          - COLOR
+          - BRIGHTNESS
+        value:
+          type: object
+    DeviceDtoGen:
+      required:
+      - category
+      - homeId
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        homeId:
+          type: integer
+          format: int32
+        category:
+          type: string
+        capabilities:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeviceDtoCapabilitiesInnerGen'
+        roomId:
+          type: integer
+          format: int32
+    UserRegisterRequestGen:
+      required:
+      - confirmPassword
+      - name
+      - password
+      - username
+      type: object
+      properties:
+        name:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+        confirmPassword:
+          type: string
+    SuccessAuthDtoGen:
+      required:
+      - accessToken
+      - refreshToken
+      - ttl
+      type: object
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+        ttl:
+          type: integer
+          format: int64
+    TokenRefreshRequestGen:
+      required:
+      - refreshToken
+      type: object
+      properties:
+        refreshToken:
+          type: string
+    UserAuthRequestGen:
+      required:
+      - password
+      - username
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    CreateDeviceRequestGen:
+      required:
+      - home_id
+      - tuya_id
+      type: object
+      properties:
+        tuya_id:
+          type: string
+        home_id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        room_id:
+          type: integer
+          format: int32
+    SendCommandRequestGen:
+      required:
+      - commands
+      type: object
+      properties:
+        commands:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeviceDtoCapabilitiesInnerGen'
+    HomeSimpleDtoGen:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        address:
+          type: string
+    SimpleDeviceDtoGen:
+      required:
+      - category
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        category:
+          type: string
+          enum:
+          - LIGHT

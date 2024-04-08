@@ -1,0 +1,28 @@
+server:
+  port: 8082
+
+spring:
+  datasource:
+    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/home_service_db}
+    username: ${POSTGRES_USERNAME:admin}
+    password: ${POSTGRES_PASSWORD:admin}
+    generate-dll: none
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+
+  liquibase:
+    change-log: db/changelog-master.yaml
+    enabled: true
+
+  application:
+    name: home-service
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVICE:localhost:29092}
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    disable-swagger-default-url: true
+  show-actuator: false

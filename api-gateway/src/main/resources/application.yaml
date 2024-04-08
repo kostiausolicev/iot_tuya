@@ -1,0 +1,17 @@
+server:
+  port: 8079
+
+jwt:
+  secret: ${JWT_SECRET:hjhbjhbJHBJHFBDjhbjhb873Y4UI2BUYLSDLDBjgf}
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    disable-swagger-default-url: true
+  show-actuator: false
+
+path:
+  user: ${USER_SERVICE_PATH:http://localhost:8080}
+  home: ${HOME_SERVICE_PATH:http://localhost:8082}
+  device: ${DEVICE_SERVICE_PATH:http://localhost:8081}
